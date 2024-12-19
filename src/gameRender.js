@@ -37,6 +37,10 @@ export default function render()
         case Game.STORY:
             drawStory();
         break;
+
+        case Game.OVER:
+            drawOver();
+            break;
         default:
             console.error("Error: Game State invalid");
     }
@@ -69,14 +73,176 @@ function drawOver()
     //Borramos la pantalla entera 
     globals.ctx.clearRect(0, 0, globals.canvas.width, globals.canvas.height);
     globals.ctxHUD.clearRect(0, 0, globals.canvasHUD.width, globals.canvasHUD.height);
+
+    renderOverScreen();
+
+    renderHUDOver();
+
+    globals.ctx.strokeStyle = 'black';
+    globals.ctx.font = '60px zwackery';
+    globals.ctx.fillStyle = 'red';
+    globals.ctx.strokeText("GAME"   , 20, 80);
+    globals.ctx.fillText("GAME"     , 20, 80);
+    globals.ctx.strokeText("OVER"   , 74, 125);
+    globals.ctx.fillText("OVER"     , 74, 125);
+
 }
 
 function drawMain()
 {   
+    globals.ctx.clearRect(0, 0, globals.canvas.width, globals.canvas.height);
+    globals.ctxHUD.clearRect(0, 0, globals.canvasHUD.width, globals.canvasHUD.height);
+
     renderMainScreen();
 
     //Dibujamos el HUD
     renderHUDMain();
+
+    let texto =
+    [
+        "The Shadowed Labyrinth:",
+        "The curse of the Throne"
+    ];
+    globals.ctx.strokeStyle = 'black';
+    globals.ctx.font = '24px zwackery';
+    globals.ctx.fillStyle = 'red';
+    globals.ctx.strokeText(texto[0], 2, 50);
+    globals.ctx.fillText(texto[0], 2, 50);
+    globals.ctx.font = '18px zwackery';
+    globals.ctx.fillStyle = 'darkred';
+    globals.ctx.strokeText(texto[1], 90, 70);
+    globals.ctx.fillText(texto[1], 90, 70);
+
+}
+
+
+function drawControls()
+{
+
+    //Borramos la pantalla entera 
+    globals.ctx.clearRect(0, 0, globals.canvas.width, globals.canvas.height);
+    globals.ctxHUD.clearRect(0, 0, globals.canvasHUD.width, globals.canvasHUD.height);
+
+    renderControlsScreen();
+
+    //Dibujamos el HUD
+    renderHUDControls();
+
+    const texto = 
+    [
+        "CONTROLS",
+        "Movement",
+        "Action",
+        "W -",
+        "A -",
+        "S -",
+        "D -",
+        "SPACE -"
+    ];
+    
+
+// "CONTROLS" con borde negro
+globals.ctx.font = '24px emulogic';
+globals.ctx.fillStyle = 'red';
+globals.ctx.strokeStyle = 'black';
+globals.ctx.lineWidth = 2;
+globals.ctx.strokeText(texto[0], 35, 50);  // Borde negro
+globals.ctx.fillText(texto[0], 35, 50);    // Relleno rojo
+
+// "Movement" con borde negro
+globals.ctx.font = '16px emulogic';
+globals.ctx.fillStyle = 'red';
+globals.ctx.strokeStyle = 'black';
+globals.ctx.strokeText(texto[1], 5, 100);  // Borde negro
+globals.ctx.fillText(texto[1], 5, 100);    // Relleno negro
+
+// "Action" con borde negro
+globals.ctx.fillStyle = 'red';
+globals.ctx.strokeStyle = 'black';
+globals.ctx.strokeText(texto[2], 170, 100);  
+globals.ctx.fillText(texto[2], 170, 100);    
+
+globals.ctx.font = '8px emulogic';
+globals.ctx.strokeText(texto[3], 50, 120);      
+globals.ctx.fillText(texto[3], 50, 120);        
+
+globals.ctx.strokeText(texto[4], 50, 140);      
+globals.ctx.fillText(texto[4], 50, 140);        
+
+globals.ctx.strokeText(texto[5], 50, 160);      
+globals.ctx.fillText(texto[5], 50, 160);        
+
+globals.ctx.strokeText(texto[6], 50, 180);      
+globals.ctx.fillText(texto[6], 50, 180);        
+
+globals.ctx.strokeText(texto[7], 175, 120); 
+globals.ctx.fillText(texto[7], 175, 120);   
+
+}
+
+
+function drawStory()
+{
+let texto = [
+    "After managing to escape from the claws,",
+    "claws of the throne, Joseph must,",
+    "escape from the mansion's forest,",
+    "there he will encounter various,",
+    "enemies, with whom he can deal,",
+    "with his weapons, but that will",
+    "be the least of his problems",
+    "since the throne follows him,",
+    "very closely."
+];
+    globals.ctx.clearRect(0, 0, globals.canvas.width, globals.canvas.height);
+    globals.ctxHUD.clearRect(0, 0, globals.canvasHUD.width, globals.canvasHUD.height);
+
+    renderStoryScreen();
+
+    renderHUDStory();
+
+    globals.ctx.font = '24px emulogic';
+    globals.ctx.fillStyle = 'red';
+    globals.ctx.strokeStyle = 'black';          
+    globals.ctx.lineWidth = 2;                  
+    globals.ctx.strokeText("STORY", 80, 50);    
+    globals.ctx.fillText("STORY", 80, 50);      
+
+    globals.ctx.font = '8px emulogic';
+    globals.ctx.fillStyle = 'white';
+    globals.ctx.strokeStyle = 'black'; 
+    globals.ctx.lineWidth = 1;         
+
+    globals.ctx.strokeText(texto[0], 5, 90);  
+    globals.ctx.fillText(texto[0], 5, 90);    
+
+    globals.ctx.strokeText(texto[1], 8, 98);  
+    globals.ctx.fillText(texto[1], 8, 98);    
+
+    globals.ctx.strokeText(texto[2], 7, 106); 
+    globals.ctx.fillText(texto[2], 7, 106);   
+
+    globals.ctx.strokeText(texto[3], 9, 114); 
+    globals.ctx.fillText(texto[3], 9, 114);   
+
+    globals.ctx.strokeText(texto[4], 15, 122); 
+    globals.ctx.fillText(texto[4], 15, 122);   
+
+    globals.ctx.strokeText(texto[5], 10, 130); 
+    globals.ctx.fillText(texto[5], 10, 130);   
+
+    globals.ctx.strokeText(texto[6], 20, 138); 
+    globals.ctx.fillText(texto[6], 20, 138);   
+
+    globals.ctx.strokeText(texto[7], 18, 146); 
+    globals.ctx.fillText(texto[7], 18, 146);   
+
+    globals.ctx.font = '20px emulogic';
+    globals.ctx.fillStyle = 'red';
+    globals.ctx.strokeStyle = 'black';  
+    globals.ctx.lineWidth = 2;          
+    globals.ctx.strokeText(texto[8], 10, 166); 
+    globals.ctx.fillText(texto[8], 10, 166);   
 
 
 }
@@ -88,27 +254,85 @@ function drawScore()
     globals.ctx.clearRect(0, 0, globals.canvas.width, globals.canvas.height);
     globals.ctxHUD.clearRect(0, 0, globals.canvasHUD.width, globals.canvasHUD.height);
 
+    renderScoreScreen();
+
     renderHUDScore();
-}
 
-function drawControls()
-{
+    globals.ctx.font = '24px emulogic';
+    globals.ctx.fillStyle = 'red';
+    globals.ctx.strokeStyle = 'black';
+    globals.ctx.lineWidth = 2;
+    globals.ctx.strokeText("HIGHSCORE", 20, 50); // Borde negro
+    globals.ctx.fillText("HIGHSCORE", 20, 50);  // Texto rojo
+    
+    globals.ctx.font = '8px emulogic';
+    globals.ctx.fillStyle = 'red';
+    
+    globals.ctx.font = '16px emulogic';
+    globals.ctx.fillStyle = 'white';
+    globals.ctx.strokeStyle = "black";
+    globals.ctx.lineWidth = 1.5; // Ajusta el grosor del borde
+    
+    globals.ctx.strokeText("RANK", 15, 70);     // Borde negro
+    globals.ctx.fillText("RANK", 15, 70);       // Texto blanco
+    globals.ctx.strokeText("NAME", 87, 70);     // Borde negro
+    globals.ctx.fillText("NAME", 87, 70);       // Texto blanco
+    globals.ctx.strokeText("SCORE", 165, 70);   // Borde negro
+    globals.ctx.fillText("SCORE", 165, 70);     // Texto blanco
+    
+    globals.ctx.font = '8px emulogic';
 
-    //Borramos la pantalla entera 
-    globals.ctx.clearRect(0, 0, globals.canvas.width, globals.canvas.height);
-    globals.ctxHUD.clearRect(0, 0, globals.canvasHUD.width, globals.canvasHUD.height);
+    // Datos iniciales: posiciones, nombres y puntajes
+    let ranks = ["1ST", "2ND", "3RD", "4TH", "5TH", "6TH", "7TH"];  
+    let names = ["AAA", "AAB", "AAC", "AAD", "AAE", "AAF", "AAG"];
+    let scores = [98310, 7810, 540, 12345, 9876, 6543, 4321];
 
-    renderHUDControls();
-}
+    // Ordenar los puntajes de mayor a menor, pero mantener posiciones y nombres intactos
+    let orderedScores = [...scores].sort((a, b) => b - a);
 
-function drawStory()
-{
+    // Función para calcular los dígitos de un puntaje
+    function calculateScoreDigits(score) 
+    {
+        if (score > 99999) 
+            {
+            score = 99999;
+        }
+        return {
+            tenK: Math.floor(score / 10000),
+            oneK: Math.floor((score % 10000) / 1000),
+            hundred: Math.floor((score % 1000) / 100),
+            ten: Math.floor((score % 100) / 10),
+            one: score % 10
+        };
+    }
 
-    //Borramos la pantalla entera 
-    globals.ctx.clearRect(0, 0, globals.canvas.width, globals.canvas.height);
-    globals.ctxHUD.clearRect(0, 0, globals.canvasHUD.width, globals.canvasHUD.height);
+    // Posiciones de impresión en Y
+    let yPositions = [90, 106, 122, 138, 156, 174, 190];
 
-    renderHUDStory();
+    // Dibujar los resultados
+    for (let i = 0; i < ranks.length; i++) 
+    {
+        const rank = ranks[i];
+        const name = names[i];
+        const score = orderedScores[i];
+        const digits = calculateScoreDigits(score);
+
+        // Dibujar rank y nombre
+        globals.ctx.strokeText(`${rank}______${name}_____`, 40, yPositions[i]);
+        globals.ctx.fillText(`${rank}______${name}_____`, 40, yPositions[i]);
+        // Dibujar los dígitos del puntaje
+        globals.ctx.strokeText(digits.tenK, 165, yPositions[i]);
+        globals.ctx.fillText(digits.tenK, 165, yPositions[i]);   
+        globals.ctx.strokeText(digits.oneK, 173, yPositions[i]);
+        globals.ctx.fillText(digits.oneK, 173, yPositions[i]);
+        globals.ctx.strokeText(digits.hundred, 181, yPositions[i]);
+        globals.ctx.fillText(digits.hundred, 181, yPositions[i]);
+        globals.ctx.strokeText(digits.ten, 189, yPositions[i]);
+        globals.ctx.fillText(digits.ten, 189, yPositions[i]);
+        globals.ctx.strokeText(digits.one, 197, yPositions[i]);
+        globals.ctx.fillText(digits.one, 197, yPositions[i]);
+    }
+
 }
 
 function renderSprite(sprite)
@@ -247,6 +471,9 @@ function renderMap()
 
 function renderMainScreen()
 {
+    //console.log(globals.spritesMain)
+
+
     for(let i = 0; i < globals.spritesMain.length; i++)
     {
         let sprite = globals.spritesMain[i];
@@ -275,6 +502,143 @@ function renderMainScreen()
         sprite.imageSet.xSize, sprite.imageSet.ySize    // The destinaton heignt and width
     );
     }
+
+}
+
+
+function renderControlsScreen()
+{
+    //console.log(globals.spritesControls)
+
+    for(let i = 0; i < globals.spritesControls.length; i++)
+    {
+        let sprite = globals.spritesControls[i];
+
+        //Calculamos la posicion del tile de inicio
+        const xPosInit = sprite.imageSet.initCol * sprite.imageSet.gridSize; 
+        const yPosInit = sprite.imageSet.initFil * sprite.imageSet.gridSize;
+        //console.log(`xPosInit: ${xPosInit}`)
+        //console.log(`yPosInit: ${yPosInit}`)
+
+
+        //Calculamos la posicion en el tilemap a dibujar
+        const xTile = xPosInit + sprite.frames.frameCounter * sprite.imageSet.gridSize + sprite.imageSet.xOffset;
+        const yTile = yPosInit + sprite.state * sprite.imageSet.gridSize + sprite.imageSet.yOffset;
+
+
+        const xPos = Math.floor(sprite.xPos);
+        const yPos = Math.floor(sprite.yPos);
+
+        //Dibujamos el nuevo fotograma del sprite en la posicion adecuada
+        globals.ctx.drawImage(                              
+            globals.tileSets[Tile.SIZE_16],                 // The image file
+            xTile, yTile,                                   // The source x and y position
+            sprite.imageSet.xSize, sprite.imageSet.ySize,   // The source heignt and width
+            xPos, yPos,                                     // The destinaton x and y position
+            sprite.imageSet.xSize, sprite.imageSet.ySize    // The destinaton heignt and width
+        );
+    }
+}
+
+function renderStoryScreen()
+{
+    console.log(globals.spritesStory)
+
+    for(let i = 0; i < globals.spritesStory.length; i++)
+    {
+        let sprite = globals.spritesStory[i];
+
+        //Calculamos la posicion del tile de inicio
+        const xPosInit = sprite.imageSet.initCol * sprite.imageSet.gridSize; 
+        const yPosInit = sprite.imageSet.initFil * sprite.imageSet.gridSize;
+        //console.log(`xPosInit: ${xPosInit}`)
+        //console.log(`yPosInit: ${yPosInit}`)
+
+
+        //Calculamos la posicion en el tilemap a dibujar
+        const xTile = xPosInit + sprite.frames.frameCounter * sprite.imageSet.gridSize + sprite.imageSet.xOffset;
+        const yTile = yPosInit + sprite.state * sprite.imageSet.gridSize + sprite.imageSet.yOffset;
+
+
+        const xPos = Math.floor(sprite.xPos);
+        const yPos = Math.floor(sprite.yPos);
+
+        //Dibujamos el nuevo fotograma del sprite en la posicion adecuada
+        globals.ctx.drawImage(                              
+            globals.tileSets[Tile.SIZE_16],                 // The image file
+            xTile, yTile,                                   // The source x and y position
+            sprite.imageSet.xSize, sprite.imageSet.ySize,   // The source heignt and width
+            xPos, yPos,                                     // The destinaton x and y position
+            sprite.imageSet.xSize, sprite.imageSet.ySize    // The destinaton heignt and width
+        );
+    }
+}
+
+function renderScoreScreen()
+{
+    console.log(globals.spritesScore)
+
+    for(let i = 0; i < globals.spritesScore.length; i++)
+    {
+        let sprite = globals.spritesScore[i];
+
+        //Calculamos la posicion del tile de inicio
+        const xPosInit = sprite.imageSet.initCol * sprite.imageSet.gridSize; 
+        const yPosInit = sprite.imageSet.initFil * sprite.imageSet.gridSize;
+        //console.log(`xPosInit: ${xPosInit}`)
+        //console.log(`yPosInit: ${yPosInit}`)
+
+
+        //Calculamos la posicion en el tilemap a dibujar
+        const xTile = xPosInit + sprite.frames.frameCounter * sprite.imageSet.gridSize + sprite.imageSet.xOffset;
+        const yTile = yPosInit + sprite.state * sprite.imageSet.gridSize + sprite.imageSet.yOffset;
+
+
+        const xPos = Math.floor(sprite.xPos);
+        const yPos = Math.floor(sprite.yPos);
+
+        //Dibujamos el nuevo fotograma del sprite en la posicion adecuada
+        globals.ctx.drawImage(                              
+            globals.tileSets[Tile.SIZE_16],                 // The image file
+            xTile, yTile,                                   // The source x and y position
+            sprite.imageSet.xSize, sprite.imageSet.ySize,   // The source heignt and width
+            xPos, yPos,                                     // The destinaton x and y position
+            sprite.imageSet.xSize, sprite.imageSet.ySize    // The destinaton heignt and width
+        );
+    }
+}
+
+function renderOverScreen()
+{
+
+    for(let i = 0; i < globals.spritesOver.length; i++)
+    {
+        let sprite = globals.spritesOver[i];
+
+        //Calculamos la posicion del tile de inicio
+        const xPosInit = sprite.imageSet.initCol * sprite.imageSet.gridSize; 
+        const yPosInit = sprite.imageSet.initFil * sprite.imageSet.gridSize;
+        //console.log(`xPosInit: ${xPosInit}`)
+        //console.log(`yPosInit: ${yPosInit}`)
+
+
+        //Calculamos la posicion en el tilemap a dibujar
+        const xTile = xPosInit + sprite.frames.frameCounter * sprite.imageSet.gridSize + sprite.imageSet.xOffset;
+        const yTile = yPosInit + sprite.state * sprite.imageSet.gridSize + sprite.imageSet.yOffset;
+
+
+        const xPos = Math.floor(sprite.xPos);
+        const yPos = Math.floor(sprite.yPos);
+
+        //Dibujamos el nuevo fotograma del sprite en la posicion adecuada
+        globals.ctx.drawImage(                              
+            globals.tileSets[Tile.SIZE_16],                 // The image file
+            xTile, yTile,                                   // The source x and y position
+            sprite.imageSet.xSize, sprite.imageSet.ySize,   // The source heignt and width
+            xPos, yPos,                                     // The destinaton x and y position
+            sprite.imageSet.xSize, sprite.imageSet.ySize    // The destinaton heignt and width
+        );
+    }
 }
 
 function renderHUD()
@@ -282,7 +646,7 @@ function renderHUD()
     //TEST: datos metidos en bruto
     const score = 1500;
     const highscore = 130000;
-    const life = 3;
+    const life = 1;
     const angerLvl = 50;
 
     //Draw score
@@ -346,6 +710,24 @@ function renderHUDMain()
 
     globals.ctxHUD.fillStyle = 'darkred';
     globals.ctxHUD.fillText("CONTROLS", 218, 10);
+    globals.ctxHUD.fillStyle = 'lightgrey';
+    globals.ctxHUD.fillText(" -->", 232, 20);
+}
+
+function renderHUDOver()
+{
+    const score = 1500;
+
+    const time = 420;
+
+    globals.ctxHUD.font = '8px emulogic';
+    globals.ctxHUD.fillStyle = 'darkred';
+    globals.ctxHUD.fillText("EXIT", 8, 10);
+    globals.ctxHUD.fillStyle = 'lightgrey';
+    globals.ctxHUD.fillText(" <-- ", 1, 20);
+
+    globals.ctxHUD.fillStyle = 'darkred';
+    globals.ctxHUD.fillText("CONTINUE", 218, 10);
     globals.ctxHUD.fillStyle = 'lightgrey';
     globals.ctxHUD.fillText(" -->", 232, 20);
 }

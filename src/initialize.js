@@ -4,6 +4,9 @@ import Sprite from "./sprite.js";
 import ImageSet from "./imageSet.js";
 import Frames from "./frames.js";
 import {Level, level1} from "./level.js";
+import Timer from "./Timer.js";
+import Physics from "./Physics.js";
+import { keydonwHandler, keyupHandler } from "./events.js";
 //Funcion que inicializa los elementos HTML
 function initHTMLelements()
 {
@@ -35,6 +38,14 @@ function initVars()
     //Inicializamos el estado del juego
     globals.gameState = Game.MAIN;
 
+    //Inicializamos los estados de las acciones
+    globals.action = 
+    {
+        moveLeft:   false,
+        moveRight:  false,
+        moveUp:     false,
+        moveDown:   false
+    }
 }
 
 //Carga de activos: TIMEMAPS, IMAGES, SOUNDS
@@ -53,12 +64,6 @@ function loadAssets()
     tileSet = new Image();
     tileSet.addEventListener("load", loadHandler, false);
     tileSet.src = "./images/TileSet2.png"; //Ojo que la ruta es relativa al HTLM, no al JS
-    globals.tileSets.push(tileSet);
-    globals.assetsToLoad.push(tileSet);
-
-    tileSet = new Image();
-    tileSet.addEventListener("load", loadHandler, false);
-    tileSet.src = "./images/MainScreen.png"; //Ojo que la ruta es relativa al HTLM, no al JS
     globals.tileSets.push(tileSet);
     globals.assetsToLoad.push(tileSet);
 }
@@ -84,7 +89,7 @@ function loadHandler()
         console.log("Assets finished loading");
 
         //Start the game 
-        globals.gameState = Game.MAIN;
+        globals.gameState = Game.CONTROLS;
     }
     console.log(`gameState = ${globals.gameState}`)
 }
@@ -105,9 +110,31 @@ function initSprites()
 
 function initMainSprites()
 {
+    initMainScreen();
     initPlayer();
     initThrone();
-    initMainScreen();
+}
+
+function initControlsSprites()
+{
+    initControlsScreen();
+    initPlayer();
+    initBomb();
+}
+
+function initStorySprites()
+{
+    initStoryScreen();
+}
+
+function initScoreSprites()
+{
+    initScoreScreen();
+}
+
+function initOverSprites()
+{
+    initOverScreen();
 }
 
 function initMainScreen()
@@ -125,7 +152,83 @@ function initMainScreen()
     const mainScreen = new Sprite(SpriteID.MAINSCREEN, State.STILL, 100, 70, imageSet, frames);
 
     //Añadimos el player al array de sprites
-    globals.spritesBackgrounds.push(mainScreen);
+    globals.spritesMain.push(mainScreen);
+
+}
+
+function initControlsScreen()
+{
+    let x = 0;
+    let y = 84;
+    let xOffset = 16*x + x;
+    let yOffset = 16*y + y + 15;
+    //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
+    const imageSet = new ImageSet(0, 0, 272, 208, 0, xOffset, yOffset);
+
+    //Creamos los datos de la animacion. 8 frames / state
+    const frames = new Frames(1);
+    //Creamos nuestro sprite
+    const ControlScreen = new Sprite(SpriteID.CONTROLSSCREEN, State.STILL, 100, 70, imageSet, frames);
+
+    //Añadimos el player al array de sprites
+    globals.spritesControls.push(ControlScreen);
+
+}
+
+function initStoryScreen()
+{
+    let x = 0;
+    let y = 60;
+    let xOffset = 16*x + x;
+    let yOffset = 16*y + y + 5;
+    //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
+    const imageSet = new ImageSet(0, 0, 272, 208, 0, xOffset, yOffset);
+
+    //Creamos los datos de la animacion. 8 frames / state
+    const frames = new Frames(1);
+    //Creamos nuestro sprite
+    const StoryScreen = new Sprite(SpriteID.STORYSCREEN, State.STILL, 100, 70, imageSet, frames);
+
+    //Añadimos el player al array de sprites
+    globals.spritesStory.push(StoryScreen);
+
+}
+
+function initScoreScreen()
+{
+    let x = 0;
+    let y = 72;
+    let xOffset = 16*x + x;
+    let yOffset = 16*y + y + 10;
+    //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
+    const imageSet = new ImageSet(0, 0, 272, 208, 0, xOffset, yOffset);
+
+    //Creamos los datos de la animacion. 8 frames / state
+    const frames = new Frames(1);
+    //Creamos nuestro sprite
+    const ScoreScreen = new Sprite(SpriteID.SCORESCREEN, State.STILL, 100, 70, imageSet, frames);
+
+    //Añadimos el player al array de sprites
+    globals.spritesScore.push(ScoreScreen);
+
+}
+
+function initOverScreen()
+{
+    let x = 0;
+    let y = 47;
+    let xOffset = 16*x + x;
+    let yOffset = 16*y + y + 17;
+    //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
+    const imageSet = new ImageSet(0, 0, 272, 208, 0, xOffset, yOffset);
+
+    //Creamos los datos de la animacion. 8 frames / state
+    const frames = new Frames(1);
+    //Creamos nuestro sprite
+    const overScreen = new Sprite(SpriteID.OVERSCREEN, State.STILL, 100, 70, imageSet, frames);
+
+    //Añadimos el player al array de sprites
+    globals.spritesOver.push(overScreen);
 
 }
 
@@ -140,13 +243,26 @@ function initPlayer()
     const imageSet = new ImageSet(0, 0, 16, 16, 17, xOffset, yOffset);
 
     //Creamos los datos de la animacion. 13 frames / state
-    const frames = new Frames(13);
-    //Creamos nuestro sprite (id, state, xPos, yPos, imageSet, frames)
-    const player = new Sprite(SpriteID.PLAYER, State.DOWN, 80, 48, imageSet, frames);
+    const frames = new Frames(8, 6);
+
+    //Crearemos nuestro objeto physics con el vLimit = 40px/s
+    const physics = new Physics(80);
+
+    //Creamos nuestro sprite (id, state, xPos, yPos, imageSet, frames, physics)
+    const player = new Sprite(SpriteID.PLAYER, State.DOWN, -50, 48, imageSet, frames, physics);
+
+    const playerC1 = new Sprite(SpriteID.PLAYER1, State.DOWN, 80, 48, imageSet, frames, 0);
+    const playerC2 = new Sprite(SpriteID.PLAYER2, State.DOWN, 80, 48, imageSet, frames, 0);
+    const playerC3 = new Sprite(SpriteID.PLAYER3, State.DOWN, 80, 48, imageSet, frames, 0);
+
 
     //Añadimos el player al array de sprites
     globals.sprites.push(player);
+    globals.spritesMain.push(player);
+    globals.spritesControls.push(player,playerC1,playerC2,playerC3);
+
 }
+
 
 function initBomb()
 {
@@ -165,6 +281,8 @@ function initBomb()
 
     //Añadimos el player al array de sprites
     globals.sprites.push(bomb);
+    globals.spritesControls.push(bomb);
+
 
 }
 
@@ -284,17 +402,23 @@ function initThrone()
     let x = 0;
     let y = 33;
     let xOffset = 16*x + x;
-    let yOffset = 16*y + y + 10;
+    let yOffset = 16*y + y + 15;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
     const imageSet = new ImageSet(0, 23, 27, 30, 0, xOffset, yOffset);
 
     //Creamos los datos de la animacion. 8 frames / state
-    const frames = new Frames(8);
-    //Creamos nuestro sprite
-    const throne = new Sprite(SpriteID.THRONE, State.LEFT_1, 100, 70, imageSet, frames);
+    const frames = new Frames(1);
 
-    //Añadimos el player al array de sprites
+    //Crearemos nuestro objeto physics con el vLimit = 40px/s
+    const physics = new Physics(160);
+
+    //Creamos nuestro sprite
+    const throne = new Sprite(SpriteID.THRONE, State.LEFT_1, -400, 70, imageSet, frames, physics);
+
+    //Añadimos el player al array de spritesS
     globals.sprites.push(throne);
+    globals.spritesMain.push(throne);
+
 }
 
 function initLevel()
@@ -306,6 +430,21 @@ function initLevel()
     globals.Level = new Level(level1, imageSet)
 }
 
+//Inicializamos el contador de juego
+globals.gameTime = 0;
+
+function initTimers()
+{
+    //Creamos timer de 200, con cambios cada 0.5s
+    globals.levelTime = new Timer(200, 0.5)
+}
+
+function initEvents()
+{
+    //Add the keyboard event listeners
+    window.addEventListener("Keydown", keydonwHandler);
+    window.addEventListener("Keyup", keyupHandler);
+}
 
 
 //Exportamos las funciones 
@@ -316,5 +455,11 @@ export
     loadAssets,
     initSprites,
     initLevel,
-    initMainSprites
+    initMainSprites,
+    initControlsSprites,
+    initStorySprites,
+    initScoreSprites,
+    initOverSprites,
+    initTimers,
+    initEvents
 }

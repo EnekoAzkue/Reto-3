@@ -1,5 +1,5 @@
 import globals from "./globals.js";
-import{initHTMLelements, loadAssets, initSprites, initVars, initLevel, initMainSprites} from "./initialize.js";
+import{initHTMLelements, loadAssets, initSprites, initVars, initLevel, initMainSprites, initControlsSprites, initStorySprites, initScoreSprites, initTimers, initEvents, initOverSprites} from "./initialize.js";
 import update from "./gameLogic.js";
 import render from "./gameRender.js";
 
@@ -24,10 +24,24 @@ function init()
     //Inicializacion de variables del juego
     initVars();
 
+    //Inicializamos temporizadores
+    initTimers();
+
+    //Inicializamos eventos
+    initEvents();
+
     //Inicializamos el mapa del juego
     initLevel();
 
     initMainSprites();
+
+    initControlsSprites();
+
+    initStorySprites();
+
+    initScoreSprites();
+
+    initOverSprites();
 
     //Start the first frame request
     window.requestAnimationFrame(gameLoop);

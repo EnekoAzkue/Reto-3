@@ -3,14 +3,14 @@
 //Estados del juego
 export const Game = 
 {
-    INVALID: -1,
-    LOADING: 0,
-    PLAYING: 1,
-    OVER:    2,
-    MAIN:    3,
-    SCORE:   4,
-    CONTROLS:5,
-    STORY:   6
+    INVALID:    -1,
+    LOADING:    0,
+    PLAYING:    1,
+    OVER:       2,
+    MAIN:       3,
+    SCORE:      4,
+    CONTROLS:   5,
+    STORY:      6
 };
 
 //Velocidad del juego
@@ -28,17 +28,29 @@ export const SpriteID =
     HEART: 7,
     HEALTHPOTION: 8,
     THRONE: 9,
-    MAINSCREEN: 10
+    MAINSCREEN: 10,
+    CONTROLSSCREEN: 11,
+    STORYSCREEN: 12,
+    SCORESCREEN: 13,
+    OVERSCREEN: 14,
+    PLAYER1: 15,
+    PLAYER2: 16,
+    PLAYER3: 17,
+    
 }
 
 //Identificador de estado de sprite(direccion)
 export const State =
 {
     //Estados de PLAYER
-    DOWN:   0,
-    RIGHT:  1,
-    UP:     2,
-    LEFT:   3,
+    DOWN:           0,
+    RIGHT:          1,
+    UP:             2,
+    LEFT:           3,
+    STILL_DOWN:     4,
+    STILL_RIGHT:    5,
+    STILL_UP:       6,
+    STILL_LEFT:     7,
 
     //Estados de BOMB
     BLUE:       0,
@@ -75,6 +87,14 @@ export const Tile =
     SIZE_16: 0, //Sprites de 16*16
     SIZE_32: 1,  //Tiles del mapa 32*32
     
+}
+
+export const key = 
+{
+    UP:     38,
+    DOWN:   40,
+    RIGHT:  39,
+    LEFT:   37
 }
 
 export const Block =

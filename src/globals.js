@@ -38,8 +38,21 @@ export default
     //Array con los datos de los sprites
     sprites: [],
     spritesHUD: [],
-    spritesBackgrounds: [],
-
+    spritesMain: [],
+    spritesControls: [],
+    spritesStory: [],
+    spritesScore: [],
+    spritesOver: [],
+    
     //Datos del nivel
-    Level: {}
+    Level: {},
+
+    //Timepo de juego
+    gameTime: -1,
+    
+    //Temporizacion nivel
+    levelTime: {},
+
+    //Objeto que guarda el estado de la tecla pulsada
+    action: {},
 };

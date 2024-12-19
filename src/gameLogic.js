@@ -1,5 +1,6 @@
 import globals from "./globals.js";
 import {Game, State, SpriteID} from "./constants.js";
+import Timer from "./Timer.js";
 
 export default function update()
 {
@@ -35,6 +36,11 @@ export default function update()
         case Game.STORY:
             storyScreen();
         break;
+
+        case Game.OVER:
+            overScreen();
+            break;
+
         default:
             console.error("Error: Game State invalid");
     }
@@ -44,11 +50,15 @@ function playGame()
 {
     updateSprites();
     updateSpritesHUD();
+
+    updateGameTime();
+
+    updateLevelTime();
 }
 
 function gameOver()
 {
-
+    updateOverSprites();
 }
 
 function mainScreen()
@@ -58,17 +68,22 @@ function mainScreen()
 
 function scoreScreen()
 {
-
+    updateScoreSprites();
 }
 
 function controlsScreen()
 {
-
+    updateControlSprites();
 }
 
 function storyScreen()
 {
+    updateStorySprites();
+}
 
+function overScreen()
+{
+    updateOverSprites();
 }
 
 function updateSprites()
@@ -150,7 +165,43 @@ function updateMainSprite(sprite)
             break;
             
 
+        //Caso del enemigo
+        default:
 
+            break;
+    }
+}
+
+function updateControlSprite(sprite)
+{
+    const type = sprite.id
+    switch(type)
+    {
+        //Caso del jugador
+        case SpriteID.CONTROLSSCREEN:
+            updateControlScreen(sprite);
+            break;
+        
+        case SpriteID.PLAYER:
+            updatePlayerControls(sprite);
+            break;
+        
+        case SpriteID.PLAYER1:
+            updatePlayer1Controls(sprite);
+            break;
+
+        case SpriteID.PLAYER2:
+            updatePlayer2Controls(sprite);
+            break;
+            
+        case SpriteID.PLAYER3:
+            updatePlayer3Controls(sprite);
+            break;
+
+        case SpriteID.BOMB:
+            updateBombControls(sprite);
+            break;
+            
 
         //Caso del enemigo
         default:
@@ -158,6 +209,59 @@ function updateMainSprite(sprite)
             break;
     }
 }
+
+function updateStorySprite(sprite)
+{
+    const type = sprite.id
+    switch(type)
+    {
+        //Caso del jugador
+        case SpriteID.STORYSCREEN:
+            updateStoryScreen(sprite);
+            break;
+        
+        //Caso del enemigo
+        default:
+
+            break;
+    }
+}
+
+function updateScoreSprite(sprite)
+{
+    const type = sprite.id
+    switch(type)
+    {
+        //Caso del jugador
+        case SpriteID.SCORESCREEN:
+            updateScoreScreen(sprite);
+            break;
+        
+        //Caso del enemigo
+        default:
+
+            break;
+    }
+}
+
+function updateOverSprite(sprite)
+{
+    const type = sprite.id
+    switch(type)
+    {
+        //Caso del jugador
+        case SpriteID.OVERSCREEN:
+            updateOverScreen(sprite);
+            break;
+        
+        //Caso del enemigo
+        default:
+
+            break;
+    }
+}
+
+
 
 function updateSpriteHUD(sprite)
 {
@@ -191,14 +295,63 @@ function updatePlayer(sprite)
 function updatePlayerMain(sprite)
 
 {
-    sprite.xPos = 32;
-    sprite.yPos = 16;
+    sprite.physics.vx = sprite.physics.vLimit;
+    sprite.yPos = 173;
+
+    sprite.state = State.RIGHT;
+
+    sprite.xPos += sprite.physics.vx * globals.deltaTime
+    if(sprite.xPos > 300)
+    {
+        sprite.xPos = -50;
+    }
+
+    updateAnimationFrame(sprite);
+}
+
+function updatePlayerControls(sprite)
+
+{
+    sprite.xPos = 80;
+    sprite.yPos = 108;
+
+    sprite.state = State.UP;
+    sprite.frames.frameCounter = 2;
+
+}
+
+function updatePlayer1Controls(sprite)
+
+{
+    sprite.xPos = 80;
+    sprite.yPos = 128;
+
+    sprite.state = State.LEFT;
+    sprite.frames.frameCounter = 2;
+
+}
+
+function updatePlayer2Controls(sprite)
+
+{
+    sprite.xPos = 80;
+    sprite.yPos = 148;
+
+    sprite.state = State.DOWN;
+    sprite.frames.frameCounter = 2;
+
+}
+
+function updatePlayer3Controls(sprite)
+
+{
+    sprite.xPos = 80;
+    sprite.yPos = 168;
 
     sprite.state = State.RIGHT;
     sprite.frames.frameCounter = 2;
 
 }
-
 
 function updateBomb(sprite)
 {
@@ -210,6 +363,15 @@ function updateBomb(sprite)
     sprite.state = State.BLUE;
     sprite.frames.frameCounter = 3;
 
+}
+
+function updateBombControls(sprite)
+{
+    sprite.xPos = 240;
+    sprite.yPos = 108;
+
+    sprite.state = State.BLUE;
+    sprite.frames.frameCounter = 0;
 }
 
 function updateMazeBlock1(sprite)
@@ -280,12 +442,19 @@ function updateThrone(sprite)
 function updateThroneMain(sprite)
 {
 
-    sprite.xPos = 50;
-    sprite.yPos = 50;
+    sprite.physics.vx = sprite.physics.vLimit;
+    sprite.yPos = 155;
 
     sprite.frames.frameCounter = 0;
 
     sprite.state = State.STILL;
+
+    sprite.xPos += sprite.physics.vx * globals.deltaTime
+    if(sprite.xPos > 600)
+    {
+        sprite.xPos = -100;
+    }
+
 }
 
 function updateMainScreen(sprite)
@@ -299,7 +468,49 @@ function updateMainScreen(sprite)
 
 }
 
+function updateControlScreen(sprite)
+{
+    sprite.xPos = 0;
+    sprite.yPos = 0;
 
+    sprite.frames.frameCounter = 0;
+
+    sprite.state = State.STILL;
+
+}
+
+function updateStoryScreen(sprite)
+{
+    sprite.xPos = 0;
+    sprite.yPos = 0;
+
+    sprite.frames.frameCounter = 0;
+
+    sprite.state = State.STILL;
+
+}
+
+function updateScoreScreen(sprite)
+{
+    sprite.xPos = 0;
+    sprite.yPos = 0;
+
+    sprite.frames.frameCounter = 0;
+
+    sprite.state = State.STILL;
+
+}
+
+function updateOverScreen(sprite)
+{
+    sprite.xPos = 0;
+    sprite.yPos = 0;
+
+    sprite.frames.frameCounter = 0;
+
+    sprite.state = State.STILL;
+
+}
 function updateMainSprites()
 {
     for(let i = 0; i < globals.spritesMain.length; i++)
@@ -307,4 +518,97 @@ function updateMainSprites()
         const sprite = globals.spritesMain[i];
         updateMainSprite(sprite);
     }
+}
+
+function updateControlSprites()
+{
+    for(let i = 0; i < globals.spritesControls.length; i++)
+    {
+        const sprite = globals.spritesControls[i];
+        updateControlSprite(sprite);
+    }
+}
+
+function updateStorySprites()
+{
+    for(let i = 0; i < globals.spritesStory.length; i++)
+    {
+        const sprite = globals.spritesStory[i];
+        updateStorySprite(sprite);
+    }
+}
+
+function updateScoreSprites()
+{
+    for(let i = 0; i < globals.spritesScore.length; i++)
+    {
+        const sprite = globals.spritesScore[i];
+        updateScoreSprite(sprite);
+    }
+}
+
+function updateOverSprites()
+{
+    for(let i = 0; i < globals.spritesOver.length; i++)
+    {
+        const sprite = globals.spritesOver[i];
+        updateOverSprite(sprite);
+    }
+}
+
+function updateGameTime()
+{
+    //Incrementamos el contador
+    globals.gameTime += globals.deltaTime;
+}
+
+function updateLevelTime()
+{
+    //Incrementaremos el contador de cambio de valor
+    globals.levelTime.timeChangeCounter += globals.deltaTime;
+
+    //Si ha pasado el tiempo necesario, cambiamos el valor de timer
+    if (globals.levelTime.timeChangeCounter > globals.levelTime.timeChangeValue)
+    {
+        globals.levelTime.value--;
+
+        //Resetearemos timeChangerCounter
+        globals.levelTime.timeChangeCounter = 0;
+    }
+}
+
+function updateAnimationFrame(sprite)
+{
+    //Aumentamos el contador de timepo de frames
+    sprite.frames.frameChangeCounter++;
+
+    //Cambiamos de frame cuando el lag de animacion alcanza animSpeed
+    if (sprite.frames.frameChangeCounter === sprite.frames.speed)
+    {
+        //Cambios de frame y reseteamos el contador de cambio de frame 
+        sprite.frames.frameCounter++;
+        sprite.frames.frameChangeCounter = 0;
+    }
+
+    if(State.RIGHT)
+    {
+        //Si hemos llegado al maximo de frames reiniciamos el contador(animacion ciclica)
+        if(sprite.frames.frameCounter === 5)
+        {
+            sprite.frames.frameCounter = 2;
+        }
+    }
+}
+
+function readKeyboardAndAssignState(sprite)
+{
+    sprite.state =  globals.action.moveLeft         ? State.LEFT:           //Left key
+                    globals.action.moveRight        ? State.RIGHT:          //Right key
+                    globals.action.moveUp           ? State.UP:             //Up key
+                    globals.action.moveDown         ? State.DOWN:           //Down key
+                    sprite.state === State.LEFT     ? State.STILL_LEFT:     //No key and previous state Left
+                    sprite.state === State.RIGHT    ? State.STILL_RIGHT:    //No key and previous state Right
+                    sprite.state === State.UP       ? State.STILL_UP:       //No key and previous state Up
+                    sprite.state === State.DOWN     ? State.STILL_DOWN:     //No key and previous state Down
+                    sprite.state;
 }
