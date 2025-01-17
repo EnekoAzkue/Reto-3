@@ -6,6 +6,8 @@
     image-rendering: -webkit-crisp-edges;
     image-rendering: pixelated;
     image-rendering: crisp-edges;
+    margin-left:24vw;
+
 }
 
 #gameHUD
@@ -18,11 +20,21 @@
     image-rendering: -webkit-crisp-edges;
     image-rendering: pixelated;
     image-rendering: crisp-edges;
+    position: center;
+    margin-left:24vw;
+    
 
 }
 
+body
+{
+
+    background-color: rgb(34, 34, 34);
+}
 @font-face 
 {
     font-family: emulogic;
     src: url("../fonts/emulogic.ttf");
 }
+
+
