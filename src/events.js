@@ -1,23 +1,23 @@
-import { key } from "./constants.js";
+import { Key } from "./constants.js";
 import globals from "./globals.js";
 
-export function keydonwHandler(event)
+export function keydownHandler(event)
 {
     switch(event.keyCode)
     {
-        case key.UP:
+        case Key.UP:
             globals.action.moveUp = true;
             break;
         
-        case key.DOWN:
+        case Key.DOWN:
             globals.action.moveDown = true;
             break;
     
-        case key.LEFT:
+        case Key.LEFT:
             globals.action.moveLeft = true;
             break;
     
-        case key.RIGHT:
+        case Key.RIGHT:
             globals.action.moveRight = true;
             break;
     }
@@ -27,19 +27,20 @@ export function keyupHandler(event)
 {
     switch(event.keyCode)
     {
-        case key.UP:
+        case Key.UP:
             globals.action.moveUp = false;
             break;
         
-        case key.DOWN:
+        case Key.DOWN:
+            console.log(event.keyCode);
             globals.action.moveDown = false;
             break;
     
-        case key.LEFT:
+        case Key.LEFT:
             globals.action.moveLeft = false;
             break;
     
-        case key.RIGHT:
+        case Key.RIGHT:
             globals.action.moveRight = false;
             break;
     }
