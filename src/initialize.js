@@ -6,7 +6,7 @@ import Frames from "./frames.js";
 import {Level, level1} from "./level.js";
 import Timer from "./Timer.js";
 import Physics from "./Physics.js";
-import { keydonwHandler, keyupHandler } from "./events.js";
+import { keydownHandler, keyupHandler } from "./events.js";
 //Funcion que inicializa los elementos HTML
 function initHTMLelements()
 {
@@ -89,7 +89,7 @@ function loadHandler()
         console.log("Assets finished loading");
 
         //Start the game 
-        globals.gameState = Game.CONTROLS;
+        globals.gameState = Game.PLAYING;
     }
     console.log(`gameState = ${globals.gameState}`)
 }
@@ -140,9 +140,9 @@ function initOverSprites()
 function initMainScreen()
 {
     let x = 0;
-    let y = 35;
+    let y = 47;
     let xOffset = 16*x + x;
-    let yOffset = 16*y + y + 11;
+    let yOffset = 16*y + y + 12;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
     const imageSet = new ImageSet(0, 0, 272, 208, 0, xOffset, yOffset);
 
@@ -159,9 +159,9 @@ function initMainScreen()
 function initControlsScreen()
 {
     let x = 0;
-    let y = 84;
+    let y = 96;
     let xOffset = 16*x + x;
-    let yOffset = 16*y + y + 15;
+    let yOffset = 16*y + y + 16;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
     const imageSet = new ImageSet(0, 0, 272, 208, 0, xOffset, yOffset);
 
@@ -178,7 +178,7 @@ function initControlsScreen()
 function initStoryScreen()
 {
     let x = 0;
-    let y = 60;
+    let y = 72;
     let xOffset = 16*x + x;
     let yOffset = 16*y + y + 5;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
@@ -197,7 +197,7 @@ function initStoryScreen()
 function initScoreScreen()
 {
     let x = 0;
-    let y = 72;
+    let y = 84;
     let xOffset = 16*x + x;
     let yOffset = 16*y + y + 10;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
@@ -216,9 +216,9 @@ function initScoreScreen()
 function initOverScreen()
 {
     let x = 0;
-    let y = 47;
+    let y = 60;
     let xOffset = 16*x + x;
-    let yOffset = 16*y + y + 17;
+    let yOffset = 16*y + y;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
     const imageSet = new ImageSet(0, 0, 272, 208, 0, xOffset, yOffset);
 
@@ -240,17 +240,17 @@ function initPlayer()
     let xOffset = 16*x + x;
     let yOffset = 16*y + y;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
-    const imageSet = new ImageSet(0, 0, 16, 16, 17, xOffset, yOffset);
+    const imageSet = new ImageSet(0, 0, 16, 16, 17, 0, 0);
 
-    //Creamos los datos de la animacion. 13 frames / state
-    const frames = new Frames(8, 6);
+    //Creamos los datos de la animacion. (2-4 frames / state, 2 velocidad)
+    const frames = new Frames(4, 5);
 
-    //Crearemos nuestro objeto physics con el vLimit = 40px/s
-    const physics = new Physics(80);
+    //Crearemos nuestro objeto physics con el vLimit = 80px/s
+    const physics_main = new Physics(40,0,0,0,0,0);
 
     //Creamos nuestro sprite (id, state, xPos, yPos, imageSet, frames, physics)
-    const player = new Sprite(SpriteID.PLAYER, State.DOWN, -50, 48, imageSet, frames, physics);
-
+    const player = new Sprite(SpriteID.PLAYER, State.STILL_DOWN, 32, 16, imageSet, frames, physics_main);
+    const playerMain = new Sprite(SpriteID.PLAYER, State.STILL_DOWN, 32, 172, imageSet, frames, physics_main);
     const playerC1 = new Sprite(SpriteID.PLAYER1, State.DOWN, 80, 48, imageSet, frames, 0);
     const playerC2 = new Sprite(SpriteID.PLAYER2, State.DOWN, 80, 48, imageSet, frames, 0);
     const playerC3 = new Sprite(SpriteID.PLAYER3, State.DOWN, 80, 48, imageSet, frames, 0);
@@ -258,7 +258,7 @@ function initPlayer()
 
     //Añadimos el player al array de sprites
     globals.sprites.push(player);
-    globals.spritesMain.push(player);
+    globals.spritesMain.push(playerMain);
     globals.spritesControls.push(player,playerC1,playerC2,playerC3);
 
 }
@@ -268,7 +268,7 @@ function initBomb()
 {
     //La bomba empieza desde y = 4 hasta y = 6,
     let x = 0;
-    let y = 4;
+    let y = 16;
     let xOffset = 16*x + x;
     let yOffset = 16*y + y;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
@@ -289,9 +289,9 @@ function initBomb()
 function initMazeBlock()
 {
     let x = 0;
-    let y = 15;
+    let y = 27;
     let xOffset = 16*x + x;
-    let yOffset = 16*y + y;
+    let yOffset = 16*y + y +1;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
     const imageSet = new ImageSet(0, 0, 16, 16, 17, xOffset, yOffset);
 
@@ -309,16 +309,20 @@ function initMazeBlock()
 function initGorrocoptero()
 {
     let x = 0;
-    let y = 17;
+    let y = 29;
     let xOffset = 16*x + x;
-    let yOffset = 16*y + y;
+    let yOffset = 16*y + y + 1;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
     const imageSet = new ImageSet(0, 0, 16, 24, 25, xOffset, yOffset);
 
-    //Creamos los datos de la animacion. 8 frames / state
-    const frames = new Frames(8);
+    //Creamos los datos de la animacion. (2-4 frames / state, 2 velocidad)
+    const frames = new Frames(4, 2);
+
+    //Crearemos nuestro objeto physics con el vLimit = 80px/s
+    const physics_main = new Physics(30,0,0,0,0,0);
+
     //Creamos nuestro sprite
-    const gorrocoptero = new Sprite(SpriteID.GORROCOPTERO, State.DOWN_1, 100, 70, imageSet, frames);
+    const gorrocoptero = new Sprite(SpriteID.GORROCOPTERO, State.DOWN_1, 96, 72, imageSet, frames, physics_main);
 
     //Añadimos el player al array de sprites
     globals.sprites.push(gorrocoptero);
@@ -328,16 +332,19 @@ function initGorrocoptero()
 function initHormiga()
 {
     let x = 0;
-    let y = 17;
+    let y = 35;
     let xOffset = 16*x + x;
-    let yOffset = 16*y + y + 25*4;
+    let yOffset = 16*y + y;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
     const imageSet = new ImageSet(0, 0, 16, 24, 25, xOffset, yOffset);
 
-    //Creamos los datos de la animacion. 8 frames / state
-    const frames = new Frames(8);
+    //Creamos los datos de la animacion. (2-4 frames / state, 2 velocidad)
+    const frames = new Frames(12, 2);
+
+    //Crearemos nuestro objeto physics con el vLimit = 80px/s
+    const physics_main = new Physics(30,0,0,0,0,0);
     //Creamos nuestro sprite
-    const hormiga = new Sprite(SpriteID.HORMIGA, State.DOWN_1, 100, 70, imageSet, frames);
+    const hormiga = new Sprite(SpriteID.HORMIGA, State.DOWN_1, 160, 8, imageSet, frames, physics_main);
 
     //Añadimos el player al array de sprites
     globals.sprites.push(hormiga);
@@ -364,7 +371,7 @@ function initBombilla()
 function initHeart()
 {
     let x = 0;
-    let y = 32;
+    let y = 44;
     let xOffset = 16*x + x;
     let yOffset = 16*y + y;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
@@ -382,7 +389,7 @@ function initHeart()
 function initHealthPotion()
 {
     let x = 0;
-    let y = 33;
+    let y = 45;
     let xOffset = 16*x + x;
     let yOffset = 16*y + y - 1;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
@@ -400,7 +407,7 @@ function initHealthPotion()
 function initThrone()
 {
     let x = 0;
-    let y = 33;
+    let y = 45;
     let xOffset = 16*x + x;
     let yOffset = 16*y + y + 15;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
@@ -409,15 +416,24 @@ function initThrone()
     //Creamos los datos de la animacion. 8 frames / state
     const frames = new Frames(1);
 
+    //Valores iniciales para Physics
+    const initAngle = 90 + Math.PI / 100;
+    const omega = 0.05;
+    const xRotCenter = globals.canvas.width/2
+    const yRotCenter = globals.canvas.height/2
+
+
     //Crearemos nuestro objeto physics con el vLimit = 40px/s
-    const physics = new Physics(160);
+    const physics_main = new Physics(160);
+    const physics = new Physics(80,0,omega,initAngle,xRotCenter,yRotCenter);
 
     //Creamos nuestro sprite
-    const throne = new Sprite(SpriteID.THRONE, State.LEFT_1, -400, 70, imageSet, frames, physics);
+    const throne_main = new Sprite(SpriteID.THRONE, State.LEFT_1, -400, 70, imageSet, frames, physics_main);
+    const throne = new Sprite(SpriteID.THRONE, State.LEFT_1, 64, 64, imageSet, frames, physics);
 
     //Añadimos el player al array de spritesS
     globals.sprites.push(throne);
-    globals.spritesMain.push(throne);
+    globals.spritesMain.push(throne_main);
 
 }
 
@@ -442,8 +458,8 @@ function initTimers()
 function initEvents()
 {
     //Add the keyboard event listeners
-    window.addEventListener("Keydown", keydonwHandler);
-    window.addEventListener("Keyup", keyupHandler);
+    window.addEventListener("keydown", keydownHandler, false);
+    window.addEventListener("keyup", keyupHandler, false);
 }
 
 
