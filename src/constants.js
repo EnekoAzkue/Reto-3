@@ -43,14 +43,23 @@ export const SpriteID =
 export const State =
 {
     //Estados de PLAYER
-    DOWN:           0,
-    RIGHT:          1,
-    UP:             2,
-    LEFT:           3,
-    STILL_DOWN:     4,
-    STILL_RIGHT:    5,
-    STILL_UP:       6,
-    STILL_LEFT:     7,
+    STILL_DOWN:           0,
+    STILL_RIGHT:          1,
+    STILL_UP:             2,
+    STILL_LEFT:           3,
+    DOWN:                 4,
+    RIGHT:                5,
+    UP:                   6,
+    LEFT:                 7,
+    HIT_DOWN:             8,
+    HIT_RIGHT:            8,
+    HIT_UP:               10,
+    HIT_LEFT:             11,
+    DED_DOWN:             12,
+    DED_RIGHT:            13,
+    DED_UP:               14,
+    DED_LEFT:             15,
+
 
     //Estados de BOMB
     BLUE:       0,
@@ -89,12 +98,12 @@ export const Tile =
     
 }
 
-export const key = 
+export const Key = 
 {
-    UP:     38,
-    DOWN:   40,
-    RIGHT:  39,
-    LEFT:   37
+    UP:     87,
+    DOWN:   83,
+    RIGHT:  68,
+    LEFT:   65
 }
 
 export const Block =
