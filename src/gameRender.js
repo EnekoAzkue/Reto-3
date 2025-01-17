@@ -100,18 +100,35 @@ function drawMain()
 
     let texto =
     [
-        "The Shadowed Labyrinth:",
+        "The Shadowed Labyrinth",
         "The curse of the Throne"
     ];
+
+
+    // Texto 1
     globals.ctx.strokeStyle = 'black';
-    globals.ctx.font = '24px zwackery';
+    globals.ctx.font = '25px zwackery';
     globals.ctx.fillStyle = 'red';
-    globals.ctx.strokeText(texto[0], 2, 50);
-    globals.ctx.fillText(texto[0], 2, 50);
-    globals.ctx.font = '18px zwackery';
+    
+    // Calcular el ancho del texto
+    const textWidth1 = globals.ctx.measureText(texto[0]).width;
+    // Calcular la posición X para centrar el texto
+    const x1 = (globals.ctx.canvas.width - textWidth1) / 2;
+    
+    globals.ctx.strokeText(texto[0], x1, 50);
+    globals.ctx.fillText(texto[0], x1, 50);
+    
+    // Texto 2
+    globals.ctx.font = '22px zwackery';
     globals.ctx.fillStyle = 'darkred';
-    globals.ctx.strokeText(texto[1], 90, 70);
-    globals.ctx.fillText(texto[1], 90, 70);
+    
+    // Calcular el ancho del texto
+    const textWidth2 = globals.ctx.measureText(texto[1]).width;
+    // Calcular la posición X para centrar el texto
+    const x2 = (globals.ctx.canvas.width - textWidth2) / 2;
+    
+    globals.ctx.strokeText(texto[1], x2, 70);
+    globals.ctx.fillText(texto[1], x2, 70);
 
 }
 
