@@ -283,24 +283,54 @@ function updatePlayer(sprite)
 {
     //Aqui actualizariamos el estado de las variables del player
 
-    sprite.xPos = 32;
-    sprite.yPos = 16;
-    //console.log(sprite.state)
-    sprite.state = State.DOWN;
-    sprite.frames.frameCounter = 0;
+    readKeyboardAndAssignState(sprite);
 
-    //console.log(sprite.state)
+    switch (sprite.state)
+    {
+        case State.UP:
+            //Si se mueve hacia arriba asignamos vy(-)
+            sprite.physics.vx = 0;
+            sprite.physics.vy = -sprite.physics.vLimit;
+            break;
+        case State.DOWN:
+            //Si se mueve hacia abajo asignamos vy(+)
+            sprite.physics.vx = 0;
+            sprite.physics.vy = sprite.physics.vLimit;
+            break;
+        case State.RIGHT:
+            //Si se mueve hacia la derecha asignamos vx(+)
+            sprite.physics.vx = sprite.physics.vLimit;
+            sprite.physics.vy = 0;
+            break;
+        case State.LEFT:
+            //Si se mueve hacia la izquierda asignamos vx(-)
+            sprite.physics.vx = -sprite.physics.vLimit;
+            sprite.physics.vy = 0;
+            break;
+                    
+        default:
+            sprite.physics.vx = 0;
+            sprite.physics.vy = 0;
+    }
+
+
+    
+    sprite.xPos += sprite.physics.vx * globals.deltaTime;
+    sprite.yPos += sprite.physics.vy * globals.deltaTime
+
+    updateAnimationFrame(sprite);
+
 }
 
 function updatePlayerMain(sprite)
 
 {
     sprite.physics.vx = sprite.physics.vLimit;
-    sprite.yPos = 173;
+    sprite.yPos = 172;
 
     sprite.state = State.RIGHT;
 
-    sprite.xPos += sprite.physics.vx * globals.deltaTime
+    sprite.xPos += sprite.physics.vx * globals.deltaTime;
     if(sprite.xPos > 300)
     {
         sprite.xPos = -50;
@@ -316,7 +346,8 @@ function updatePlayerControls(sprite)
     sprite.yPos = 108;
 
     sprite.state = State.UP;
-    sprite.frames.frameCounter = 2;
+    sprite.frames.speed = 20;
+    updateAnimationFrame(sprite);
 
 }
 
@@ -327,7 +358,7 @@ function updatePlayer1Controls(sprite)
     sprite.yPos = 128;
 
     sprite.state = State.LEFT;
-    sprite.frames.frameCounter = 2;
+    updateAnimationFrame(sprite);
 
 }
 
@@ -338,7 +369,7 @@ function updatePlayer2Controls(sprite)
     sprite.yPos = 148;
 
     sprite.state = State.DOWN;
-    sprite.frames.frameCounter = 2;
+    updateAnimationFrame(sprite);
 
 }
 
@@ -349,7 +380,7 @@ function updatePlayer3Controls(sprite)
     sprite.yPos = 168;
 
     sprite.state = State.RIGHT;
-    sprite.frames.frameCounter = 2;
+    updateAnimationFrame(sprite);
 
 }
 
@@ -361,7 +392,7 @@ function updateBomb(sprite)
     sprite.yPos = 80;
 
     sprite.state = State.BLUE;
-    sprite.frames.frameCounter = 3;
+    sprite.frames.frameCounter = 0;
 
 }
 
@@ -388,26 +419,93 @@ function updateMazeBlock1(sprite)
 
 function updateGorrocoptero(sprite)
 {
+    if(sprite.yPos >= 169)
+        {
+            sprite.state = State.UP_2;
+        }
+    else if(sprite.yPos <= 10)
+            {
+                sprite.state = State.DOWN_2;
+            }
+
+    //Maquina de estados
+    switch(sprite.state)
+    {
+        case State.RIGHT_1:
+            //Si se mueve a la derecha asignamos la velocidad X positiva
+            sprite.physics.vx = sprite.physics.vLimit;
+            break;
+        case State.LEFT_1:
+            //Si se mueve a la derecha asignamos la velocidad X positiva
+            sprite.physics.vx = -sprite.physics.vLimit;
+            break;
+        case State.UP_1:
+            //Si se mueve a la derecha asignamos la velocidad X positiva
+            sprite.physics.vy = -sprite.physics.vLimit;
+            break;
+        case State.DOWN_1:
+            //Si se mueve a la derecha asignamos la velocidad X positiva
+            sprite.physics.vy = sprite.physics.vLimit;
+            break;
+    
+
+    }
+
+    //Calculamos la distancia que se mueve(x = x + Vt)
+    sprite.xPos += sprite.physics.vx * globals.deltaTime
+
+    //Calculamos la distancia que se mueve(x = x + Vt)
+    sprite.yPos += sprite.physics.vy * globals.deltaTime
+
+    updateAnimationFrame(sprite);
 
 
-    sprite.xPos = 96;
-    sprite.yPos = 24;
-
-    sprite.frames.frameCounter = 0;
-
-    sprite.state = State.DOWN_1;
 }
 
 function updateHormiga(sprite)
 {
+    if(sprite.yPos >= 169)
+        {
+            sprite.state = State.UP_2;
+        }
+    else if(sprite.yPos <= 10)
+            {
+                sprite.state = State.DOWN_2;
+            }
+    
+    //Maquina de estados
+    switch(sprite.state)
+    {
+        case State.RIGHT_2:
+            //Si se mueve a la derecha asignamos la velocidad X positiva
+            sprite.physics.vx = sprite.physics.vLimit;
+            break;
+        case State.LEFT_2:
+            //Si se mueve a la derecha asignamos la velocidad X positiva
+            sprite.physics.vx = -sprite.physics.vLimit;
+            break;
+        case State.UP_2:
+            //Si se mueve a la derecha asignamos la velocidad X positiva
+            sprite.physics.vy = -sprite.physics.vLimit;
+            break;
+        case State.DOWN_2:
+            //Si se mueve a la derecha asignamos la velocidad X positiva
+            sprite.physics.vy = sprite.physics.vLimit;
+            break;
+    
+
+    }
+
+    //Calculamos la distancia que se mueve(x = x + Vt)
+    sprite.xPos += sprite.physics.vx * globals.deltaTime
+
+    //Calculamos la distancia que se mueve(x = x + Vt)
+    sprite.yPos += sprite.physics.vy * globals.deltaTime
+
+updateAnimationFrame(sprite);
 
 
-    sprite.xPos = 160;
-    sprite.yPos = 8;
 
-    sprite.frames.frameCounter = 0;
-
-    sprite.state = State.LEFT_2;
 }
 
 function updateHeart(sprite)
@@ -430,13 +528,18 @@ function updateHealthPotion(sprite)
 
 function updateThrone(sprite)
 {
-
-    sprite.xPos = 74;
-    sprite.yPos = 182;
-
     sprite.frames.frameCounter = 0;
 
     sprite.state = State.STILL;
+
+    //Actualizamos el angulo de giro
+    sprite.physics.angle += sprite.physics.omega * globals.deltaTime;
+
+    //Calculamos la nueva posicion 
+    setThronePosition(sprite);
+    //console.log(sprite.xPos);
+    //console.log(sprite.yPos);
+
 }
 
 function updateThroneMain(sprite)
@@ -579,6 +682,61 @@ function updateLevelTime()
 
 function updateAnimationFrame(sprite)
 {
+    if(sprite.id == 0)
+    {
+    switch(sprite.state)
+    {
+        case State.STILL_UP:
+        case State.STILL_LEFT:
+        case State.STILL_DOWN:
+        case State.STILL_RIGHT:
+            
+            break;
+
+        case State.UP:
+        case State.LEFT:
+        case State.DOWN:
+        case State.RIGHT:
+            sprite.frameCounter = 4;
+            sprite.frameChangeCounter = 0;
+            break;
+    }
+    }
+
+    if(sprite.id == 4)
+        {
+        switch(sprite.state)
+        {
+            case State.UP_1:
+            case State.LEFT_1:
+            case State.DOWN_1:
+            case State.RIGHT_1:
+                sprite.frameCounter = 4;
+                sprite.frameChangeCounter = 1;
+                sprite.frames.speed = 2;
+                break;
+    
+            
+        }
+        }
+
+        if(sprite.id == 5)
+        {
+            switch(sprite.state)
+            {
+                case State.UP_2:
+                case State.LEFT_2:
+                case State.DOWN_2:
+                case State.RIGHT_2:
+                    sprite.frameCounter = 12;
+                    sprite.frameChangeCounter = 1;
+                    sprite.frames.speed = 2;
+                    break;
+        
+                
+            }
+        }
+    
     //Aumentamos el contador de timepo de frames
     sprite.frames.frameChangeCounter++;
 
@@ -590,14 +748,34 @@ function updateAnimationFrame(sprite)
         sprite.frames.frameChangeCounter = 0;
     }
 
-    if(State.RIGHT)
-    {
         //Si hemos llegado al maximo de frames reiniciamos el contador(animacion ciclica)
-        if(sprite.frames.frameCounter === 5)
+        if(sprite.frames.frameCounter === sprite.frames.framesPerState)
         {
-            sprite.frames.frameCounter = 2;
+            sprite.frames.frameCounter = 0;
         }
-    }
+
+}
+
+function setThronePosition(sprite)
+{
+    //Movimiento circular
+    //x = xCentre + Acos(angle)
+    //y = yCentre + Asin(angle)
+
+    const radiusA = 200;
+    const radiusB = 100;
+
+    const K = 30;
+    const Kp = 25;
+
+    sprite.xPos = sprite.physics.xRotCenter + radiusA * Math.cos(K * sprite.physics.angle)
+    sprite.yPos = sprite.physics.yRotCenter + radiusB * Math.sin(Kp * sprite.physics.angle)
+
+
+    //Centramos el giro respecto del centro del sprite
+    sprite.xPos -= sprite.imageSet.xSize/2;
+    sprite.yPos -= sprite.imageSet.ySize/2;
+
 }
 
 function readKeyboardAndAssignState(sprite)
@@ -611,4 +789,5 @@ function readKeyboardAndAssignState(sprite)
                     sprite.state === State.UP       ? State.STILL_UP:       //No key and previous state Up
                     sprite.state === State.DOWN     ? State.STILL_DOWN:     //No key and previous state Down
                     sprite.state;
+
 }
