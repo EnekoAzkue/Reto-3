@@ -7,6 +7,7 @@ import {Level, level1} from "./level.js";
 import Timer from "./Timer.js";
 import Physics from "./Physics.js";
 import { keydownHandler, keyupHandler } from "./events.js";
+import HitBox from "./hitbox.js";
 //Funcion que inicializa los elementos HTML
 function initHTMLelements()
 {
@@ -46,6 +47,8 @@ function initVars()
         moveUp:     false,
         moveDown:   false
     }
+
+    globals.life = 3;
 }
 
 //Carga de activos: TIMEMAPS, IMAGES, SOUNDS
@@ -248,18 +251,22 @@ function initPlayer()
     //Crearemos nuestro objeto physics con el vLimit = 80px/s
     const physics_main = new Physics(40,0,0,0,0,0);
 
+    //Creamos nuestro objeto hitBox(xSize, ySize, xOffset, yOffset)
+    const hitBox = new HitBox(12,8,4,2)
+
     //Creamos nuestro sprite (id, state, xPos, yPos, imageSet, frames, physics)
-    const player = new Sprite(SpriteID.PLAYER, State.STILL_DOWN, 32, 16, imageSet, frames, physics_main);
-    const playerMain = new Sprite(SpriteID.PLAYER, State.STILL_DOWN, 32, 172, imageSet, frames, physics_main);
-    const playerC1 = new Sprite(SpriteID.PLAYER1, State.DOWN, 80, 48, imageSet, frames, 0);
-    const playerC2 = new Sprite(SpriteID.PLAYER2, State.DOWN, 80, 48, imageSet, frames, 0);
-    const playerC3 = new Sprite(SpriteID.PLAYER3, State.DOWN, 80, 48, imageSet, frames, 0);
+    const player = new Sprite(SpriteID.PLAYER, State.STILL_DOWN, 32, 16, imageSet, frames, physics_main, hitBox);
+    const playerMain = new Sprite(SpriteID.PLAYERMAIN, State.STILL_DOWN, 32, 172, imageSet, frames, physics_main,0);
+    const playerC = new Sprite(SpriteID.PLAYERC1, State.STILL_DOWN, 32, 16, imageSet, frames, physics_main, hitBox);
+    const playerC1 = new Sprite(SpriteID.PLAYERC2, State.DOWN, 80, 48, imageSet, frames, 0,0);
+    const playerC2 = new Sprite(SpriteID.PLAYERC3, State.DOWN, 80, 48, imageSet, frames, 0,0);
+    const playerC3 = new Sprite(SpriteID.PLAYERC4, State.DOWN, 80, 48, imageSet, frames, 0,0);
 
 
     //Añadimos el player al array de sprites
-    globals.sprites.push(player);
+    globals.sprites[0] = player;
     globals.spritesMain.push(playerMain);
-    globals.spritesControls.push(player,playerC1,playerC2,playerC3);
+    globals.spritesControls.push(playerC,playerC1,playerC2,playerC3);
 
 }
 
@@ -276,8 +283,11 @@ function initBomb()
 
     //Creamos los datos de la animacion. 8 frames / state
     const frames = new Frames(8);
+
+    const hitBox = new HitBox(14,14,1,1)
+
     //Creamos nuestro sprite
-    const bomb = new Sprite(SpriteID.BOMB, State.BLUE, 100, 70, imageSet, frames);
+    const bomb = new Sprite(SpriteID.BOMB, State.BLUE, 100, 70, imageSet, frames,0, hitBox);
 
     //Añadimos el player al array de sprites
     globals.sprites.push(bomb);
@@ -297,8 +307,12 @@ function initMazeBlock()
 
     //Creamos los datos de la animacion. 8 frames / state
     const frames = new Frames(8);
+
+    const hitBox = new HitBox(14,14,1,1)
+
+
     //Creamos nuestro sprite
-    const mazeBlock = new Sprite(SpriteID.MAZE_BLOCK, State.STILL, 100, 70, imageSet, frames);
+    const mazeBlock = new Sprite(SpriteID.MAZE_BLOCK, State.STILL, 100, 70, imageSet, frames,0,hitBox);
 
 
     //Añadimos el player al array de sprites
@@ -321,8 +335,10 @@ function initGorrocoptero()
     //Crearemos nuestro objeto physics con el vLimit = 80px/s
     const physics_main = new Physics(30,0,0,0,0,0);
 
+    const hitBox = new HitBox(14,14,1,9)
+
     //Creamos nuestro sprite
-    const gorrocoptero = new Sprite(SpriteID.GORROCOPTERO, State.DOWN_1, 96, 72, imageSet, frames, physics_main);
+    const gorrocoptero = new Sprite(SpriteID.GORROCOPTERO, State.DOWN_1, 96, 24, imageSet, frames, physics_main,hitBox);
 
     //Añadimos el player al array de sprites
     globals.sprites.push(gorrocoptero);
@@ -342,9 +358,12 @@ function initHormiga()
     const frames = new Frames(12, 2);
 
     //Crearemos nuestro objeto physics con el vLimit = 80px/s
-    const physics_main = new Physics(30,0,0,0,0,0);
+    const physics_main = new Physics(20,0,0,0,0,0);
+
+    const hitBox = new HitBox(14,14,1,8)
+
     //Creamos nuestro sprite
-    const hormiga = new Sprite(SpriteID.HORMIGA, State.DOWN_1, 160, 8, imageSet, frames, physics_main);
+    const hormiga = new Sprite(SpriteID.HORMIGA, State.DOWN_1, 160, 9, imageSet, frames, physics_main,hitBox);
 
     //Añadimos el player al array de sprites
     globals.sprites.push(hormiga);
@@ -397,8 +416,12 @@ function initHealthPotion()
 
     //Creamos los datos de la animacion. 8 frames / state
     const frames = new Frames(8);
+
+    const hitBox = new HitBox(6,4,6,5)
+
+
     //Creamos nuestro sprite
-    const healthPotion = new Sprite(SpriteID.HEALTHPOTION, State.STILL, 100, 70, imageSet, frames);
+    const healthPotion = new Sprite(SpriteID.HEALTHPOTION, State.STILL, 100, 70, imageSet, frames,0,hitBox);
 
     //Añadimos el player al array de sprites
     globals.sprites.push(healthPotion);
@@ -418,7 +441,7 @@ function initThrone()
 
     //Valores iniciales para Physics
     const initAngle = 90 + Math.PI / 100;
-    const omega = 0.05;
+    const omega = 0.01;
     const xRotCenter = globals.canvas.width/2
     const yRotCenter = globals.canvas.height/2
 
@@ -427,9 +450,11 @@ function initThrone()
     const physics_main = new Physics(160);
     const physics = new Physics(80,0,omega,initAngle,xRotCenter,yRotCenter);
 
+    const hitBox = new HitBox(27,25,1,2)
+
     //Creamos nuestro sprite
-    const throne_main = new Sprite(SpriteID.THRONE, State.LEFT_1, -400, 70, imageSet, frames, physics_main);
-    const throne = new Sprite(SpriteID.THRONE, State.LEFT_1, 64, 64, imageSet, frames, physics);
+    const throne_main = new Sprite(SpriteID.THRONE, State.LEFT_1, -400, 70, imageSet, frames, physics_main,0);
+    const throne = new Sprite(SpriteID.THRONE, State.LEFT_1, 64, 64, imageSet, frames, physics,hitBox);
 
     //Añadimos el player al array de spritesS
     globals.sprites.push(throne);
@@ -461,6 +486,8 @@ function initEvents()
     window.addEventListener("keydown", keydownHandler, false);
     window.addEventListener("keyup", keyupHandler, false);
 }
+
+
 
 
 //Exportamos las funciones 
