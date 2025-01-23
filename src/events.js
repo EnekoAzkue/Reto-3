@@ -32,7 +32,6 @@ export function keyupHandler(event)
             break;
         
         case Key.DOWN:
-            console.log(event.keyCode);
             globals.action.moveDown = false;
             break;
     
