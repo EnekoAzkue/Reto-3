@@ -55,4 +55,7 @@ export default
 
     //Objeto que guarda el estado de la tecla pulsada
     action: {},
+
+    //Life
+    life: 0
 };
