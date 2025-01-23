@@ -1,6 +1,7 @@
 import globals from "./globals.js";
 import {Game, State, SpriteID} from "./constants.js";
 import Timer from "./Timer.js";
+import detectCollisions from "./collisions.js";
 
 export default function update()
 {
@@ -51,9 +52,12 @@ function playGame()
     updateSprites();
     updateSpritesHUD();
 
+    detectCollisions();
+
     updateGameTime();
 
     updateLevelTime();
+    updateLife();
 }
 
 function gameOver()
@@ -155,7 +159,7 @@ function updateMainSprite(sprite)
             updateMainScreen(sprite);
             break;
         
-        case SpriteID.PLAYER:
+        case SpriteID.PLAYERMAIN:
             updatePlayerMain(sprite);
             break;
         
@@ -182,19 +186,19 @@ function updateControlSprite(sprite)
             updateControlScreen(sprite);
             break;
         
-        case SpriteID.PLAYER:
+        case SpriteID.PLAYERC1:
             updatePlayerControls(sprite);
             break;
         
-        case SpriteID.PLAYER1:
+        case SpriteID.PLAYERC2:
             updatePlayer1Controls(sprite);
             break;
 
-        case SpriteID.PLAYER2:
+        case SpriteID.PLAYERC3:
             updatePlayer2Controls(sprite);
             break;
             
-        case SpriteID.PLAYER3:
+        case SpriteID.PLAYERC4:
             updatePlayer3Controls(sprite);
             break;
 
@@ -389,7 +393,7 @@ function updateBomb(sprite)
 
 
     sprite.xPos = 96;
-    sprite.yPos = 80;
+    sprite.yPos = 54;
 
     sprite.state = State.BLUE;
     sprite.frames.frameCounter = 0;
@@ -790,4 +794,31 @@ function readKeyboardAndAssignState(sprite)
                     sprite.state === State.DOWN     ? State.STILL_DOWN:     //No key and previous state Down
                     sprite.state;
 
+}
+
+function updateLife()
+{
+    for(let i = 0; i < globals.sprites.length; ++i)
+    {
+        const sprite = globals.sprites[i];
+
+            if(sprite.isCollidingWithPlayer && !(sprite.id === 1 || sprite.id === 2 || sprite.id === 3))
+            {
+                if(sprite.id === 8)
+                {
+                    if(globals.life < 3)
+                    {
+                        globals.life++;
+                    }
+                }
+                else
+                {
+                    if(globals.life > 0)
+                    {
+                        //Si hay colision reducimos la vida
+                        globals.life--;
+                    }
+                }
+            }
+    }
 }
