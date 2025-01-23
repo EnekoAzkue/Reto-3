@@ -33,9 +33,11 @@ export const SpriteID =
     STORYSCREEN: 12,
     SCORESCREEN: 13,
     OVERSCREEN: 14,
-    PLAYER1: 15,
-    PLAYER2: 16,
-    PLAYER3: 17,
+    PLAYERC1: 15,
+    PLAYERC2: 16,
+    PLAYERC3: 17,
+    PLAYERC4: 18,
+    PLAYERMAIN: 19,
     
 }
 
