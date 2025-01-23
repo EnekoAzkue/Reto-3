@@ -358,23 +358,12 @@ function renderSprite(sprite)
     //Calculamos la posicion del tile de inicio
     const xPosInit = sprite.imageSet.initCol * sprite.imageSet.gridSize; 
     const yPosInit = sprite.imageSet.initFil * sprite.imageSet.gridSize;
-    //console.log(`xPosInit: ${xPosInit}`)
-    //console.log(`yPosInit: ${yPosInit}`)
 
 
     //Calculamos la posicion en el tilemap a dibujar
     const xTile = xPosInit + sprite.frames.frameCounter * sprite.imageSet.gridSize + sprite.imageSet.xOffset;
     const yTile = yPosInit + sprite.state * sprite.imageSet.gridSize + sprite.imageSet.yOffset;
-    //console.log("ID: " + sprite.id)
-    //console.log("STATE: " + sprite.state)
-    //console.log(`xTile: ${xTile}`)
-    //console.log(`sprite.frames.frameCounter: ${sprite.frames.frameCounter}`)
-    //console.log(`sprite.imageSet.gridSize: ${sprite.imageSet.gridSize}`)
-    //console.log(`sprite.imageSet.xOffset: ${sprite.imageSet.xOffset}`)
-    //console.log(`yTile: ${yTile}`)
-    //console.log(`sprite.state: ${sprite.state}`)
-    //console.log(`sprite.imageSet.gridSize: ${sprite.imageSet.gridSize}`)
-    //console.log(`sprite.imageSet.yOffset: ${sprite.imageSet.yOffset}`)
+
 
 
     const xPos = Math.floor(sprite.xPos);
@@ -415,10 +404,15 @@ function drawSprites()
     {
         const sprite = globals.sprites[i];
 
+
+
         //TEST: Dibuja un rectangulo alrededor del sprite(hitbox)
         //drawSpriteRectangle(sprite);
 
         renderSprite(sprite);
+
+        //TEST: Dibuja el hitBox
+        drawHitBox(sprite);
     }
 
 }
@@ -663,7 +657,6 @@ function renderHUD()
     //TEST: datos metidos en bruto
     const score = 1500;
     const highscore = 130000;
-    const life = 1;
     const angerLvl = 50;
 
     //Draw score
@@ -685,7 +678,7 @@ function renderHUD()
     
     // Render hearts based on life count
     const heartSpacing = 15; // Spacing between hearts
-    for (let i = 0; i < life; i++) {
+    for (let i = 0; i < globals.life; i++) {
         const xOffset = 160 + i * heartSpacing; // Dynamic x position for each heart
         const yOffset = 10; // Fixed y position
         renderSpriteHUD(globals.spritesHUD[0], xOffset, yOffset);
@@ -803,3 +796,14 @@ function renderHUDScore()
     globals.ctxHUD.fillText(" -->", 248, 20);
 }
 
+function drawHitBox(sprite)
+{
+    //Datos del sprite
+    const x1 = Math.floor(sprite.xPos) + Math.floor(sprite.hitBox.xOffset);
+    const y1 = Math.floor(sprite.yPos) + Math.floor(sprite.hitBox.yOffset);
+    const w1 = sprite.hitBox.xSize;
+    const h1 = sprite.hitBox.ySize;
+
+    globals.ctx.strokeStyle = "red";
+    globals.ctx.strokeRect(x1,y1,h1,w1);
+}
