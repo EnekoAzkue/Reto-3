@@ -249,14 +249,14 @@ function initPlayer()
     const frames = new Frames(4, 5);
 
     //Crearemos nuestro objeto physics con el vLimit = 80px/s
-    const physics_main = new Physics(40,0,0,0,0,0);
-
+    const physics = new Physics(40,0,0,0,0,0);
+    const physics_main = new Physics(80,0,0,0,0,0);
     //Creamos nuestro objeto hitBox(xSize, ySize, xOffset, yOffset)
-    const hitBox = new HitBox(12,8,4,2)
+    const hitBox = new HitBox(8,8,4,6)
 
     //Creamos nuestro sprite (id, state, xPos, yPos, imageSet, frames, physics)
-    const player = new Sprite(SpriteID.PLAYER, State.STILL_DOWN, 32, 16, imageSet, frames, physics_main, hitBox);
-    const playerMain = new Sprite(SpriteID.PLAYERMAIN, State.STILL_DOWN, 32, 172, imageSet, frames, physics_main,0);
+    const player = new Sprite(SpriteID.PLAYER, State.STILL_DOWN, 32, 16, imageSet, frames, physics, hitBox);
+    const playerMain = new Sprite(SpriteID.PLAYERMAIN, State.STILL_DOWN, -50, 172, imageSet, frames, physics_main,0);
     const playerC = new Sprite(SpriteID.PLAYERC1, State.STILL_DOWN, 32, 16, imageSet, frames, physics_main, hitBox);
     const playerC1 = new Sprite(SpriteID.PLAYERC2, State.DOWN, 80, 48, imageSet, frames, 0,0);
     const playerC2 = new Sprite(SpriteID.PLAYERC3, State.DOWN, 80, 48, imageSet, frames, 0,0);
