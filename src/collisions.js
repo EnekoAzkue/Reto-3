@@ -144,13 +144,13 @@ function detectCollisionBetweenPlayerAndMapObstacles()
         case State.RIGHT:
 
             //Primera colision en (xPos + xSize - 1, yPos)
-            xPos = player.xPos + player.hitBox.xOffset + player.hitBox.xSize - 1;
+            xPos = player.xPos + player.hitBox.xOffset + player.hitBox.xSize + 2;
             yPos = player.yPos + player.hitBox.yOffset;
             isCollidingOnPos1 = isCollidingWithObstacleAt(xPos,yPos,obstacleId4,obstacleId5,obstacleId6);
 
 
             //Segunda colision en (xPos + xSize - 1, yPos + ySize - 1)
-            yPos = player.yPos + player.hitBox.yOffset + player.hitBox.ySize + 4;
+            yPos = player.yPos + player.hitBox.yOffset + player.hitBox.ySize + 1;
             isCollidingOnPos2 = isCollidingWithObstacleAt(xPos,yPos,obstacleId4,obstacleId5,obstacleId6);
 
 
@@ -180,7 +180,7 @@ function detectCollisionBetweenPlayerAndMapObstacles()
 
 
             //Segunda colision en (xPos + xSize - 1, yPos + ySize - 1)
-            yPos = player.yPos + player.hitBox.yOffset + player.hitBox.ySize + 4;
+            yPos = player.yPos + player.hitBox.yOffset + player.hitBox.ySize + 1;
             isCollidingOnPos2 = isCollidingWithObstacleAt(xPos,yPos,obstacleId3,obstacleId4,obstacleId5);
 
 
@@ -204,12 +204,12 @@ function detectCollisionBetweenPlayerAndMapObstacles()
 
             //Primera colision en (xPos + xSize - 1, yPos)
             xPos = player.xPos + player.hitBox.xOffset;
-            yPos = (player.yPos + player.hitBox.yOffset + player.hitBox.ySize) + 4;
+            yPos = (player.yPos + player.hitBox.yOffset + player.hitBox.ySize) + 1 ;
             isCollidingOnPos1 = isCollidingWithObstacleAt(xPos,yPos,obstacleId4,obstacleId5,obstacleId7,obstacleId8,obstacleId9,obstacleId10);
 
 
             //Segunda colision en (xPos + xSize - 1, yPos + ySize - 1)
-            xPos = player.xPos + player.hitBox.xOffset + player.hitBox.xSize - 5;
+            xPos = player.xPos + player.hitBox.xOffset + player.hitBox.xSize - 1;
             isCollidingOnPos2 = isCollidingWithObstacleAt(xPos,yPos,obstacleId4,obstacleId5,obstacleId7,obstacleId8,obstacleId9,obstacleId10);
 
 
@@ -223,8 +223,8 @@ function detectCollisionBetweenPlayerAndMapObstacles()
 
                 //AJUSTE: Calculamos solapamiento(ovelap) y lo eliminamos 
                 //moviendo el personaje tantos pixeles como overlap a la izq
-                overlap = Math.floor(xPos) / brickSize;
-                player.yPos -= overlap;
+                overlap = Math.floor(xPos) % brickSize;
+                player.yPos -= overlap - 4;
             }
             //console.log(player.isCollidingWithObstacleOnTheRight)   
             break;
@@ -252,8 +252,8 @@ function detectCollisionBetweenPlayerAndMapObstacles()
 
                 //AJUSTE: Calculamos solapamiento(ovelap) y lo eliminamos 
                 //moviendo el personaje tantos pixeles como overlap a la izq
-                overlap = Math.floor(xPos) / brickSize;
-                player.yPos += overlap;
+                overlap = Math.floor(xPos) % brickSize;
+                player.yPos += overlap ;
             }
             //console.log(player.isCollidingWithObstacleOnTheRight)   
             break;
