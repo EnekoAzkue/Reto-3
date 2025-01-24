@@ -412,7 +412,7 @@ function drawSprites()
         renderSprite(sprite);
 
         //TEST: Dibuja el hitBox
-        drawHitBox(sprite);
+        //drawHitBox(sprite);
     }
 
 }
@@ -703,6 +703,11 @@ function renderHUD()
     globals.ctxHUD.fillRect(232, 19, 1, 1);
     globals.ctxHUD.fillRect(232 + angerLvl - 1, 12, 1, 1);
     globals.ctxHUD.fillRect(232 + angerLvl - 1, 19, 1, 1);
+
+        //Draw timer
+        globals.ctxHUD.fillStyle = 'white';
+
+        globals.ctxHUD.fillText("" + Math.ceil(globals.remainingTime), 130, 22);
 
 }
 
