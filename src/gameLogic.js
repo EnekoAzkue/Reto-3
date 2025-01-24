@@ -784,6 +784,12 @@ function setThronePosition(sprite)
 
 function readKeyboardAndAssignState(sprite)
 {
+        // Si el jugador está en estado HIT_*, no cambies el estado
+        if (sprite.state >= State.HIT_DOWN && sprite.state <= State.HIT_LEFT) {
+            console.log("Jugador en estado HIT_*. No se permite cambiar el estado por teclado.");
+            return;
+        }
+
     sprite.state =  globals.action.moveLeft         ? State.LEFT:           //Left key
                     globals.action.moveRight        ? State.RIGHT:          //Right key
                     globals.action.moveUp           ? State.UP:             //Up key
@@ -796,29 +802,74 @@ function readKeyboardAndAssignState(sprite)
 
 }
 
-function updateLife()
-{
-    for(let i = 0; i < globals.sprites.length; ++i)
-    {
+let invulnerable = false; // Estado de invulnerabilidad
+const INVULNERABLE_TIME = 3000; // Tiempo de invulnerabilidad en milisegundos
+
+function updateLife() {
+    const player = globals.sprites[0]; // Suponemos que el jugador está en sprites[0]
+
+    for (let i = 0; i < globals.sprites.length; ++i) {
         const sprite = globals.sprites[i];
 
-            if(sprite.isCollidingWithPlayer && !(sprite.id === 1 || sprite.id === 2 || sprite.id === 3))
-            {
-                if(sprite.id === 8)
-                {
-                    if(globals.life < 3)
-                    {
-                        globals.life++;
-                    }
+        if (sprite.isCollidingWithPlayer && !(sprite.id === 1 || sprite.id === 2 || sprite.id === 3)) {
+            if (sprite.id === 8) {
+                // Incrementa la vida si el jugador recoge el objeto adecuado
+                if (globals.life < 3) {
+                    globals.life++;
+                    console.log("Vida incrementada. Vida actual:", globals.life);
                 }
-                else
-                {
-                    if(globals.life > 0)
-                    {
-                        //Si hay colision reducimos la vida
-                        globals.life--;
-                    }
+            } else {
+                if (!invulnerable && globals.life > 0) {
+                    // Reduce la vida si no está en invulnerabilidad
+                    globals.life--;
+                    console.log("Colisión detectada. Vida reducida. Vida actual:", globals.life);
+
+                    // Cambia al estado HIT_* correspondiente
+                    const hitState = getHitState(player.state);
+                    console.log("Estado antes del golpe:", player.state, "-> Cambiando a estado HIT_*:", hitState);
+                    player.state = hitState;
+
+                    // Activa la invulnerabilidad
+                    invulnerable = true;
+
+                    console.log("Jugador en estado HIT_*:", player.state, ". Invulnerabilidad activada.");
+
+                    // Configura un temporizador para restaurar el estado original y desactivar invulnerabilidad
+                    setTimeout(() => {
+                        const originalState = restoreOriginalState(hitState);
+                        console.log("Restaurando estado del jugador:", player.state, "->", originalState);
+                        player.state = originalState;
+                        invulnerable = false;
+                        console.log("Invulnerabilidad desactivada. Estado actual:", player.state);
+                    }, INVULNERABLE_TIME);
                 }
             }
+        }
+    }
+}
+
+// Devuelve el estado HIT_* correspondiente
+function getHitState(currentState) {
+    switch (currentState) {
+        case State.STILL_DOWN: return State.HIT_DOWN;
+        case State.STILL_RIGHT: return State.HIT_RIGHT;
+        case State.STILL_UP: return State.HIT_UP;
+        case State.STILL_LEFT: return State.HIT_LEFT;
+        case State.DOWN: return State.HIT_DOWN;
+        case State.RIGHT: return State.HIT_RIGHT;
+        case State.UP: return State.HIT_UP;
+        case State.LEFT: return State.HIT_LEFT;
+        default: return currentState; // Si no coincide, no cambia
+    }
+}
+
+// Restaura el estado original a partir del estado HIT_*
+function restoreOriginalState(hitState) {
+    switch (hitState) {
+        case State.HIT_DOWN: return State.STILL_DOWN;
+        case State.HIT_RIGHT: return State.STILL_RIGHT;
+        case State.HIT_UP: return State.STILL_UP;
+        case State.HIT_LEFT: return State.STILL_LEFT;
+        default: return hitState; // Si no coincide, no cambia
     }
 }
