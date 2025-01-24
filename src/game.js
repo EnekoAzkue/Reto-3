@@ -1,36 +1,39 @@
 import globals from "./globals.js";
-import{initHTMLelements, loadAssets, initSprites, initVars, initLevel, initMainSprites, initControlsSprites, initStorySprites, initScoreSprites, initTimers, initEvents, initOverSprites} from "./initialize.js";
+import {
+    initHTMLelements, loadAssets, initSprites, initVars, initLevel,
+    initMainSprites, initControlsSprites, initStorySprites,
+    initScoreSprites, initTimers, initEvents, initOverSprites
+} from "./initialize.js";
 import update from "./gameLogic.js";
 import render from "./gameRender.js";
+import { Game } from "./constants.js"; // Importamos los estados del juego
 
 /////////////////////
-//GAME INIT
+// GAME INIT
 /////////////////////
 
 window.onload = init;
 
-function init()
-{
-
-    //Inicializaremos los elementos de HTML: Canvas, Context, Caja de texto de pruebas
+function init() {
+    // Inicializamos los elementos de HTML: Canvas, Context, Caja de texto de pruebas
     initHTMLelements();
 
-    //Cargamos todos los activos: TILEMAPS, IMAGES, SOUNDS
+    // Cargamos todos los activos: TILEMAPS, IMAGES, SOUNDS
     loadAssets();
 
-    //Inicializamos los sprites
+    // Inicializamos los sprites
     initSprites();
     
-    //Inicializacion de variables del juego
+    // Inicialización de variables del juego
     initVars();
 
-    //Inicializamos temporizadores
+    // Inicializamos temporizadores
     initTimers();
 
-    //Inicializamos eventos
+    // Inicializamos eventos
     initEvents();
 
-    //Inicializamos el mapa del juego
+    // Inicializamos el mapa del juego
     initLevel();
 
     initMainSprites();
@@ -43,45 +46,63 @@ function init()
 
     initOverSprites();
 
-    //Start the first frame request
-    window.requestAnimationFrame(gameLoop);
+    // Inicializamos el temporizador global
+    globals.remainingTime = 180; // 180 segundos
 
+    // Estado inicial del juego
+    globals.gameState = Game.PLAYING;
+
+    // Start the first frame request
+    window.requestAnimationFrame(gameLoop);
 }
 
 /////////////////////
 // GAME EXECUTE
 /////////////////////
 
-//Bucle principal de ejecucion 
-function gameLoop(timeStamp)
-{
-
-    //Keep requesting new frames
+// Bucle principal de ejecución 
+function gameLoop(timeStamp) {
+    // Keep requesting new frames
     window.requestAnimationFrame(gameLoop, globals.canvas);
 
-    //Timepo real de ciclo de ejecucion 
-    const elapsedCycleSeconds = (timeStamp - globals.previousCycleMilliseconds) / 1000; //Seconds
+    // Tiempo real del ciclo de ejecución 
+    const elapsedCycleSeconds = (timeStamp - globals.previousCycleMilliseconds) / 1000; // Segundos
 
-    //Timepo anterior de ciclo de ejecucucion 
-    globals.previousCycleMilliseconds = timeStamp;
+    // Tiempo anterior del ciclo de ejecución 
+    globals.previousCycleMilliseconds = timeStamp ;
 
-    //Variable que corrige el tiempo de frame debido a retrasos con respecto al timepo objetivo(frameTimeOb)
+    // Reducir el temporizador global si el juego está en estado PLAYING
+    if (globals.gameState === Game.PLAYING) {
+        globals.remainingTime -= elapsedCycleSeconds * 1.5;
+
+        // Verificar si el tiempo se agotó
+        if (globals.remainingTime <= 0) {
+            globals.remainingTime = 0; // Evitar valores negativos
+            globals.gameState = Game.OVER; // Cambiamos el estado del juego a OVER
+            console.log("¡El tiempo se acabó! Cambiando estado a OVER.");
+            return; // Salimos del bucle para evitar más lógica del frame
+        }
+    }
+
+    // Log del tiempo restante (puedes eliminarlo más adelante)
+    console.log(`Tiempo restante: ${Math.ceil(globals.remainingTime)}s`);
+
+    // Variable que corrige el tiempo de frame debido a retrasos con respecto al tiempo objetivo (frameTimeObj)
     globals.deltaTime += elapsedCycleSeconds;
 
-    //CHANGES: CORRECCIONES
+    // CHANGES: Correcciones
     globals.cycleRealTime += elapsedCycleSeconds;
 
-    //CHANGES: CORRECCIONES
-    if(globals.cycleRealTime >= globals.frameTimeObj)
-    {
-        //Update the game logic. gameLogic.js
+    // CHANGES: Correcciones
+    if (globals.cycleRealTime >= globals.frameTimeObj) {
+        // Actualizar la lógica del juego. gameLogic.js
         update();
 
-        //Perform the drawing operation. gameRender.js
+        // Dibujar el juego. gameRender.js
         render();
 
-        //CHANGES
-        //Corregimos los exesos de tiempo
+        // CHANGES
+        // Corregimos los excesos de tiempo
         globals.cycleRealTime -= globals.frameTimeObj;
         globals.deltaTime = 0;
     }
