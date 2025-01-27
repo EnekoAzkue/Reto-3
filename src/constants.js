@@ -102,10 +102,13 @@ export const Tile =
 
 export const Key = 
 {
-    UP:     87,
-    DOWN:   83,
-    RIGHT:  68,
-    LEFT:   65
+    UP:         87,
+    DOWN:       83,
+    RIGHT:      68,
+    LEFT:       65,
+    ARROWRIGHT: 39,
+    ARROWLEFT:  37,
+    ENTER:      13,
 }
 
 export const Block =
