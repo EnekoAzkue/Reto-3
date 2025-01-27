@@ -20,6 +20,18 @@ export function keydownHandler(event)
         case Key.RIGHT:
             globals.action.moveRight = true;
             break;
+
+        case Key.ARROWLEFT:
+            globals.action.changeScreenLeft = true;
+            break;
+
+        case Key.ARROWRIGHT:
+            globals.action.changeScreenRight = true;
+            break;
+
+        case Key.ENTER:
+            globals.action.enter = true;
+            break;
     }
 }
 
@@ -42,5 +54,18 @@ export function keyupHandler(event)
         case Key.RIGHT:
             globals.action.moveRight = false;
             break;
+
+        case Key.ARROWLEFT:
+            globals.action.changeScreenLeft = false;
+            break;
+
+        case Key.ARROWRIGHT:
+            globals.action.changeScreenRight = false;
+            break;
+
+        case Key.ENTER:
+            globals.action.enter = false;
+            break;
+    
     }
 }
