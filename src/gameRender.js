@@ -88,6 +88,11 @@ function drawOver()
 
 }
 
+// Configuración para el parpadeo del texto
+let textVisible = true; // Controla si el texto es visible o no
+const TEXT_BLINK_INTERVAL = 500; // Intervalo de parpadeo en milisegundos
+let lastBlinkTime = Date.now(); // Última vez que se alternó la visibilidad del texto
+
 function drawMain()
 {   
     globals.ctx.clearRect(0, 0, globals.canvas.width, globals.canvas.height);
@@ -101,9 +106,9 @@ function drawMain()
     let texto =
     [
         "The Shadowed Labyrinth",
-        "The curse of the Throne"
+        "The curse of the Throne",
+        "Press ENTER to play"
     ];
-
 
     // Texto 1
     globals.ctx.strokeStyle = 'black';
@@ -130,7 +135,27 @@ function drawMain()
     globals.ctx.strokeText(texto[1], x2, 70);
     globals.ctx.fillText(texto[1], x2, 70);
 
+    // Texto 3 con parpadeo
+    const currentTime = Date.now();
+    if (currentTime - lastBlinkTime >= TEXT_BLINK_INTERVAL) {
+        textVisible = !textVisible;
+        lastBlinkTime = currentTime;
+    }
+
+    if (textVisible) {
+        globals.ctx.font = '18px zwackery';
+        globals.ctx.fillStyle = 'white';
+        
+        // Calcular el ancho del texto
+        const textWidth3 = globals.ctx.measureText(texto[2]).width;
+        // Calcular la posición X para centrar el texto
+        const x3 = (globals.ctx.canvas.width - textWidth3) / 2;
+        
+        globals.ctx.strokeText(texto[2], x3, 120);
+        globals.ctx.fillText(texto[2], x3, 120);
+    }
 }
+
 
 
 function drawControls()
@@ -230,6 +255,8 @@ let texto = [
     globals.ctx.strokeStyle = 'black'; 
     globals.ctx.lineWidth = 1;         
 
+
+    
     globals.ctx.strokeText(texto[0], 5, 90);  
     globals.ctx.fillText(texto[0], 5, 90);    
 
@@ -553,7 +580,6 @@ function renderControlsScreen()
 
 function renderStoryScreen()
 {
-    console.log(globals.spritesStory)
 
     for(let i = 0; i < globals.spritesStory.length; i++)
     {
@@ -587,7 +613,6 @@ function renderStoryScreen()
 
 function renderScoreScreen()
 {
-    console.log(globals.spritesScore)
 
     for(let i = 0; i < globals.spritesScore.length; i++)
     {
