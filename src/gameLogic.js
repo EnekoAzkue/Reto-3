@@ -340,6 +340,7 @@ function updatePlayerMain(sprite)
         sprite.xPos = -50;
     }
 
+    
     updateAnimationFrame(sprite);
 }
 
@@ -541,8 +542,6 @@ function updateThrone(sprite)
 
     //Calculamos la nueva posicion 
     setThronePosition(sprite);
-    //console.log(sprite.xPos);
-    //console.log(sprite.yPos);
 
 }
 
@@ -564,8 +563,74 @@ function updateThroneMain(sprite)
 
 }
 
-function updateMainScreen(sprite)
-{
+let canChangeScreen = true; // Controla el retraso en el cambio de pantalla
+const SCREEN_CHANGE_DELAY = 250; // Tiempo de retraso en milisegundos
+
+function updateMainScreen(sprite) {
+
+
+    if (globals.gameState === 3 && canChangeScreen) {
+        if (globals.action.changeScreenRight) { // Flecha derecha detectada
+            globals.gameState = Game.CONTROLS;
+            activateScreenChangeDelay();
+        } else if (globals.action.changeScreenLeft) { // Flecha izquierda detectada
+            globals.gameState = Game.SCORE;
+            activateScreenChangeDelay();
+        } else if (globals.action.enter) {
+            globals.gameState = Game.PLAYING;
+        }
+    }
+}
+
+function updateControlScreen(sprite) {
+
+    if (globals.gameState === 5 && canChangeScreen) {
+        if (globals.action.changeScreenRight) { // Flecha derecha detectada
+            globals.gameState = Game.STORY;
+            activateScreenChangeDelay();
+        } else if (globals.action.changeScreenLeft) { // Flecha izquierda detectada
+            globals.gameState = Game.MAIN;
+            activateScreenChangeDelay();
+        }
+    }
+}
+
+function updateStoryScreen(sprite) {
+
+    if (globals.gameState === 6 && canChangeScreen) {
+        if (globals.action.changeScreenRight) { // Flecha derecha detectada
+            globals.gameState = Game.SCORE;
+            activateScreenChangeDelay();
+        } else if (globals.action.changeScreenLeft) { // Flecha izquierda detectada
+            globals.gameState = Game.CONTROLS;
+            activateScreenChangeDelay();
+        }
+    }
+}
+
+function updateScoreScreen(sprite) {
+
+    if (globals.gameState === 4 && canChangeScreen) {
+        if (globals.action.changeScreenRight) { // Flecha derecha detectada
+            globals.gameState = Game.MAIN;
+            activateScreenChangeDelay();
+        } else if (globals.action.changeScreenLeft) { // Flecha izquierda detectada
+            globals.gameState = Game.STORY;
+            activateScreenChangeDelay();
+        }
+    }
+}
+
+// Activa un retraso en el cambio de pantalla
+function activateScreenChangeDelay() {
+    canChangeScreen = false;
+    setTimeout(() => {
+        canChangeScreen = true;
+    }, SCREEN_CHANGE_DELAY);
+}
+
+
+function updateOverScreen(sprite) {
     sprite.xPos = 0;
     sprite.yPos = 0;
 
@@ -573,51 +638,19 @@ function updateMainScreen(sprite)
 
     sprite.state = State.STILL;
 
+    // Detectar las teclas de flecha derecha e izquierda
+    if(globals.gameState === 2)
+    {
+        if (globals.action.changeScreenRight) { // Flecha derecha detectada
+            globals.gameState = Game.PLAYING;
+            globals.remainingTime = 180; // 180 segundos
+
+        } else if (globals.action.changeScreenLeft) { // Flecha izquierda detectada
+            globals.gameState = Game.MAIN;
+        }
+    }
 }
 
-function updateControlScreen(sprite)
-{
-    sprite.xPos = 0;
-    sprite.yPos = 0;
-
-    sprite.frames.frameCounter = 0;
-
-    sprite.state = State.STILL;
-
-}
-
-function updateStoryScreen(sprite)
-{
-    sprite.xPos = 0;
-    sprite.yPos = 0;
-
-    sprite.frames.frameCounter = 0;
-
-    sprite.state = State.STILL;
-
-}
-
-function updateScoreScreen(sprite)
-{
-    sprite.xPos = 0;
-    sprite.yPos = 0;
-
-    sprite.frames.frameCounter = 0;
-
-    sprite.state = State.STILL;
-
-}
-
-function updateOverScreen(sprite)
-{
-    sprite.xPos = 0;
-    sprite.yPos = 0;
-
-    sprite.frames.frameCounter = 0;
-
-    sprite.state = State.STILL;
-
-}
 function updateMainSprites()
 {
     for(let i = 0; i < globals.spritesMain.length; i++)
@@ -784,12 +817,6 @@ function setThronePosition(sprite)
 
 function readKeyboardAndAssignState(sprite)
 {
-        // Si el jugador está en estado HIT_*, no cambies el estado
-        if (sprite.state >= State.HIT_DOWN && sprite.state <= State.HIT_LEFT) {
-            console.log("Jugador en estado HIT_*. No se permite cambiar el estado por teclado.");
-            return;
-        }
-
     sprite.state =  globals.action.moveLeft         ? State.LEFT:           //Left key
                     globals.action.moveRight        ? State.RIGHT:          //Right key
                     globals.action.moveUp           ? State.UP:             //Up key
@@ -802,74 +829,29 @@ function readKeyboardAndAssignState(sprite)
 
 }
 
-let invulnerable = false; // Estado de invulnerabilidad
-const INVULNERABLE_TIME = 3000; // Tiempo de invulnerabilidad en milisegundos
-
-function updateLife() {
-    const player = globals.sprites[0]; // Suponemos que el jugador está en sprites[0]
-
-    for (let i = 0; i < globals.sprites.length; ++i) {
+function updateLife()
+{
+    for(let i = 0; i < globals.sprites.length; ++i)
+    {
         const sprite = globals.sprites[i];
 
-        if (sprite.isCollidingWithPlayer && !(sprite.id === 1 || sprite.id === 2 || sprite.id === 3)) {
-            if (sprite.id === 8) {
-                // Incrementa la vida si el jugador recoge el objeto adecuado
-                if (globals.life < 3) {
-                    globals.life++;
-                    console.log("Vida incrementada. Vida actual:", globals.life);
+            if(sprite.isCollidingWithPlayer && !(sprite.id === 1 || sprite.id === 2 || sprite.id === 3))
+            {
+                if(sprite.id === 8)
+                {
+                    if(globals.life < 3)
+                    {
+                        globals.life++;
+                    }
                 }
-            } else {
-                if (!invulnerable && globals.life > 0) {
-                    // Reduce la vida si no está en invulnerabilidad
-                    globals.life--;
-                    console.log("Colisión detectada. Vida reducida. Vida actual:", globals.life);
-
-                    // Cambia al estado HIT_* correspondiente
-                    const hitState = getHitState(player.state);
-                    console.log("Estado antes del golpe:", player.state, "-> Cambiando a estado HIT_*:", hitState);
-                    player.state = hitState;
-
-                    // Activa la invulnerabilidad
-                    invulnerable = true;
-
-                    console.log("Jugador en estado HIT_*:", player.state, ". Invulnerabilidad activada.");
-
-                    // Configura un temporizador para restaurar el estado original y desactivar invulnerabilidad
-                    setTimeout(() => {
-                        const originalState = restoreOriginalState(hitState);
-                        console.log("Restaurando estado del jugador:", player.state, "->", originalState);
-                        player.state = originalState;
-                        invulnerable = false;
-                        console.log("Invulnerabilidad desactivada. Estado actual:", player.state);
-                    }, INVULNERABLE_TIME);
+                else
+                {
+                    if(globals.life > 0)
+                    {
+                        //Si hay colision reducimos la vida
+                        globals.life--;
+                    }
                 }
             }
-        }
-    }
-}
-
-// Devuelve el estado HIT_* correspondiente
-function getHitState(currentState) {
-    switch (currentState) {
-        case State.STILL_DOWN: return State.HIT_DOWN;
-        case State.STILL_RIGHT: return State.HIT_RIGHT;
-        case State.STILL_UP: return State.HIT_UP;
-        case State.STILL_LEFT: return State.HIT_LEFT;
-        case State.DOWN: return State.HIT_DOWN;
-        case State.RIGHT: return State.HIT_RIGHT;
-        case State.UP: return State.HIT_UP;
-        case State.LEFT: return State.HIT_LEFT;
-        default: return currentState; // Si no coincide, no cambia
-    }
-}
-
-// Restaura el estado original a partir del estado HIT_*
-function restoreOriginalState(hitState) {
-    switch (hitState) {
-        case State.HIT_DOWN: return State.STILL_DOWN;
-        case State.HIT_RIGHT: return State.STILL_RIGHT;
-        case State.HIT_UP: return State.STILL_UP;
-        case State.HIT_LEFT: return State.STILL_LEFT;
-        default: return hitState; // Si no coincide, no cambia
     }
 }
