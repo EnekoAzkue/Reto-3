@@ -1,51 +1,125 @@
 import globals from "./globals.js";
 import { Block, State } from "./constants.js";
 
-export default function detectCollisions()
-{
-    //Calculamos colision del player con cada uno de los sprites
-    for(let i = 1; i < globals.sprites.length; i++)
-    {
+export default function detectCollisions() {
+    // Calculamos colisión del player con cada uno de los sprites
+    for (let i = 1; i < globals.sprites.length; i++) {
         const sprite = globals.sprites[i];
-        if(globals.sprites[i].id > 0)
-        {
-            detectCollisionBetweenPlayerAndSprite(sprite);
+        if (sprite.id > 0) {
+            detectCollisionBetweenPlayerAndSprite(sprite);  // Colisión con sprite
         }
     }
 
-    //Calculamos colision del player con los obstaculos del mapa
-    detectCollisionBetweenPlayerAndMapObstacles();
+    // Calculamos colisión del player con los obstáculos del mapa
+    detectCollisionBetweenPlayerAndMapObstacles();  // Colisión con bloques
 }
 
-function detectCollisionBetweenPlayerAndSprite(sprite)
-{
-    //Reset collision state
+
+function detectCollisionBetweenPlayerAndSprite(sprite) {
+    // Resetear el estado de colisión
     sprite.isCollidingWithPlayer = false;
 
-    //Nuestro player esta en la posicion 0
+    // Datos del jugador
     const player = globals.sprites[0];
-
-
-    //Datos del player
     const x1 = player.xPos + player.hitBox.xOffset;
     const y1 = player.yPos + player.hitBox.yOffset;
     const w1 = player.hitBox.xSize;
     const h1 = player.hitBox.ySize;
 
-    //Datos del otro sprite
+    // Datos del sprite
     const x2 = sprite.xPos + sprite.hitBox.xOffset;
     const y2 = sprite.yPos + sprite.hitBox.yOffset;
     const w2 = sprite.hitBox.xSize;
     const h2 = sprite.hitBox.ySize;
 
-    const isOverlap = rectIntersect(x1,y1,w1,h1,x2,y2,w2,h2)
-    if(isOverlap)
-    {
-        //Existe Colision
-        sprite.isCollidingWithPlayer = true
-    }
+    const isOverlap = rectIntersect(x1, y1, w1, h1, x2, y2, w2, h2);
+    if (isOverlap) {
+        // Si hay colisión, marcarla como tal
+        sprite.isCollidingWithPlayer = true;
 
+        if (sprite.id === 2) {
+            // Colisión con el sprite con id 2
+
+            // Calcular las posiciones de colisión dependiendo de la dirección del jugador
+            const direction = player.state;  // Direcciones: RIGHT, LEFT, UP, DOWN
+            let xPos, yPos, isCollidingOnPos1, isCollidingOnPos2, isColliding, overlap;
+
+            switch (direction) {
+                case State.RIGHT:
+                    // Colisión en la derecha (ajuste al solapamiento)
+                    xPos = player.xPos + player.hitBox.xOffset + player.hitBox.xSize + 1;
+                    yPos = player.yPos + player.hitBox.yOffset;
+                    isCollidingOnPos1 = rectIntersect(xPos, yPos, player.hitBox.xSize, player.hitBox.ySize, sprite.xPos + sprite.hitBox.xOffset, sprite.yPos + sprite.hitBox.yOffset, sprite.hitBox.xSize, sprite.hitBox.ySize);
+
+                    yPos = player.yPos + player.hitBox.yOffset + player.hitBox.ySize + 1;
+                    isCollidingOnPos2 = rectIntersect(xPos, yPos, player.hitBox.xSize, player.hitBox.ySize, sprite.xPos + sprite.hitBox.xOffset, sprite.yPos + sprite.hitBox.yOffset, sprite.hitBox.xSize, sprite.hitBox.ySize);
+
+                    isColliding = isCollidingOnPos1 || isCollidingOnPos2;
+
+                    if (isColliding) {
+                        overlap = Math.floor(xPos) % globals.Level.imageSet.gridSize;
+                        player.xPos -= overlap; // Ajuste hacia la izquierda
+                    }
+                    break;
+
+                case State.LEFT:
+                    // Colisión en la izquierda (ajuste al solapamiento)
+                    xPos = player.xPos + player.hitBox.xOffset;
+                    yPos = player.yPos + player.hitBox.yOffset;
+                    isCollidingOnPos1 = rectIntersect(xPos, yPos, player.hitBox.xSize, player.hitBox.ySize, sprite.xPos + sprite.hitBox.xOffset, sprite.yPos + sprite.hitBox.yOffset, sprite.hitBox.xSize, sprite.hitBox.ySize);
+
+                    yPos = player.yPos + player.hitBox.yOffset + player.hitBox.ySize + 1;
+                    isCollidingOnPos2 = rectIntersect(xPos, yPos, player.hitBox.xSize, player.hitBox.ySize, sprite.xPos + sprite.hitBox.xOffset, sprite.yPos + sprite.hitBox.yOffset, sprite.hitBox.xSize, sprite.hitBox.ySize);
+
+                    isColliding = isCollidingOnPos1 || isCollidingOnPos2;
+
+                    if (isColliding) {
+                        overlap = globals.Level.imageSet.gridSize - (xPos % globals.Level.imageSet.gridSize);
+                        if (overlap === globals.Level.imageSet.gridSize) overlap = 0;
+                        player.xPos += overlap; // Ajuste hacia la derecha
+                    }
+                    break;
+
+                case State.DOWN:
+                    // Colisión hacia abajo (ajuste al solapamiento)
+                    xPos = player.xPos + player.hitBox.xOffset;
+                    yPos = player.yPos + player.hitBox.yOffset + player.hitBox.ySize  + 2;
+                    isCollidingOnPos1 = rectIntersect(xPos, yPos, player.hitBox.xSize, player.hitBox.ySize, sprite.xPos + sprite.hitBox.xOffset, sprite.yPos + sprite.hitBox.yOffset, sprite.hitBox.xSize, sprite.hitBox.ySize);
+
+                    xPos = player.xPos + player.hitBox.xOffset + player.hitBox.xSize;
+                    isCollidingOnPos2 = rectIntersect(xPos, yPos, player.hitBox.xSize, player.hitBox.ySize, sprite.xPos + sprite.hitBox.xOffset, sprite.yPos + sprite.hitBox.yOffset, sprite.hitBox.xSize, sprite.hitBox.ySize);
+
+                    isColliding = isCollidingOnPos1 || isCollidingOnPos2;
+
+                    if (isColliding) {
+                        overlap = Math.floor(yPos) % globals.Level.imageSet.gridSize;
+                        player.yPos -= overlap -1; // Ajuste hacia arriba
+                    }
+                    break;
+
+                case State.UP:
+                    // Colisión hacia arriba (ajuste al solapamiento)
+                    xPos = player.xPos + player.hitBox.xOffset;
+                    yPos = player.yPos + player.hitBox.yOffset;
+                    isCollidingOnPos1 = rectIntersect(xPos, yPos, player.hitBox.xSize, player.hitBox.ySize, sprite.xPos + sprite.hitBox.xOffset, sprite.yPos + sprite.hitBox.yOffset, sprite.hitBox.xSize, sprite.hitBox.ySize);
+
+                    xPos = player.xPos + player.hitBox.xOffset + player.hitBox.xSize - 5;
+                    isCollidingOnPos2 = rectIntersect(xPos, yPos, player.hitBox.xSize, player.hitBox.ySize, sprite.xPos + sprite.hitBox.xOffset, sprite.yPos + sprite.hitBox.yOffset, sprite.hitBox.xSize, sprite.hitBox.ySize);
+
+                    isColliding = isCollidingOnPos1 || isCollidingOnPos2;
+
+                    if (isColliding) {
+                        overlap = globals.Level.imageSet.gridSize - (yPos % globals.Level.imageSet.gridSize);
+                        if (overlap === globals.Level.imageSet.gridSize) overlap = 0;
+                        player.yPos += overlap; // Ajuste hacia abajo
+                    }
+                    break;
+            }
+        }
+    }
 }
+
+
 
 function rectIntersect(x1,y1,w1,h1,x2,y2,w2,h2)
 {
@@ -130,6 +204,7 @@ function detectCollisionBetweenPlayerAndMapObstacles()
     const obstacleId8 = Block.MAZE_BOT_WALL_2;
     const obstacleId9 = Block.MAZE_BOT_WALL_3;
     const obstacleId10 = Block.MAZE_BOT_WALL_4;
+    
     //const obstacleId = Block.MAZE_RIGHT_WALL_2
 
     switch(direction)
@@ -143,7 +218,7 @@ function detectCollisionBetweenPlayerAndMapObstacles()
 
 
             //Segunda colision en (xPos + xSize - 1, yPos + ySize - 1)
-            yPos = player.yPos + player.hitBox.yOffset + player.hitBox.ySize + 1;
+            yPos = player.yPos + player.hitBox.yOffset + player.hitBox.ySize;
             isCollidingOnPos2 = isCollidingWithObstacleAt(xPos,yPos,obstacleId4,obstacleId5,obstacleId6);
 
 
@@ -169,7 +244,7 @@ function detectCollisionBetweenPlayerAndMapObstacles()
     yPos = player.yPos + player.hitBox.yOffset;
     isCollidingOnPos1 = isCollidingWithObstacleAt(xPos, yPos, obstacleId3, obstacleId4, obstacleId5);
 
-    yPos = player.yPos + player.hitBox.yOffset + player.hitBox.ySize + 1;
+    yPos = player.yPos + player.hitBox.yOffset + player.hitBox.ySize ;
     isCollidingOnPos2 = isCollidingWithObstacleAt(xPos, yPos, obstacleId3, obstacleId4, obstacleId5);
 
     isColliding = isCollidingOnPos1 || isCollidingOnPos2;
@@ -190,7 +265,7 @@ function detectCollisionBetweenPlayerAndMapObstacles()
 
             //Primera colision en (xPos + xSize - 1, yPos)
             xPos = player.xPos + player.hitBox.xOffset;
-            yPos = (player.yPos + player.hitBox.yOffset + player.hitBox.ySize) + 2 ;
+            yPos = (player.yPos + player.hitBox.yOffset + player.hitBox.ySize) + 1 ;
             isCollidingOnPos1 = isCollidingWithObstacleAt(xPos,yPos,obstacleId4,obstacleId5,obstacleId7,obstacleId8,obstacleId9,obstacleId10);
 
 
