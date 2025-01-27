@@ -92,7 +92,7 @@ function loadHandler()
         console.log("Assets finished loading");
 
         //Start the game 
-        globals.gameState = Game.PLAYING;
+        globals.gameState = Game.MAIN;
     }
     console.log(`gameState = ${globals.gameState}`)
 }
@@ -152,7 +152,7 @@ function initMainScreen()
     //Creamos los datos de la animacion. 8 frames / state
     const frames = new Frames(1);
     //Creamos nuestro sprite
-    const mainScreen = new Sprite(SpriteID.MAINSCREEN, State.STILL, 100, 70, imageSet, frames);
+    const mainScreen = new Sprite(SpriteID.MAINSCREEN, State.STILL, 0, 0, imageSet, frames);
 
     //Añadimos el player al array de sprites
     globals.spritesMain.push(mainScreen);
@@ -171,7 +171,7 @@ function initControlsScreen()
     //Creamos los datos de la animacion. 8 frames / state
     const frames = new Frames(1);
     //Creamos nuestro sprite
-    const ControlScreen = new Sprite(SpriteID.CONTROLSSCREEN, State.STILL, 100, 70, imageSet, frames);
+    const ControlScreen = new Sprite(SpriteID.CONTROLSSCREEN, State.STILL, 0, 0, imageSet, frames);
 
     //Añadimos el player al array de sprites
     globals.spritesControls.push(ControlScreen);
@@ -190,7 +190,7 @@ function initStoryScreen()
     //Creamos los datos de la animacion. 8 frames / state
     const frames = new Frames(1);
     //Creamos nuestro sprite
-    const StoryScreen = new Sprite(SpriteID.STORYSCREEN, State.STILL, 100, 70, imageSet, frames);
+    const StoryScreen = new Sprite(SpriteID.STORYSCREEN, State.STILL, 0, 0, imageSet, frames);
 
     //Añadimos el player al array de sprites
     globals.spritesStory.push(StoryScreen);
@@ -209,7 +209,7 @@ function initScoreScreen()
     //Creamos los datos de la animacion. 8 frames / state
     const frames = new Frames(1);
     //Creamos nuestro sprite
-    const ScoreScreen = new Sprite(SpriteID.SCORESCREEN, State.STILL, 100, 70, imageSet, frames);
+    const ScoreScreen = new Sprite(SpriteID.SCORESCREEN, State.STILL, 0, 0, imageSet, frames);
 
     //Añadimos el player al array de sprites
     globals.spritesScore.push(ScoreScreen);
@@ -228,7 +228,7 @@ function initOverScreen()
     //Creamos los datos de la animacion. 8 frames / state
     const frames = new Frames(1);
     //Creamos nuestro sprite
-    const overScreen = new Sprite(SpriteID.OVERSCREEN, State.STILL, 100, 70, imageSet, frames);
+    const overScreen = new Sprite(SpriteID.OVERSCREEN, State.STILL, 0, 0, imageSet, frames);
 
     //Añadimos el player al array de sprites
     globals.spritesOver.push(overScreen);
@@ -247,6 +247,8 @@ function initPlayer()
 
     //Creamos los datos de la animacion. (2-4 frames / state, 2 velocidad)
     const frames = new Frames(4, 5);
+    const framesMain = new Frames(4, 2);
+
 
     //Crearemos nuestro objeto physics con el vLimit = 80px/s
     const physics = new Physics(40,0,0,0,0,0);
@@ -256,7 +258,7 @@ function initPlayer()
 
     //Creamos nuestro sprite (id, state, xPos, yPos, imageSet, frames, physics)
     const player = new Sprite(SpriteID.PLAYER, State.STILL_DOWN, 32, 16, imageSet, frames, physics, hitBox);
-    const playerMain = new Sprite(SpriteID.PLAYERMAIN, State.STILL_DOWN, -50, 172, imageSet, frames, physics_main,0);
+    const playerMain = new Sprite(SpriteID.PLAYERMAIN, State.STILL_DOWN, -50, 172, imageSet, framesMain, physics_main,0);
     const playerC = new Sprite(SpriteID.PLAYERC1, State.STILL_DOWN, 32, 16, imageSet, frames, physics_main, hitBox);
     const playerC1 = new Sprite(SpriteID.PLAYERC2, State.DOWN, 80, 48, imageSet, frames, 0,0);
     const playerC2 = new Sprite(SpriteID.PLAYERC3, State.DOWN, 80, 48, imageSet, frames, 0,0);
