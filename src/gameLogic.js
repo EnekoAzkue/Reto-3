@@ -817,6 +817,11 @@ function setThronePosition(sprite)
 
 function readKeyboardAndAssignState(sprite)
 {
+        // Si el jugador está en estado HIT_*, no cambies el estado
+        if (sprite.state >= State.HIT_DOWN && sprite.state <= State.HIT_LEFT) {
+            return;
+        }
+
     sprite.state =  globals.action.moveLeft         ? State.LEFT:           //Left key
                     globals.action.moveRight        ? State.RIGHT:          //Right key
                     globals.action.moveUp           ? State.UP:             //Up key
@@ -829,29 +834,92 @@ function readKeyboardAndAssignState(sprite)
 
 }
 
-function updateLife()
-{
-    for(let i = 0; i < globals.sprites.length; ++i)
-    {
+let invulnerable = false; // Estado de invulnerabilidad global
+const INVULNERABLE_TIME = 1500; // Tiempo de invulnerabilidad en milisegundos
+
+function updateLife() {
+    const player = globals.sprites[0]; // Suponemos que el jugador está en sprites[0]
+
+    for (let i = 0; i < globals.sprites.length; ++i) {
         const sprite = globals.sprites[i];
 
-            if(sprite.isCollidingWithPlayer && !(sprite.id === 1 || sprite.id === 2 || sprite.id === 3))
-            {
-                if(sprite.id === 8)
-                {
-                    if(globals.life < 3)
-                    {
-                        globals.life++;
-                    }
+        if (sprite.isCollidingWithPlayer && !(sprite.id === 1 || sprite.id === 2 || sprite.id === 3)) {
+            if (sprite.id === 8) {
+                // Incrementa la vida si el jugador recoge el objeto adecuado
+                if (globals.life < 3) {
+                    globals.life++;
                 }
-                else
-                {
-                    if(globals.life > 0)
-                    {
-                        //Si hay colision reducimos la vida
-                        globals.life--;
-                    }
+            } else {
+                if (!invulnerable && globals.life > 0) {
+                    // Reduce la vida si no está en invulnerabilidad
+                    globals.life--;
+
+
+                    // Cambia al estado HIT_* correspondiente
+                    const hitState = getHitState(player.state);
+
+                    player.state = hitState;
+
+                    // Activa la invulnerabilidad
+                    invulnerable = true;
+
+
+                    // Configura un temporizador para restaurar el estado original y desactivar invulnerabilidad
+                    setTimeout(() => {
+                        const originalState = restoreOriginalState(hitState);
+                        player.state = originalState;
+                        invulnerable = false;
+                    }, INVULNERABLE_TIME); // ← Asegúrate de que INVULNERABLE_TIME está definido
                 }
             }
+        }
+    }
+}
+
+
+// Devuelve el estado HIT_* correspondiente utilizando múltiples case
+function getHitState(currentState) {
+    switch (currentState) {
+        case 0: // STILL_DOWN
+        case 4: // DOWN
+            return 8; // HIT_DOWN
+
+        case 1: // STILL_RIGHT
+        case 5: // RIGHT
+            return 9; // HIT_RIGHT
+
+        case 2: // STILL_UP
+        case 6: // UP
+            return 10; // HIT_UP
+
+        case 3: // STILL_LEFT
+        case 7: // LEFT
+            return 11; // HIT_LEFT
+
+        default:
+            return currentState; // Si no coincide, no cambia
+    }
+}
+
+
+// Restaura el estado original a partir del estado HIT_*
+function restoreOriginalState(hitState) {
+    switch (hitState) 
+    {
+        case 8: // HIT_DOWN
+            return 0; // STILL_DOWN
+
+        case 9: // HIT_RIGHT
+            return 1; // STILL_RIGHT
+
+        case 10: // HIT_UP
+            return 2; // STILL_UP
+
+        case 11: // HIT_LEFT
+            return 3; // STILL_LEFT
+
+        default:
+            return hitState; // Si no coincide, no cambia
+
     }
 }
