@@ -32,6 +32,11 @@ export function keydownHandler(event)
         case Key.ENTER:
             globals.action.enter = true;
             break;
+
+        case Key.SPACE:
+            globals.action.plantbomb = true;
+            break;
+
     }
 }
 
@@ -65,6 +70,10 @@ export function keyupHandler(event)
 
         case Key.ENTER:
             globals.action.enter = false;
+            break;
+
+        case Key.SPACE:
+            globals.action.plantbomb = false;
             break;
     
     }
