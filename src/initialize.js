@@ -289,11 +289,11 @@ function initBomb()
     const hitBox = new HitBox(14,14,1,1)
 
     //Creamos nuestro sprite
-    const bomb = new Sprite(SpriteID.BOMB, State.BLUE, 100, 70, imageSet, frames,0, hitBox);
-
+    const bomb = new Sprite(SpriteID.BOMB, State.BLUE, 0, -16, imageSet, frames,0, hitBox);
+    const bombC = new Sprite(SpriteID.BOMB, State.BLUE, 0, -16, imageSet, frames,0, hitBox);
     //Añadimos el player al array de sprites
     globals.sprites.push(bomb);
-    globals.spritesControls.push(bomb);
+    globals.spritesControls.push(bombC);
 
 
 }
@@ -314,7 +314,7 @@ function initMazeBlock()
 
 
     //Creamos nuestro sprite
-    const mazeBlock = new Sprite(SpriteID.MAZE_BLOCK, State.STILL, 100, 70, imageSet, frames,0,hitBox);
+    const mazeBlock = new Sprite(SpriteID.MAZE_BLOCK, State.STILL, 96, 96, imageSet, frames,0,hitBox);
 
 
     //Añadimos el player al array de sprites
@@ -423,7 +423,7 @@ function initHealthPotion()
 
 
     //Creamos nuestro sprite
-    const healthPotion = new Sprite(SpriteID.HEALTHPOTION, State.STILL, 100, 70, imageSet, frames,0,hitBox);
+    const healthPotion = new Sprite(SpriteID.HEALTHPOTION, State.STILL, 0, -70, imageSet, frames,0,hitBox);
 
     //Añadimos el player al array de sprites
     globals.sprites.push(healthPotion);
@@ -456,7 +456,7 @@ function initThrone()
 
     //Creamos nuestro sprite
     const throne_main = new Sprite(SpriteID.THRONE, State.LEFT_1, -400, 70, imageSet, frames, physics_main,0);
-    const throne = new Sprite(SpriteID.THRONE, State.LEFT_1, 64, 64, imageSet, frames, physics,hitBox);
+    const throne = new Sprite(SpriteID.THRONE, State.LEFT_1, 200, 464, imageSet, frames, physics,hitBox);
 
     //Añadimos el player al array de spritesS
     globals.sprites.push(throne);
