@@ -3,14 +3,16 @@
 //Estados del juego
 export const Game = 
 {
-    INVALID:    -1,
-    LOADING:    0,
-    PLAYING:    1,
-    OVER:       2,
-    MAIN:       3,
-    SCORE:      4,
-    CONTROLS:   5,
-    STORY:      6
+    INVALID:            -1,
+    LOADING:            0,
+    PLAYING:            1,
+    OVER:               2,
+    MAIN:               3,
+    SCORE:              4,
+    CONTROLS:           5,
+    STORY:              6,
+    LOADING_PLAYING:    7,
+    ONE_LIFE_LESS:      8,
 };
 
 //Velocidad del juego
@@ -18,26 +20,26 @@ export const FPS = 30;
 
 export const SpriteID =
 {
-    PLAYER: 0,
-    BOMB: 1,
-    MAZE_BLOCK: 2,
-    FARM_BLOCK: 3,
-    GORROCOPTERO: 4,
-    HORMIGA: 5,
-    BOMBILLA: 6, 
-    HEART: 7,
-    HEALTHPOTION: 8,
-    THRONE: 9,
-    MAINSCREEN: 10,
+    PLAYER:         0,
+    BOMB:           1,
+    MAZE_BLOCK:     2,
+    FARM_BLOCK:     3,
+    GORROCOPTERO:   4,
+    HORMIGA:        5,
+    BOMBILLA:       6,
+    HEART:          7,
+    HEALTHPOTION:   8,
+    THRONE:         9,
+    MAINSCREEN:     10,
     CONTROLSSCREEN: 11,
-    STORYSCREEN: 12,
-    SCORESCREEN: 13,
-    OVERSCREEN: 14,
-    PLAYERC1: 15,
-    PLAYERC2: 16,
-    PLAYERC3: 17,
-    PLAYERC4: 18,
-    PLAYERMAIN: 19,
+    STORYSCREEN:    12,
+    SCORESCREEN:    13,
+    OVERSCREEN:     14,
+    PLAYERC1:       15,
+    PLAYERC2:       16,
+    PLAYERC3:       17,
+    PLAYERC4:       18,
+    PLAYERMAIN:     19,
     
 }
 
@@ -45,22 +47,22 @@ export const SpriteID =
 export const State =
 {
     //Estados de PLAYER
-    STILL_DOWN:           0,
-    STILL_RIGHT:          1,
-    STILL_UP:             2,
-    STILL_LEFT:           3,
-    DOWN:                 4,
-    RIGHT:                5,
-    UP:                   6,
-    LEFT:                 7,
-    HIT_DOWN:             8,
-    HIT_RIGHT:            8,
-    HIT_UP:               10,
-    HIT_LEFT:             11,
-    DED_DOWN:             12,
-    DED_RIGHT:            13,
-    DED_UP:               14,
-    DED_LEFT:             15,
+    STILL_DOWN:     0,
+    STILL_RIGHT:    1,
+    STILL_UP:       2,
+    STILL_LEFT:     3,
+    DOWN:           4,
+    RIGHT:          5,
+    UP:             6,
+    LEFT:           7,
+    HIT_DOWN:       8,
+    HIT_RIGHT:      8,
+    HIT_UP:         10,
+    HIT_LEFT:       11,
+    DED_DOWN:       12,
+    DED_RIGHT:      13,
+    DED_UP:         14,
+    DED_LEFT:       15,
 
 
     //Estados de BOMB
@@ -109,6 +111,7 @@ export const Key =
     ARROWRIGHT: 39,
     ARROWLEFT:  37,
     ENTER:      13,
+    SPACE:      32,
 }
 
 export const Block =
