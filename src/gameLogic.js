@@ -118,10 +118,6 @@ function updateSprite(sprite)
             updatePlayer(sprite);
             break;
         
-        case SpriteID.BOMB:
-            updateBomb(sprite);
-            break;
-
         case SpriteID.MAZE_BLOCK:
             updateMazeBlock1(sprite);
             break;
@@ -316,14 +312,23 @@ function updatePlayer(sprite)
             sprite.physics.vx = 0;
             sprite.physics.vy = 0;
     }
-
-
     
     sprite.xPos += sprite.physics.vx * globals.deltaTime;
     sprite.yPos += sprite.physics.vy * globals.deltaTime
 
     updateAnimationFrame(sprite);
 
+
+    if (globals.action.plantbomb === true && !globals.bombPlanted) {
+        updateBomb(globals.sprites[1], sprite);
+        globals.bombPlanted = true; // Evita que la bomba se replante en cada frame
+    
+        // Opcional: Restablecer la variable después de un tiempo si quieres permitir otra bomba
+        setTimeout(() => {
+            globals.bombPlanted = false; // Permite plantar otra bomba después de un tiempo
+        }, 4000); // Ajusta el tiempo según necesites (3000ms = 3 segundos)
+    }
+    
 }
 
 function updatePlayerMain(sprite)
@@ -389,16 +394,62 @@ function updatePlayer3Controls(sprite)
 
 }
 
-function updateBomb(sprite)
-{
+function updateBomb(sprite, player) {
+    let centerX = player.xPos + player.hitBox.xOffset + player.hitBox.xSize / 2;
+    let centerY = player.yPos + player.hitBox.yOffset + player.hitBox.ySize / 2;
 
+    sprite.xPos = Math.floor(centerX / 16) * 16; 
+    sprite.yPos = Math.floor(centerY / 16) * 16; 
 
-    sprite.xPos = 96;
-    sprite.yPos = 54;
+    sprite.frames.frameCounter = 0;
+    let timeElapsed = 0;
+    let blinkRate = 300;
 
-    sprite.state = State.BLUE;
+    function animateBomb() {
+        if (timeElapsed >= 3) {
+            sprite.frames.frameCounter = 3;
+            sprite.state = State.EXPLOSION; // Cambia al estado de explosión
+            //triggerExplosion(sprite); // Llama a la función que manejará la explosión
+
+            // Después de la explosión, cambia el frame de la bomba
+            changeFrameAfterExplosion(sprite);
+            return;
+        }
+
+        sprite.state = (sprite.state === State.RED) ? State.BLUE : State.RED;
+
+        if (timeElapsed >= 1 && timeElapsed < 2) {
+            sprite.frames.frameCounter = 1;
+        } else if (timeElapsed >= 2) {
+            sprite.frames.frameCounter = 2;
+        }
+
+        if (timeElapsed >= 1) {
+            blinkRate = 100;
+        }
+        if (timeElapsed >= 2) {
+            blinkRate = 50;
+        }
+
+        timeElapsed += blinkRate / 1000;
+        setTimeout(animateBomb, blinkRate);
+    }
+
+    animateBomb();
+}
+
+// Función para cambiar los frames progresivamente hasta llegar al frame 4
+function changeFrameAfterExplosion(sprite) {
     sprite.frames.frameCounter = 0;
 
+    const changeFrameInterval = setInterval(() => {
+        if (sprite.frames.frameCounter <= 9) {
+            console.log(sprite.frames.frameCounter)
+            sprite.frames.frameCounter++;
+        } else {
+            clearInterval(changeFrameInterval);
+        }
+    }, 75); // Cambia cada 200ms
 }
 
 function updateBombControls(sprite)
@@ -408,6 +459,8 @@ function updateBombControls(sprite)
 
     sprite.state = State.BLUE;
     sprite.frames.frameCounter = 0;
+
+    
 }
 
 function updateMazeBlock1(sprite)
