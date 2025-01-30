@@ -125,6 +125,12 @@ function initControlsSprites()
     initBomb();
 }
 
+function initOneLifeLessSprites()
+{
+    initOneLifeLessScreen();
+    initPlayer();
+}
+
 function initStorySprites()
 {
     initStoryScreen();
@@ -235,6 +241,25 @@ function initOverScreen()
 
 }
 
+function initOneLifeLessScreen()
+{
+    let x = 0;
+    let y = 96;
+    let xOffset = 16*x + x;
+    let yOffset = 16*y + y + 16;
+    //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
+    const imageSet = new ImageSet(0, 0, 272, 208, 0, xOffset, yOffset);
+
+    //Creamos los datos de la animacion. 8 frames / state
+    const frames = new Frames(1);
+    //Creamos nuestro sprite
+    const oneLifeLessScreenScreen = new Sprite(SpriteID.ONELIFELESSSCREEN, State.STILL, 0, 0, imageSet, frames);
+
+    //Añadimos el player al array de sprites
+    globals.spritesOneLifeLess.push(oneLifeLessScreenScreen);
+
+}
+
 function initPlayer()
 {
     //El player solo llega a y = 3 y el maximo de x es 12
@@ -257,7 +282,7 @@ function initPlayer()
     const hitBox = new HitBox(8,8,4,6)
 
     //Creamos nuestro sprite (id, state, xPos, yPos, imageSet, frames, physics)
-    const player = new Sprite(SpriteID.PLAYER, State.STILL_DOWN, 32, 16, imageSet, frames, physics, hitBox);
+    const player = new Sprite(SpriteID.PLAYER, State.STILL_DOWN, 112, 112, imageSet, frames, physics, hitBox);
     const playerMain = new Sprite(SpriteID.PLAYERMAIN, State.STILL_DOWN, -50, 172, imageSet, framesMain, physics_main,0);
     const playerC = new Sprite(SpriteID.PLAYERC1, State.STILL_DOWN, 32, 16, imageSet, frames, physics_main, hitBox);
     const playerC1 = new Sprite(SpriteID.PLAYERC2, State.DOWN, 80, 48, imageSet, frames, 0,0);
@@ -289,8 +314,17 @@ function initBomb()
     const hitBox = new HitBox(14,14,1,1)
 
     //Creamos nuestro sprite
-    const bomb = new Sprite(SpriteID.BOMB, State.BLUE, 0, -16, imageSet, frames,0, hitBox);
-    const bombC = new Sprite(SpriteID.BOMB, State.BLUE, 0, -16, imageSet, frames,0, hitBox);
+    const bomb = new Sprite(SpriteID.BOMB, State.BLUE, 16, 16, imageSet, frames,0, hitBox);
+    const bomb1 = new Sprite(SpriteID.BOMB1, State.BLUE, -16, 11, imageSet, frames,0, hitBox);
+    const bomb2 = new Sprite(SpriteID.BOMB2, State.BLUE, -16, 12, imageSet, frames,0, hitBox);
+    const bomb3 = new Sprite(SpriteID.BOMB3, State.BLUE, -16, 13, imageSet, frames,0, hitBox);
+    const bomb4 = new Sprite(SpriteID.BOMB4, State.BLUE, -16, 14, imageSet, frames,0, hitBox);
+    const bomb5 = new Sprite(SpriteID.BOMB5, State.BLUE, -16, 15, imageSet, frames,0, hitBox);
+    const bomb6 = new Sprite(SpriteID.BOMB6, State.BLUE, -16, 16, imageSet, frames,0, hitBox);
+    const bomb7 = new Sprite(SpriteID.BOMB7, State.BLUE, -16, 17, imageSet, frames,0, hitBox);
+    const bomb8 = new Sprite(SpriteID.BOMB8, State.BLUE, -16, 18, imageSet, frames,0, hitBox);
+
+    const bombC = new Sprite(SpriteID.BOMB, State.BLUE, 0, 0, imageSet, frames,0, hitBox);
     //Añadimos el player al array de sprites
     globals.sprites.push(bomb);
     globals.spritesControls.push(bombC);
@@ -505,6 +539,7 @@ export
     initStorySprites,
     initScoreSprites,
     initOverSprites,
+    initOneLifeLessSprites,
     initTimers,
     initEvents
 }
