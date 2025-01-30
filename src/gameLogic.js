@@ -1,7 +1,7 @@
 import globals from "./globals.js";
 import {Game, State, SpriteID} from "./constants.js";
 import Timer from "./Timer.js";
-import detectCollisions from "./collisions.js";
+import {detectCollisionsPlayer, detectCollisionsExplosion} from "./collisions.js";
 
 export default function update()
 {
@@ -42,6 +42,10 @@ export default function update()
             overScreen();
             break;
 
+        case Game.ONE_LIFE_LESS:
+            oneLifeLessScreen();
+            break;
+
         default:
             console.error("Error: Game State invalid");
     }
@@ -52,7 +56,8 @@ function playGame()
     updateSprites();
     updateSpritesHUD();
 
-    detectCollisions();
+    detectCollisionsPlayer();
+    detectCollisionsExplosion();
 
     updateGameTime();
 
@@ -90,6 +95,10 @@ function overScreen()
     updateOverSprites();
 }
 
+function oneLifeLessScreen()
+{
+    updateOneLifeLessSprites();
+}
 function updateSprites()
 {
     for(let i = 0; i < globals.sprites.length; i++)
@@ -249,18 +258,30 @@ function updateOverSprite(sprite)
     const type = sprite.id
     switch(type)
     {
-        //Caso del jugador
         case SpriteID.OVERSCREEN:
             updateOverScreen(sprite);
             break;
         
-        //Caso del enemigo
         default:
 
             break;
     }
 }
 
+function updateOneLifeLessSprite(sprite)
+{
+    const type = sprite.id;
+    switch(type)
+    {
+        case SpriteID.ONELIFELESSSCREEN:
+            updateOneLifeLessScreen(sprite);
+            break;
+
+        default:
+
+            break;
+    }
+}
 
 
 function updateSpriteHUD(sprite)
@@ -401,7 +422,7 @@ function updateBomb(sprite, player) {
     sprite.xPos = Math.floor(centerX / 16) * 16; 
     sprite.yPos = Math.floor(centerY / 16) * 16; 
 
-    sprite.frames.frameCounter = 0;
+    sprite.frames.frameCounter = 1;
     let timeElapsed = 0;
     let blinkRate = 300;
 
@@ -409,19 +430,16 @@ function updateBomb(sprite, player) {
         if (timeElapsed >= 3) {
             sprite.frames.frameCounter = 3;
             sprite.state = State.EXPLOSION; // Cambia al estado de explosión
-            //triggerExplosion(sprite); // Llama a la función que manejará la explosión
-
-            // Después de la explosión, cambia el frame de la bomba
-            changeFrameAfterExplosion(sprite);
+            triggerExplosion(sprite); // Llama a la función que manejará la explosión
             return;
         }
 
         sprite.state = (sprite.state === State.RED) ? State.BLUE : State.RED;
 
         if (timeElapsed >= 1 && timeElapsed < 2) {
-            sprite.frames.frameCounter = 1;
-        } else if (timeElapsed >= 2) {
             sprite.frames.frameCounter = 2;
+        } else if (timeElapsed >= 2) {
+            sprite.frames.frameCounter = 3;
         }
 
         if (timeElapsed >= 1) {
@@ -439,19 +457,36 @@ function updateBomb(sprite, player) {
 }
 
 // Función para cambiar los frames progresivamente hasta llegar al frame 4
-function changeFrameAfterExplosion(sprite) {
-    sprite.frames.frameCounter = 0;
+function triggerExplosion(sprite) {
 
-    const changeFrameInterval = setInterval(() => {
-        if (sprite.frames.frameCounter <= 9) {
-            console.log(sprite.frames.frameCounter)
-            sprite.frames.frameCounter++;
-        } else {
-            clearInterval(changeFrameInterval);
-        }
-    }, 75); // Cambia cada 200ms
+    sprite.frames.frameCounter = 1;
+
+    updateExplosions(sprite)
+
 }
 
+function updateExplosions(sprite)
+{
+    for(let i = 2; i < 10; i++)
+    {
+
+        let explosion = globals.sprites[i];
+        
+        explosion.frames.frameChangeCounter = 1
+        explosion.state = State.EXPLOSION;
+        for(let j = 0; j < 3; j++)
+        {
+            for(let k = 0; k < 3; k++)
+            {
+            explosion.xPos = sprite.xPos + (8 * j);
+            explosion.yPos = sprite.yPos + (8 * k);
+            }
+        }
+
+        
+    }
+    console.log("fin")
+}
 function updateBombControls(sprite)
 {
     sprite.xPos = 240;
@@ -631,6 +666,8 @@ function updateMainScreen(sprite) {
             activateScreenChangeDelay();
         } else if (globals.action.enter) {
             globals.gameState = Game.PLAYING;
+            globals.remainingTime = 180; // 180 segundos
+
         }
     }
 }
@@ -704,6 +741,27 @@ function updateOverScreen(sprite) {
     }
 }
 
+function updateOneLifeLessScreen(sprite) {
+    sprite.xPos = 0;
+    sprite.yPos = 0;
+
+    sprite.frames.frameCounter = 0;
+
+    sprite.state = State.STILL;
+
+    // Detectar las teclas de flecha derecha e izquierda
+    // if(globals.gameState === 2)
+    // {
+    //     if (globals.action.changeScreenRight) { // Flecha derecha detectada
+    //         globals.gameState = Game.PLAYING;
+    //         globals.remainingTime = 180; // 180 segundos
+
+    //     } else if (globals.action.changeScreenLeft) { // Flecha izquierda detectada
+    //         globals.gameState = Game.MAIN;
+    //     }
+    // }
+}
+
 function updateMainSprites()
 {
     for(let i = 0; i < globals.spritesMain.length; i++)
@@ -746,6 +804,15 @@ function updateOverSprites()
     {
         const sprite = globals.spritesOver[i];
         updateOverSprite(sprite);
+    }
+}
+
+function updateOneLifeLessSprites()
+{
+    for(let i = 0; i < globals.spritesOneLifeLess.length; i++)
+    {
+        const sprite = globals.spritesOneLifeLess[i];
+        updateOneLifeLessSprite(sprite)
     }
 }
 
