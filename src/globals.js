@@ -43,6 +43,7 @@ export default
     spritesStory: [],
     spritesScore: [],
     spritesOver: [],
+    spritesOneLifeLess: [],
     
     //Datos del nivel
     Level: {},
