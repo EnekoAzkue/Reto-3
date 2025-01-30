@@ -1,8 +1,10 @@
 import globals from "./globals.js";
-import {
+import 
+{
     initHTMLelements, loadAssets, initSprites, initVars, initLevel,
     initMainSprites, initControlsSprites, initStorySprites,
-    initScoreSprites, initTimers, initEvents, initOverSprites
+    initScoreSprites, initTimers, initEvents, initOverSprites,
+    initOneLifeLessSprites
 } from "./initialize.js";
 import update from "./gameLogic.js";
 import render from "./gameRender.js";
@@ -45,6 +47,8 @@ function init() {
     initScoreSprites();
 
     initOverSprites();
+
+    initOneLifeLessSprites();
 
     // Inicializamos el temporizador global
     globals.remainingTime = 180; // 180 segundos
