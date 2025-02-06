@@ -315,14 +315,7 @@ function initBomb()
 
     //Creamos nuestro sprite
     const bomb = new Sprite(SpriteID.BOMB, State.BLUE, 16, 16, imageSet, frames,0, hitBox);
-    const bomb1 = new Sprite(SpriteID.BOMB1, State.BLUE, -16, 11, imageSet, frames,0, hitBox);
-    const bomb2 = new Sprite(SpriteID.BOMB2, State.BLUE, -16, 12, imageSet, frames,0, hitBox);
-    const bomb3 = new Sprite(SpriteID.BOMB3, State.BLUE, -16, 13, imageSet, frames,0, hitBox);
-    const bomb4 = new Sprite(SpriteID.BOMB4, State.BLUE, -16, 14, imageSet, frames,0, hitBox);
-    const bomb5 = new Sprite(SpriteID.BOMB5, State.BLUE, -16, 15, imageSet, frames,0, hitBox);
-    const bomb6 = new Sprite(SpriteID.BOMB6, State.BLUE, -16, 16, imageSet, frames,0, hitBox);
-    const bomb7 = new Sprite(SpriteID.BOMB7, State.BLUE, -16, 17, imageSet, frames,0, hitBox);
-    const bomb8 = new Sprite(SpriteID.BOMB8, State.BLUE, -16, 18, imageSet, frames,0, hitBox);
+
 
     const bombC = new Sprite(SpriteID.BOMB, State.BLUE, 0, 0, imageSet, frames,0, hitBox);
     //Añadimos el player al array de sprites
@@ -455,9 +448,8 @@ function initHealthPotion()
 
     const hitBox = new HitBox(6,4,6,5)
 
-
     //Creamos nuestro sprite
-    const healthPotion = new Sprite(SpriteID.HEALTHPOTION, State.STILL, 0, -70, imageSet, frames,0,hitBox);
+    const healthPotion = new Sprite(SpriteID.HEALTHPOTION, State.STILL, 64, 112, imageSet, frames,0,hitBox);
 
     //Añadimos el player al array de sprites
     globals.sprites.push(healthPotion);
