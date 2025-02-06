@@ -3,6 +3,8 @@ import {Game, State, SpriteID} from "./constants.js";
 import Timer from "./Timer.js";
 import {detectCollisionsPlayer, detectCollisionsExplosion} from "./collisions.js";
 
+//const random = Math.floor((Math.random() * 10) + 1)
+const random = 4;
 export default function update()
 {
 
@@ -427,12 +429,6 @@ function updateBomb(sprite, player) {
     let blinkRate = 300;
 
     function animateBomb() {
-        if (timeElapsed >= 3) {
-            sprite.frames.frameCounter = 3;
-            sprite.state = State.EXPLOSION; // Cambia al estado de explosión
-            triggerExplosion(sprite); // Llama a la función que manejará la explosión
-            return;
-        }
 
         sprite.state = (sprite.state === State.RED) ? State.BLUE : State.RED;
 
@@ -448,6 +444,14 @@ function updateBomb(sprite, player) {
         if (timeElapsed >= 2) {
             blinkRate = 50;
         }
+        if (timeElapsed >= 3) {
+
+            sprite.frames.frameCounter = 1;
+            sprite.state = State.EXPLOSION; // Cambia al estado de explosión
+            triggerExplosion(sprite); // Llama a la función que manejará la explosión
+            resetAnimation(sprite);
+            return;
+        }
 
         timeElapsed += blinkRate / 1000;
         setTimeout(animateBomb, blinkRate);
@@ -456,37 +460,53 @@ function updateBomb(sprite, player) {
     animateBomb();
 }
 
-// Función para cambiar los frames progresivamente hasta llegar al frame 4
 function triggerExplosion(sprite) {
 
     sprite.frames.frameCounter = 1;
 
     updateExplosions(sprite)
 
+    return true;
+
 }
 
-function updateExplosions(sprite)
-{
-    for(let i = 2; i < 10; i++)
-    {
+function resetAnimation(sprite) {
+    sprite.state = State.BLUE; // Cambia al estado de explosión
+    sprite.frames.frameCounter = 5;
 
-        let explosion = globals.sprites[i];
-        
-        explosion.frames.frameChangeCounter = 1
-        explosion.state = State.EXPLOSION;
-        for(let j = 0; j < 3; j++)
-        {
-            for(let k = 0; k < 3; k++)
-            {
-            explosion.xPos = sprite.xPos + (8 * j);
-            explosion.yPos = sprite.yPos + (8 * k);
+}
+
+
+
+function updateExplosions(sprite) {
+    let explosion = globals.sprites[8]; 
+
+    sprite.frames.frameCounter = 1;
+    explosion.state = State.EXPLOSION;
+
+    let totalDuration = 3 * 300 + 2 * 100; // Tiempo total de la animación (última celda)
+
+    for (let j = 0; j < 3; j++) {
+        setTimeout(() => {
+            for (let k = 0; k < 3; k++) {
+                setTimeout(() => {
+                    explosion.xPos = sprite.xPos - 16 + (16 * k);
+                    explosion.yPos = sprite.yPos - 16 + (16 * j);
+                }, k * 75);
             }
-        }
-
-        
+        }, j * 225);
     }
-    console.log("fin")
+
+    setTimeout(() => {
+        explosion.xPos = -16;
+        explosion.yPos = -16;
+        console.log("Explosión terminada. Volviendo a (-16, -16)");
+    }, totalDuration - 400); // Espera a que termine la animación antes de reiniciar
 }
+
+
+
+
 function updateBombControls(sprite)
 {
     sprite.xPos = 240;
@@ -611,13 +631,86 @@ function updateHeart(sprite)
 function updateHealthPotion(sprite)
 {
 
-    sprite.xPos = 64;
-    sprite.yPos = 112;
 
-    sprite.frames.frameCounter = 0;
+    setPotionPosition(sprite,random);
 
-    sprite.state = State.STILL;
+
 }
+
+function setPotionPosition(sprite,random) {
+    const TILE_SIZE = 16;  // Tamaño de cada tile
+
+    // Primer if
+    if (random === 1) { 
+        sprite.xPos = 7 * TILE_SIZE;  // 9 en x y 7 en y
+        sprite.yPos = 9 * TILE_SIZE;
+        console.log(`Posición 1: x = ${sprite.xPos}, y = ${sprite.yPos}`);
+    }
+
+    // Segundo if
+    if (random === 2) { 
+        sprite.xPos = 11 * TILE_SIZE;  // 10 en x y 8 en y
+        sprite.yPos = 9 * TILE_SIZE;
+        console.log(`Posición 2: x = ${sprite.xPos}, y = ${sprite.yPos}`);
+    }
+
+    // Tercer if
+    if (random === 3) { 
+        sprite.xPos = 3 * TILE_SIZE;  // 11 en x y 9 en y
+        sprite.yPos = 5 * TILE_SIZE;
+        console.log(`Posición 3: x = ${sprite.xPos}, y = ${sprite.yPos}`);
+    }
+
+    // Cuarto if
+    if (random === 4) { 
+        sprite.xPos = 12 * TILE_SIZE;  // 12 en x y 10 en y
+        sprite.yPos = 3 * TILE_SIZE;
+        console.log(`Posición 4: x = ${sprite.xPos}, y = ${sprite.yPos}`);
+    }
+
+    // Quinto if
+    if (random === 5) { 
+        sprite.xPos = 13 * TILE_SIZE;  // 13 en x y 11 en y
+        sprite.yPos = 11 * TILE_SIZE;
+        console.log(`Posición 5: x = ${sprite.xPos}, y = ${sprite.yPos}`);
+    }
+
+    // Sexto if
+    if (random === 6) { 
+        sprite.xPos = 14 * TILE_SIZE;  // 14 en x y 12 en y
+        sprite.yPos = 12 * TILE_SIZE;
+        console.log(`Posición 6: x = ${sprite.xPos}, y = ${sprite.yPos}`);
+    }
+
+    // Séptimo if
+    if (random === 7) { 
+        sprite.xPos = 15 * TILE_SIZE;  // 15 en x y 13 en y
+        sprite.yPos = 13 * TILE_SIZE;
+        console.log(`Posición 7: x = ${sprite.xPos}, y = ${sprite.yPos}`);
+    }
+
+    // Octavo if
+    if (random === 8) { 
+        sprite.xPos = 16 * TILE_SIZE;  // 16 en x y 14 en y
+        sprite.yPos = 14 * TILE_SIZE;
+        console.log(`Posición 8: x = ${sprite.xPos}, y = ${sprite.yPos}`);
+    }
+
+    // Noveno if
+    if (random === 9) { 
+        sprite.xPos = 17 * TILE_SIZE;  // 17 en x y 15 en y
+        sprite.yPos = 15 * TILE_SIZE;
+        console.log(`Posición 9: x = ${sprite.xPos}, y = ${sprite.yPos}`);
+    }
+
+    // Décimo if
+    if (random === 10) { 
+        sprite.xPos = 18 * TILE_SIZE;  // 18 en x y 16 en y
+        sprite.yPos = 16 * TILE_SIZE;
+        console.log(`Posición 10: x = ${sprite.xPos}, y = ${sprite.yPos}`);
+    }
+}
+
 
 function updateThrone(sprite)
 {
@@ -974,7 +1067,6 @@ function updateLife() {
                     // Reduce la vida si no está en invulnerabilidad
                     globals.life--;
 
-
                     // Cambia al estado HIT_* correspondiente
                     const hitState = getHitState(player.state);
 
@@ -982,7 +1074,6 @@ function updateLife() {
 
                     // Activa la invulnerabilidad
                     invulnerable = true;
-
 
                     // Configura un temporizador para restaurar el estado original y desactivar invulnerabilidad
                     setTimeout(() => {
