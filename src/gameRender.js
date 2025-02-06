@@ -697,10 +697,8 @@ function renderHUD()
     globals.ctxHUD.fillStyle = 'lightgrey';
     globals.ctxHUD.fillText("" + highscore, 72, 19);
 
-    //Draw life
     globals.ctxHUD.fillStyle = 'darkred';
-    globals.ctxHUD.fillText("LIFE", 168, 8);
-    
+    globals.ctxHUD.fillText("LIFE", 167, 8);
     // Render hearts based on life count
     const heartSpacing = 15; // Spacing between hearts
     for (let i = 0; i < globals.life; i++) {
