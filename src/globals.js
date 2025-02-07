@@ -58,5 +58,8 @@ export default
     action: {},
 
     //Life
-    life: 0
+    life: 0,
+
+    hitNum: 0
+
 };

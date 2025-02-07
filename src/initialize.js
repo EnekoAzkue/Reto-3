@@ -8,6 +8,8 @@ import Timer from "./Timer.js";
 import Physics from "./Physics.js";
 import { keydownHandler, keyupHandler } from "./events.js";
 import HitBox from "./hitbox.js";
+
+globals.hitNum = 0;
 //Funcion que inicializa los elementos HTML
 function initHTMLelements()
 {
@@ -102,13 +104,16 @@ function initSprites()
 
     initPlayer();
     initBomb();
-    initMazeBlock();
+    //initMazeBlock();
     initGorrocoptero();
     initHormiga();
     initBombilla();
     initHeart();
     initHealthPotion();
     initThrone();
+    initAngerBarrFill();
+    initAngerBar();
+
 }
 
 function initMainSprites()
@@ -149,9 +154,9 @@ function initOverSprites()
 function initMainScreen()
 {
     let x = 0;
-    let y = 47;
+    let y = 49;
     let xOffset = 16*x + x;
-    let yOffset = 16*y + y + 12;
+    let yOffset = 16*y + y + 7; 
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
     const imageSet = new ImageSet(0, 0, 272, 208, 0, xOffset, yOffset);
 
@@ -168,9 +173,9 @@ function initMainScreen()
 function initControlsScreen()
 {
     let x = 0;
-    let y = 96;
+    let y = 98;
     let xOffset = 16*x + x;
-    let yOffset = 16*y + y + 16;
+    let yOffset = 16*y + y + 10;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
     const imageSet = new ImageSet(0, 0, 272, 208, 0, xOffset, yOffset);
 
@@ -187,9 +192,9 @@ function initControlsScreen()
 function initStoryScreen()
 {
     let x = 0;
-    let y = 72;
+    let y = 74;
     let xOffset = 16*x + x;
-    let yOffset = 16*y + y + 5;
+    let yOffset = 16*y + y ;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
     const imageSet = new ImageSet(0, 0, 272, 208, 0, xOffset, yOffset);
 
@@ -206,9 +211,9 @@ function initStoryScreen()
 function initScoreScreen()
 {
     let x = 0;
-    let y = 84;
+    let y = 86;
     let xOffset = 16*x + x;
-    let yOffset = 16*y + y + 10;
+    let yOffset = 16*y + y + 5;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
     const imageSet = new ImageSet(0, 0, 272, 208, 0, xOffset, yOffset);
 
@@ -225,9 +230,9 @@ function initScoreScreen()
 function initOverScreen()
 {
     let x = 0;
-    let y = 60;
+    let y = 61;
     let xOffset = 16*x + x;
-    let yOffset = 16*y + y;
+    let yOffset = 16*y + y + 12;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
     const imageSet = new ImageSet(0, 0, 272, 208, 0, xOffset, yOffset);
 
@@ -315,9 +320,8 @@ function initBomb()
 
     //Creamos nuestro sprite
     const bomb = new Sprite(SpriteID.BOMB, State.BLUE, 16, 16, imageSet, frames,0, hitBox);
-
-
     const bombC = new Sprite(SpriteID.BOMB, State.BLUE, 0, 0, imageSet, frames,0, hitBox);
+
     //Añadimos el player al array de sprites
     globals.sprites.push(bomb);
     globals.spritesControls.push(bombC);
@@ -488,6 +492,42 @@ function initThrone()
     globals.sprites.push(throne);
     globals.spritesMain.push(throne_main);
 
+}
+
+function initAngerBar()
+{
+    let x = 0;
+    let y = 47;
+    let xOffset = 54*x + x;
+    let yOffset = 16*y + y + 13;
+    //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
+    const imageSet = new ImageSet(0, 0, 54, 16, 55, xOffset, yOffset);
+
+    //Creamos los datos de la animacion. 8 frames / state
+    const frames = new Frames(3);
+    //Creamos nuestro sprite
+    const angerBar = new Sprite(SpriteID.ANGERBAR, State.STILL, 100, 70, imageSet, frames);
+
+    //Añadimos el player al array de sprites
+    globals.spritesHUD.push(angerBar);
+}
+
+function initAngerBarrFill()
+{
+    let x = 0;
+    let y = 48;
+    let xOffset = 16*x + x;
+    let yOffset = 16*y + y + 12;
+    //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
+    const imageSet = new ImageSet(0, 0, 0, 11, 13, xOffset, yOffset);
+
+    //Creamos los datos de la animacion. 8 frames / state
+    const frames = new Frames(1);
+    //Creamos nuestro sprite
+    const angerBarFill = new Sprite(SpriteID.ANGERBARFILL, State.STILL, 100, 70, imageSet, frames);
+
+    //Añadimos el player al array de sprites
+    globals.spritesHUD.push(angerBarFill);
 }
 
 function initLevel()

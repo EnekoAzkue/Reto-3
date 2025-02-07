@@ -3,8 +3,7 @@ import {Game, State, SpriteID} from "./constants.js";
 import Timer from "./Timer.js";
 import {detectCollisionsPlayer, detectCollisionsExplosion} from "./collisions.js";
 
-//const random = Math.floor((Math.random() * 10) + 1)
-const random = 4;
+const random = Math.floor((Math.random() * 10) + 1)
 export default function update()
 {
 
@@ -294,7 +293,7 @@ function updateSpriteHUD(sprite)
         case SpriteID.HEART:
             updateHeart(sprite);
             break;
-        
+    
         default:
 
             break;
@@ -628,6 +627,56 @@ function updateHeart(sprite)
 
 }
 
+function updateAngerBarLvl1(sprite)
+{
+    sprite.frames.frameCounter = 1;
+}
+
+function updateAngerBarLvl2(sprite)
+{
+    sprite.frames.frameCounter = 2;
+}
+
+function updateAngerBarLvl3(sprite)
+{
+    sprite.frames.frameCounter = 3;
+}
+function updateAngerBarFill(sprite, hitNum) {
+    if (sprite.angerAnimation) 
+    {
+        clearInterval(sprite.angerAnimation);
+    }
+
+    let targetSize = hitNum * 13;
+    let currentSize = sprite.imageSet.xSize;
+
+    sprite.angerAnimation = setInterval(() => 
+    {
+        if (currentSize < targetSize) 
+        {
+            sprite.imageSet.xSize++;
+            currentSize++;
+        } 
+        else 
+        {
+            clearInterval(sprite.angerAnimation);
+        }
+    }, 50); 
+
+    if (hitNum === 1) 
+    {
+        updateAngerBarLvl1(globals.spritesHUD[2]);
+    }
+    else if (hitNum === 2) 
+    {
+        updateAngerBarLvl2(globals.spritesHUD[2]);
+    } 
+    else if (hitNum === 3) 
+    {
+        updateAngerBarLvl3(globals.spritesHUD[2]);
+    }
+}
+
 function updateHealthPotion(sprite)
 {
 
@@ -637,87 +686,64 @@ function updateHealthPotion(sprite)
 
 }
 
-function setPotionPosition(sprite,random) {
-    const TILE_SIZE = 16;  // Tamaño de cada tile
+function setPotionPosition(sprite,random) 
+{
+    const TILE_SIZE = 16;  
 
-    // Primer if
     if (random === 1) { 
-        sprite.xPos = 7 * TILE_SIZE;  // 9 en x y 7 en y
+        sprite.xPos = 7 * TILE_SIZE;  
         sprite.yPos = 9 * TILE_SIZE;
-        console.log(`Posición 1: x = ${sprite.xPos}, y = ${sprite.yPos}`);
     }
 
-    // Segundo if
     if (random === 2) { 
-        sprite.xPos = 11 * TILE_SIZE;  // 10 en x y 8 en y
+        sprite.xPos = 11 * TILE_SIZE; 
         sprite.yPos = 9 * TILE_SIZE;
-        console.log(`Posición 2: x = ${sprite.xPos}, y = ${sprite.yPos}`);
     }
 
-    // Tercer if
     if (random === 3) { 
-        sprite.xPos = 3 * TILE_SIZE;  // 11 en x y 9 en y
+        sprite.xPos = 3 * TILE_SIZE;  
         sprite.yPos = 5 * TILE_SIZE;
-        console.log(`Posición 3: x = ${sprite.xPos}, y = ${sprite.yPos}`);
     }
 
-    // Cuarto if
     if (random === 4) { 
-        sprite.xPos = 12 * TILE_SIZE;  // 12 en x y 10 en y
+        sprite.xPos = 12 * TILE_SIZE; 
         sprite.yPos = 3 * TILE_SIZE;
-        console.log(`Posición 4: x = ${sprite.xPos}, y = ${sprite.yPos}`);
     }
 
-    // Quinto if
     if (random === 5) { 
-        sprite.xPos = 13 * TILE_SIZE;  // 13 en x y 11 en y
-        sprite.yPos = 11 * TILE_SIZE;
-        console.log(`Posición 5: x = ${sprite.xPos}, y = ${sprite.yPos}`);
+        sprite.xPos = 12 * TILE_SIZE; 
+        sprite.yPos = 10 * TILE_SIZE;
     }
 
-    // Sexto if
     if (random === 6) { 
-        sprite.xPos = 14 * TILE_SIZE;  // 14 en x y 12 en y
-        sprite.yPos = 12 * TILE_SIZE;
-        console.log(`Posición 6: x = ${sprite.xPos}, y = ${sprite.yPos}`);
+        sprite.xPos = 6 * TILE_SIZE;  
+        sprite.yPos = 10 * TILE_SIZE;
     }
 
-    // Séptimo if
     if (random === 7) { 
-        sprite.xPos = 15 * TILE_SIZE;  // 15 en x y 13 en y
-        sprite.yPos = 13 * TILE_SIZE;
-        console.log(`Posición 7: x = ${sprite.xPos}, y = ${sprite.yPos}`);
+        sprite.xPos = 4 * TILE_SIZE;  
+        sprite.yPos = 7 * TILE_SIZE;
     }
 
-    // Octavo if
     if (random === 8) { 
-        sprite.xPos = 16 * TILE_SIZE;  // 16 en x y 14 en y
-        sprite.yPos = 14 * TILE_SIZE;
-        console.log(`Posición 8: x = ${sprite.xPos}, y = ${sprite.yPos}`);
+        sprite.xPos = 8 * TILE_SIZE;  
+        sprite.yPos = 5 * TILE_SIZE;
     }
 
-    // Noveno if
     if (random === 9) { 
-        sprite.xPos = 17 * TILE_SIZE;  // 17 en x y 15 en y
-        sprite.yPos = 15 * TILE_SIZE;
-        console.log(`Posición 9: x = ${sprite.xPos}, y = ${sprite.yPos}`);
+        sprite.xPos = 2 * TILE_SIZE;  
+        sprite.yPos = 11 * TILE_SIZE;
     }
 
-    // Décimo if
     if (random === 10) { 
-        sprite.xPos = 18 * TILE_SIZE;  // 18 en x y 16 en y
-        sprite.yPos = 16 * TILE_SIZE;
-        console.log(`Posición 10: x = ${sprite.xPos}, y = ${sprite.yPos}`);
+        sprite.xPos = 14 * TILE_SIZE; 
+        sprite.yPos = 3 * TILE_SIZE;
     }
 }
 
 
 function updateThrone(sprite)
 {
-    sprite.frames.frameCounter = 0;
-
-    sprite.state = State.STILL;
-
     //Actualizamos el angulo de giro
     sprite.physics.angle += sprite.physics.omega * globals.deltaTime;
 
@@ -826,6 +852,7 @@ function updateOverScreen(sprite) {
     {
         if (globals.action.changeScreenRight) { // Flecha derecha detectada
             globals.gameState = Game.PLAYING;
+            globals.life = 3;   
             globals.remainingTime = 180; // 180 segundos
 
         } else if (globals.action.changeScreenLeft) { // Flecha izquierda detectada
@@ -1053,19 +1080,28 @@ const INVULNERABLE_TIME = 1500; // Tiempo de invulnerabilidad en milisegundos
 function updateLife() {
     const player = globals.sprites[0]; // Suponemos que el jugador está en sprites[0]
 
+    if(globals.life < 1)
+    {
+        globals.gameState = Game.OVER;
+    }
     for (let i = 0; i < globals.sprites.length; ++i) {
         const sprite = globals.sprites[i];
 
         if (sprite.isCollidingWithPlayer && !(sprite.id === 1 || sprite.id === 2 || sprite.id === 3)) {
             if (sprite.id === 8) {
                 // Incrementa la vida si el jugador recoge el objeto adecuado
-                if (globals.life < 3) {
+                if (globals.life < 3) 
+                {
                     globals.life++;
                 }
-            } else {
+            } 
+            else 
+            {
                 if (!invulnerable && globals.life > 0) {
                     // Reduce la vida si no está en invulnerabilidad
                     globals.life--;
+                    globals.hitNum++;
+                    updateAngerBarFill(globals.spritesHUD[1], globals.hitNum)
 
                     // Cambia al estado HIT_* correspondiente
                     const hitState = getHitState(player.state);

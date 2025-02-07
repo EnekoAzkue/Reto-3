@@ -712,25 +712,33 @@ function renderHUD()
     globals.ctxHUD.fillStyle = 'darkred';
     globals.ctxHUD.fillText("AngerLvl", 224, 8);
 
-    // Create gradient for angerLvl
-    let gradient = globals.ctxHUD.createLinearGradient(232, 12, 232 + angerLvl, 12);
-    gradient.addColorStop(0, '#100000');
-    gradient.addColorStop(1, 'red'); 
+    //Draw angerLvl Bar Fill
+    renderSpriteHUD(globals.spritesHUD[1], 235, 10);
 
-    globals.ctxHUD.fillStyle = gradient;
-    globals.ctxHUD.fillRect(232, 12, angerLvl, 8);
+    //Draw angerLvl Bar
+    renderSpriteHUD(globals.spritesHUD[2], 230, 8);
 
-    //Round corners. (remove 1 pixel per corner)
-    globals.ctxHUD.fillStyle = 'black';
-    globals.ctxHUD.fillRect(232, 12, 1, 1);
-    globals.ctxHUD.fillRect(232, 19, 1, 1);
-    globals.ctxHUD.fillRect(232 + angerLvl - 1, 12, 1, 1);
-    globals.ctxHUD.fillRect(232 + angerLvl - 1, 19, 1, 1);
 
-        //Draw timer
-        globals.ctxHUD.fillStyle = 'white';
 
-        globals.ctxHUD.fillText("" + Math.ceil(globals.remainingTime), 130, 22);
+    // // Create gradient for angerLvl
+    // let gradient = globals.ctxHUD.createLinearGradient(232, 12, 232 + angerLvl, 12);
+    // gradient.addColorStop(0, '#100000');
+    // gradient.addColorStop(1, 'red'); 
+
+    // globals.ctxHUD.fillStyle = gradient;
+    // globals.ctxHUD.fillRect(232, 12, angerLvl, 8);
+
+    // //Round corners. (remove 1 pixel per corner)
+    // globals.ctxHUD.fillStyle = 'black';
+    // globals.ctxHUD.fillRect(232, 12, 1, 1);
+    // globals.ctxHUD.fillRect(232, 19, 1, 1);
+    // globals.ctxHUD.fillRect(232 + angerLvl - 1, 12, 1, 1);
+    // globals.ctxHUD.fillRect(232 + angerLvl - 1, 19, 1, 1);
+
+    //Draw timer
+    globals.ctxHUD.fillStyle = 'white';
+
+    globals.ctxHUD.fillText("" + Math.ceil(globals.remainingTime), 130, 22);
 
 }
 

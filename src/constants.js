@@ -41,14 +41,8 @@ export const SpriteID =
     PLAYERC4:           18,
     PLAYERMAIN:         19,
     ONELIFELESSSCREEN:  20,
-    BOMB1:              21,
-    BOMB2:              22,
-    BOMB3:              23,
-    BOMB4:              24,
-    BOMB5:              25,
-    BOMB6:              26,
-    BOMB7:              27,
-    BOMB8:              28,
+    ANGERBAR:           21,
+    ANGERBARFILL:       22,
 }
 
 //Identificador de estado de sprite(direccion)
