@@ -1,17 +1,16 @@
 Lunes
 
-- Cambiar el bloque para que sea tile en vez de sprite
-- Terminar los movimientos de los sprites(el gorrocoptero y la hormiga son iguales ahora mismo)
-- Teminar la colision, la bomba tiene que interactuar con los enemigos y los tiles
+- Teminar la colision, la bomba tiene que interactuar con los enemigos
 - Terminar la gestion de vidas, cuando te golpean que vuelva a la posicion inicial
 - Hacer los scores, cuando mates a un enemigo que suba el score
 
 ---------
 
 - Hacer que el trono aumente de velociodad con el anger lvl
-- Cuando te golpeen que salga pantalla de una vida movimientos
+- Cuando te golpeen que salga pantalla de una vida menos
 - sonidos
 - tabla de scores
 - transformacion
 - particulas
 - movimiento de story
+- hacer el mapa mas grande y añadir una camara
