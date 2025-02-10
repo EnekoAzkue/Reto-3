@@ -1,3 +1,5 @@
+import { Collision } from "./constants.js";
+
 //Clase gestora de los sprites
 export default class Sprite
 {
@@ -16,5 +18,15 @@ export default class Sprite
         this.isCollidingWithObstacleOnTheLeft       = false;
         this.isCollidingWithObstacleOnTheBottom     = false;
         this.isCollidingWithObstacleOnTheRight      = false;
+    }
+}
+
+export class Hormiga extends Sprite
+{
+    constructor (id, state, xPos, yPos, imageSet, frames, physics, hitBox)
+    {
+        super(id, state, xPos, yPos, imageSet, frames, physics, hitBox)
+
+        this.collisionBorder = Collision.NO_COLLISION;
     }
 }
