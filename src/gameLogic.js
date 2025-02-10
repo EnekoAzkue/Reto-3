@@ -1,7 +1,7 @@
 import globals from "./globals.js";
-import {Game, State, SpriteID} from "./constants.js";
+import {Game, State, SpriteID, Collision} from "./constants.js";
 import Timer from "./Timer.js";
-import {detectCollisionsPlayer, detectCollisionsExplosion} from "./collisions.js";
+import {detectCollisionsPlayer, detectCollisionsExplosion,detectCollisionBetweenGorrocopteroAndMapObstacles, detectCollisionBetweenHormigaAndMapObstacles} from "./collisions.js";
 
 const random = Math.floor((Math.random() * 10) + 1)
 export default function update()
@@ -58,7 +58,8 @@ function playGame()
     updateSpritesHUD();
 
     detectCollisionsPlayer();
-    detectCollisionsExplosion();
+    detectCollisionBetweenGorrocopteroAndMapObstacles();
+
 
     updateGameTime();
 
@@ -448,7 +449,6 @@ function updateBomb(sprite, player) {
             sprite.frames.frameCounter = 1;
             sprite.state = State.EXPLOSION; // Cambia al estado de explosión
             triggerExplosion(sprite); // Llama a la función que manejará la explosión
-            resetAnimation(sprite);
             return;
         }
 
@@ -461,11 +461,12 @@ function updateBomb(sprite, player) {
 
 function triggerExplosion(sprite) {
 
+
     sprite.frames.frameCounter = 1;
 
-    updateExplosions(sprite)
+    updateExplosions(sprite);
+    detectCollisionsExplosion();
 
-    return true;
 
 }
 
@@ -475,15 +476,14 @@ function resetAnimation(sprite) {
 
 }
 
-
-
 function updateExplosions(sprite) {
-    let explosion = globals.sprites[8]; 
+    let explosion = globals.sprites[7]; 
 
     sprite.frames.frameCounter = 1;
     explosion.state = State.EXPLOSION;
 
-    let totalDuration = 3 * 300 + 2 * 100; // Tiempo total de la animación (última celda)
+
+    let totalDuration = 3 * 300 + 2 * 100;
 
     for (let j = 0; j < 3; j++) {
         setTimeout(() => {
@@ -497,9 +497,11 @@ function updateExplosions(sprite) {
     }
 
     setTimeout(() => {
+        resetAnimation(explosion);
         explosion.xPos = -16;
         explosion.yPos = -16;
-        console.log("Explosión terminada. Volviendo a (-16, -16)");
+        globals.sprites[1].xPos = -16;
+        globals.sprites[1].yPos = -16;
     }, totalDuration - 400); // Espera a que termine la animación antes de reiniciar
 }
 
@@ -529,96 +531,122 @@ function updateMazeBlock1(sprite)
     sprite.state = State.STILL;
 }
 
-function updateGorrocoptero(sprite)
-{
-    if(sprite.yPos >= 169)
-        {
-            sprite.state = State.UP_2;
-        }
-    else if(sprite.yPos <= 10)
-            {
-                sprite.state = State.DOWN_2;
-            }
-
-    //Maquina de estados
-    switch(sprite.state)
-    {
+function updateGorrocoptero(sprite) {
+    // Máquina de estados
+    switch (sprite.state) {
         case State.RIGHT_1:
-            //Si se mueve a la derecha asignamos la velocidad X positiva
             sprite.physics.vx = sprite.physics.vLimit;
+            sprite.physics.vy = 0;
             break;
         case State.LEFT_1:
-            //Si se mueve a la derecha asignamos la velocidad X positiva
             sprite.physics.vx = -sprite.physics.vLimit;
+            sprite.physics.vy = 0;
             break;
         case State.UP_1:
-            //Si se mueve a la derecha asignamos la velocidad X positiva
             sprite.physics.vy = -sprite.physics.vLimit;
+            sprite.physics.vx = 0;
             break;
         case State.DOWN_1:
-            //Si se mueve a la derecha asignamos la velocidad X positiva
             sprite.physics.vy = sprite.physics.vLimit;
+            sprite.physics.vx = 0;
             break;
-    
-
     }
 
-    //Calculamos la distancia que se mueve(x = x + Vt)
-    sprite.xPos += sprite.physics.vx * globals.deltaTime
+    // Calculamos la nueva posición
+    sprite.xPos += sprite.physics.vx * globals.deltaTime;
+    sprite.yPos += sprite.physics.vy * globals.deltaTime;
 
-    //Calculamos la distancia que se mueve(x = x + Vt)
-    sprite.yPos += sprite.physics.vy * globals.deltaTime
+    updateAnimationFrame(sprite);
+}
+
+// Función para cambiar el estado del sprite aleatoriamente cada 5 segundos
+setInterval(() => {
+    if (globals.sprites[2].state === State.UP_1 || globals.sprites[2].state === State.DOWN_1) {
+        // Si está en UP o DOWN, cambiar a LEFT o RIGHT
+        const horizontalStates = [State.LEFT_1, State.RIGHT_1];
+        globals.sprites[2].state = horizontalStates[Math.floor(Math.random() * horizontalStates.length)];
+    } else {
+        // Si está en LEFT o RIGHT, cambiar a UP o DOWN
+        const verticalStates = [State.UP_1, State.DOWN_1];
+        globals.sprites[2].state = verticalStates[Math.floor(Math.random() * verticalStates.length)];
+    }
+}, 10000);
+
+
+function updateHormiga(sprite) {
+    // Máquina de estados
+    switch (sprite.state) {
+        case State.TL: // Top Left (↖)
+            sprite.physics.vx = -sprite.physics.vLimit; // Izquierda
+            sprite.physics.vy = -sprite.physics.vLimit - 10; // Arriba
+            break;
+        case State.TR: // Top Right (↗)
+            sprite.physics.vx = sprite.physics.vLimit;  // Derecha
+            sprite.physics.vy = -sprite.physics.vLimit - 10; // Arriba
+            break;
+        case State.DL: // Down Left (↙)
+            sprite.physics.vx = -sprite.physics.vLimit; // Izquierda
+            sprite.physics.vy = sprite.physics.vLimit + 10;  // Abajo
+            break;
+        case State.DR: // Down Right (↘)
+            sprite.physics.vx = sprite.physics.vLimit;  // Derecha
+            sprite.physics.vy = sprite.physics.vLimit + 10;  // Abajo
+            break;
+    }
+
+    if(sprite.collisionBorder === Collision.BORDER_UP)
+    {
+        if(sprite.state === State.TL)
+        {
+            sprite.state = State.DL;
+        }
+        else if(sprite.state === State.TR)
+        {
+            sprite.state = State.DR;
+        }
+    }
+    if(sprite.collisionBorder === Collision.BORDER_DOWN)
+    {
+        if(sprite.state === State.DL)
+        {
+            sprite.state = State.TL;
+        }
+        else if(sprite.state === State.DR)
+        {
+            sprite.state = State.TR;
+        }
+    }
+    if(sprite.collisionBorder === Collision.BORDER_LEFT)
+    {
+        if(sprite.state === State.TL)
+        {
+            sprite.state = State.TR;
+        }
+        else if(sprite.state === State.DL)
+        {
+            sprite.state = State.DR;
+        }
+    }
+    if(sprite.collisionBorder === Collision.BORDER_RIGHT)
+    {
+        if(sprite.state === State.TR)
+        {
+            sprite.state = State.TL;
+        }
+        else if(sprite.state === State.DR)
+        {
+            sprite.state = State.DL;
+        }
+    }
+    // Calculamos la nueva posición (x = x + Vt, y = y + Vt)
+    sprite.xPos += sprite.physics.vx * globals.deltaTime;
+    sprite.yPos += sprite.physics.vy * globals.deltaTime;
 
     updateAnimationFrame(sprite);
 
-
+    calculateCollisionWithFourBorders(sprite);
 }
 
-function updateHormiga(sprite)
-{
-    if(sprite.yPos >= 169)
-        {
-            sprite.state = State.UP_2;
-        }
-    else if(sprite.yPos <= 10)
-            {
-                sprite.state = State.DOWN_2;
-            }
-    
-    //Maquina de estados
-    switch(sprite.state)
-    {
-        case State.RIGHT_2:
-            //Si se mueve a la derecha asignamos la velocidad X positiva
-            sprite.physics.vx = sprite.physics.vLimit;
-            break;
-        case State.LEFT_2:
-            //Si se mueve a la derecha asignamos la velocidad X positiva
-            sprite.physics.vx = -sprite.physics.vLimit;
-            break;
-        case State.UP_2:
-            //Si se mueve a la derecha asignamos la velocidad X positiva
-            sprite.physics.vy = -sprite.physics.vLimit;
-            break;
-        case State.DOWN_2:
-            //Si se mueve a la derecha asignamos la velocidad X positiva
-            sprite.physics.vy = sprite.physics.vLimit;
-            break;
-    
-
-    }
-
-    //Calculamos la distancia que se mueve(x = x + Vt)
-    sprite.xPos += sprite.physics.vx * globals.deltaTime
-
-    //Calculamos la distancia que se mueve(x = x + Vt)
-    sprite.yPos += sprite.physics.vy * globals.deltaTime
-
-updateAnimationFrame(sprite);
-
-
-
-}
 
 function updateHeart(sprite)
 {
@@ -1001,11 +1029,11 @@ function updateAnimationFrame(sprite)
         {
             switch(sprite.state)
             {
-                case State.UP_2:
-                case State.LEFT_2:
-                case State.DOWN_2:
-                case State.RIGHT_2:
-                    sprite.frameCounter = 12;
+                case State.TL:
+                case State.TR:
+                case State.DL:
+                case State.DR:
+                    sprite.frameCounter = 8;
                     sprite.frameChangeCounter = 1;
                     sprite.frames.speed = 2;
                     break;
@@ -1168,5 +1196,36 @@ function restoreOriginalState(hitState) {
         default:
             return hitState; // Si no coincide, no cambia
 
+    }
+}
+
+
+function calculateCollisionWithFourBorders (sprite)
+{
+    let collision = detectCollisionBetweenHormigaAndMapObstacles();
+
+
+    if (sprite.xPos + sprite.imageSet.xSize > globals.canvas.width || collision === 1)
+    {
+        sprite.collisionBorder = Collision.BORDER_RIGHT;
+    }
+    else if (sprite.xPos < 0 || collision === 2)
+    {
+        sprite.collisionBorder = Collision.BORDER_LEFT;
+
+    }
+    else if (sprite.yPos < 0 || collision === 4)
+    {
+        sprite.collisionBorder = Collision.BORDER_UP;
+
+    }
+    else if (sprite.yPos + sprite.imageSet.ySize > globals.canvas.height || collision === 3)
+    {
+        sprite.collisionBorder = Collision.BORDER_DOWN;
+
+    }
+    else
+    {
+        sprite.collisionBorder = Collision.NO_COLLISION;
     }
 }
