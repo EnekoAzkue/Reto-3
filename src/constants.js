@@ -83,10 +83,10 @@ export const State =
     RIGHT_1:    3,
 
     //Estados de UNIQUASINDERECHOS
-    DOWN_2:     0,
-    UP_2:       1,
-    LEFT_2:     2,
-    RIGHT_2:    3,
+    TR:     0,
+    TL:       1,
+    DL:     2,
+    DR:    3,
 
     //Estados de BOMBILLA
     INACTIVE:   0,
@@ -132,9 +132,9 @@ export const Block =
     MAZE_BLOCK_2: 11,
     MAZE_RIGHT_WALL_2: 12,
     MAZE_RIGHT_WALL_3: 13,
-    EMPTY2: 14,
-    MAZE_LEFT_WALL_4: 15,
-    MAZE_LEFT_WALL_5: 16,
+    MAZE_LEFT_WALL_4: 14,
+    MAZE_LEFT_WALL_5: 15,
+    BLOCK: 16,
     MAZE_DIRT2: 17,
     MAZE_DIRT3: 18,
     MAZE_DIRT4: 19,
@@ -189,4 +189,14 @@ export const Block =
     EMPTY12: 68,
     EMPTY13: 68,
     EMPTY14: 70
+}
+
+export const Collision = {
+
+    NO_COLLISION: -1,
+    BORDER_UP: 0,
+    BORDER_DOWN: 1,
+    BORDER_LEFT: 2,
+    BORDER_RIGHT: 3 
+
 }
