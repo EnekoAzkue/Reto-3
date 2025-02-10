@@ -1,6 +1,6 @@
 import globals from "./globals.js";
 import {Game, SpriteID, State, FPS} from "./constants.js";
-import Sprite from "./sprite.js";
+import Sprite, { Hormiga } from "./sprite.js";
 import ImageSet from "./imageSet.js";
 import Frames from "./frames.js";
 import {Level, level1} from "./level.js";
@@ -104,7 +104,6 @@ function initSprites()
 
     initPlayer();
     initBomb();
-    //initMazeBlock();
     initGorrocoptero();
     initHormiga();
     initBombilla();
@@ -287,7 +286,7 @@ function initPlayer()
     const hitBox = new HitBox(8,8,4,6)
 
     //Creamos nuestro sprite (id, state, xPos, yPos, imageSet, frames, physics)
-    const player = new Sprite(SpriteID.PLAYER, State.STILL_DOWN, 112, 112, imageSet, frames, physics, hitBox);
+    const player = new Sprite(SpriteID.PLAYER, State.STILL_DOWN, 32, 16, imageSet, frames, physics, hitBox);
     const playerMain = new Sprite(SpriteID.PLAYERMAIN, State.STILL_DOWN, -50, 172, imageSet, framesMain, physics_main,0);
     const playerC = new Sprite(SpriteID.PLAYERC1, State.STILL_DOWN, 32, 16, imageSet, frames, physics_main, hitBox);
     const playerC1 = new Sprite(SpriteID.PLAYERC2, State.DOWN, 80, 48, imageSet, frames, 0,0);
@@ -388,15 +387,18 @@ function initHormiga()
     const imageSet = new ImageSet(0, 0, 16, 24, 25, xOffset, yOffset);
 
     //Creamos los datos de la animacion. (2-4 frames / state, 2 velocidad)
-    const frames = new Frames(12, 2);
+    const frames = new Frames(7, 2);
 
     //Crearemos nuestro objeto physics con el vLimit = 80px/s
-    const physics_main = new Physics(20,0,0,0,0,0);
+    const physics = new Physics(5,0,0,0,0,0);
 
-    const hitBox = new HitBox(14,14,1,8)
+    const hitBox = new HitBox(14,7,4,8)
 
     //Creamos nuestro sprite
-    const hormiga = new Sprite(SpriteID.HORMIGA, State.DOWN_1, 160, 9, imageSet, frames, physics_main,hitBox);
+    const hormiga = new Hormiga(SpriteID.HORMIGA, State.DR, 128, 96, imageSet, frames, physics,hitBox);
+
+    hormiga.physics.vx = hormiga.physics.vLimit;
+    hormiga.physics.vy = hormiga.physics.vLimit;
 
     //Añadimos el player al array de sprites
     globals.sprites.push(hormiga);
