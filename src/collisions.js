@@ -705,17 +705,17 @@ export function detectCollisionBetweenHormigaAndMapObstacles() {
     switch (direction) {
         case State.TR:
             // Primera colisión en (xPos + xSize, yPos)
-            xPos = ant.xPos + ant.hitBox.xOffset + (ant.hitBox.xSize - 1);
-            yPos = (ant.yPos + ant.hitBox.yOffset) -1 ;
+            xPos = ant.xPos + ant.hitBox.xOffset + (ant.hitBox.xSize - 1)  -8;
+            yPos = (ant.yPos + ant.hitBox.yOffset)   ;
             isCollidingOnPos1 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId6, obstacleId11);
 
             // Segunda colision en (xPos, yPos)
-            xPos = ant.xPos + ant.hitBox.xOffset;
+            xPos = ant.xPos + ant.hitBox.xOffset ;
             isCollidingOnPos2 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId6, obstacleId11);
 
             // Tercera colisión en (xPos + xSize - 1, yPos + ySize - 1)
-            xPos = ant.xPos + ant.hitBox.xOffset + ant.hitBox.xSize;
-            yPos = ant.yPos + (ant.hitBox.yOffset + 1);
+            xPos = ant.xPos + ant.hitBox.xOffset + ant.hitBox.xSize -6;
+            yPos = ant.yPos + (ant.hitBox.yOffset + 1) ;
             isCollidingOnPos3 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId6, obstacleId11);
             
             // Cuarta colisión en (xPos + xSize - 1, yPos + ySize - 1)
@@ -734,7 +734,7 @@ export function detectCollisionBetweenHormigaAndMapObstacles() {
                 if (overlap === brickSize) overlap = 0;
     
                 // Ajustar la posición del jugador hacia abajo para corregir el solapamiento
-                ant.yPos += overlap -8;
+                ant.yPos += overlap - 8;
                 return 4;
             }
             if (isCollidingRight) {
@@ -743,7 +743,7 @@ export function detectCollisionBetweenHormigaAndMapObstacles() {
     
                 // AJUSTE: Calculamos solapamiento (overlap) y lo eliminamos
                 overlap = Math.floor(xPos) % brickSize;
-                ant.xPos -= overlap;
+                ant.xPos -= overlap + 3;
     
                 return 1;
             }
@@ -756,11 +756,11 @@ export function detectCollisionBetweenHormigaAndMapObstacles() {
             isCollidingOnPos1 = isCollidingWithObstacleAt(xPos, yPos, obstacleId3, obstacleId4, obstacleId5, obstacleId11);
     
             // Calcular la posición para la segunda colisión
-            xPos = ant.xPos + ant.hitBox.xOffset + ant.hitBox.xSize;
+            xPos = ant.xPos + ant.hitBox.xOffset + ant.hitBox.xSize - 5 ;
             isCollidingOnPos2 = isCollidingWithObstacleAt(xPos, yPos, obstacleId3, obstacleId4, obstacleId5, obstacleId11);
 
             // Tercera colisión en (xPos + xSize - 1, yPos + ySize - 1)
-            xPos = ant.xPos + (ant.hitBox.xOffset);
+            xPos = ant.xPos + (ant.hitBox.xOffset) -1;
             yPos = ant.yPos + (ant.hitBox.yOffset + 1);
             isCollidingOnPos3 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId6, obstacleId11);
             
@@ -790,7 +790,7 @@ export function detectCollisionBetweenHormigaAndMapObstacles() {
                 overlap = brickSize - (xPos % brickSize);
                 if (overlap === brickSize) overlap = 0;
     
-                ant.xPos += overlap; // Ajuste hacia la derecha
+                ant.xPos += overlap +  3; // Ajuste hacia la derecha
     
                 return 2;
             }
@@ -798,21 +798,21 @@ export function detectCollisionBetweenHormigaAndMapObstacles() {
     
         case State.DR:
             // Primera colisión en (xPos + xSize - 1, yPos)
-            xPos = ant.xPos + ant.hitBox.xOffset;
-            yPos = ant.yPos + ant.hitBox.yOffset + ant.hitBox.ySize + 7;
+            xPos = ant.xPos + ant.hitBox.xOffset +1;
+            yPos = ant.yPos + ant.hitBox.yOffset + ant.hitBox.ySize + 4;
             isCollidingOnPos1 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId7, obstacleId8, obstacleId9, obstacleId10, obstacleId11);
     
             // Segunda colisión en (xPos + xSize - 1, yPos + ySize - 1)
-            xPos = ant.xPos + ant.hitBox.xOffset + (ant.hitBox.xSize - 1);
+            xPos = ant.xPos + ant.hitBox.xOffset + (ant.hitBox.xSize)  - 8;
             isCollidingOnPos2 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId7, obstacleId8, obstacleId9, obstacleId10, obstacleId11);
     
             // Primera colisión en (xPos + xSize, yPos)
-            xPos = ant.xPos + ant.hitBox.xOffset + ant.hitBox.xSize;
+            xPos = ant.xPos + ant.hitBox.xOffset + ant.hitBox.xSize -7;
             yPos = ant.yPos + ant.hitBox.yOffset;
             isCollidingOnPos3 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId6, obstacleId11);
 
             // Segunda colision en (xPos, yPos)
-            yPos = ant.yPos + ant.hitBox.yOffset + (ant.hitBox.ySize - 1);
+            yPos = ant.yPos + ant.hitBox.yOffset + (ant.hitBox.ySize - 1) ;
             isCollidingOnPos4 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId6, obstacleId11);
 
 
@@ -826,9 +826,9 @@ export function detectCollisionBetweenHormigaAndMapObstacles() {
     
                 // AJUSTE: Calculamos solapamiento (overlap) y lo eliminamos
                 overlap = Math.floor(yPos) % brickSize;
-                ant.yPos -= overlap - 7;
+                ant.yPos -= overlap - 10;
     
-                return 3;
+                //return 3;
 
             }
             if (isCollidingRight) {
@@ -837,7 +837,7 @@ export function detectCollisionBetweenHormigaAndMapObstacles() {
     
                 // AJUSTE: Calculamos solapamiento (overlap) y lo eliminamos
                 overlap = Math.floor(xPos) % brickSize;
-                ant.xPos -= overlap;
+                ant.xPos -= overlap +2;
     
                 return 1;
             }
@@ -846,20 +846,20 @@ export function detectCollisionBetweenHormigaAndMapObstacles() {
         case State.DL:
             // Primera colisión en (xPos + xSize - 1, yPos)
             xPos = ant.xPos + (ant.hitBox.xOffset + 1);
-            yPos = ant.yPos + ant.hitBox.yOffset + ant.hitBox.ySize;
+            yPos = ant.yPos + ant.hitBox.yOffset + ant.hitBox.ySize + 4;
             isCollidingOnPos1 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId7, obstacleId8, obstacleId9, obstacleId10, obstacleId11);
     
             // Segunda colisión en (xPos + xSize - 1, yPos + ySize - 1)
-            xPos = ant.xPos + ant.hitBox.xOffset + ant.hitBox.xSize;
+            xPos = ant.xPos + ant.hitBox.xOffset + ant.hitBox.xSize - 6;
             isCollidingOnPos2 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId7, obstacleId8, obstacleId9, obstacleId10, obstacleId11);
     
             // Primera colisión en (xPos + xSize, yPos)
-            xPos = ant.xPos + ant.hitBox.xOffset;
-            yPos = ant.yPos + ant.hitBox.yOffset;
+            xPos = ant.xPos + ant.hitBox.xOffset - 1;
+            yPos = ant.yPos + ant.hitBox.yOffset -1;
             isCollidingOnPos3 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId6, obstacleId11);
 
             // Segunda colision en (xPos, yPos)
-            yPos = ant.yPos + ant.hitBox.yOffset + (ant.hitBox.ySize - 1);
+            yPos = ant.yPos + ant.hitBox.yOffset + ant.hitBox.ySize + 3;
             isCollidingOnPos4 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId6, obstacleId11);
 
             // Verificar si hay colisión
@@ -872,7 +872,7 @@ export function detectCollisionBetweenHormigaAndMapObstacles() {
     
                 // AJUSTE: Calculamos solapamiento (overlap) y lo eliminamos
                 overlap = Math.floor(yPos) % brickSize;
-                ant.yPos -= overlap;
+                ant.yPos -= overlap - 14;
     
                 return 3;
 
@@ -884,7 +884,7 @@ export function detectCollisionBetweenHormigaAndMapObstacles() {
                 overlap = brickSize - (xPos % brickSize);
                 if (overlap === brickSize) overlap = 0;
     
-                ant.xPos += overlap; // Ajuste hacia la derecha
+                ant.xPos += overlap ; // Ajuste hacia la derecha
     
                 return 2;
             }
