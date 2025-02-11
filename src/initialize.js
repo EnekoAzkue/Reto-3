@@ -94,7 +94,7 @@ function loadHandler()
         console.log("Assets finished loading");
 
         //Start the game 
-        globals.gameState = Game.MAIN;
+        globals.gameState = Game.PLAYING;
     }
     console.log(`gameState = ${globals.gameState}`)
 }
@@ -286,7 +286,7 @@ function initPlayer()
     const hitBox = new HitBox(8,8,4,6)
 
     //Creamos nuestro sprite (id, state, xPos, yPos, imageSet, frames, physics)
-    const player = new Sprite(SpriteID.PLAYER, State.STILL_DOWN, 32, 16, imageSet, frames, physics, hitBox);
+    const player = new Sprite(SpriteID.PLAYER, State.STILL_DOWN, 32, 100, imageSet, frames, physics, hitBox);
     const playerMain = new Sprite(SpriteID.PLAYERMAIN, State.STILL_DOWN, -50, 172, imageSet, framesMain, physics_main,0);
     const playerC = new Sprite(SpriteID.PLAYERC1, State.STILL_DOWN, 32, 16, imageSet, frames, physics_main, hitBox);
     const playerC1 = new Sprite(SpriteID.PLAYERC2, State.DOWN, 80, 48, imageSet, frames, 0,0);
@@ -365,7 +365,7 @@ function initGorrocoptero()
     const frames = new Frames(4, 2);
 
     //Crearemos nuestro objeto physics con el vLimit = 80px/s
-    const physics_main = new Physics(30,0,0,0,0,0);
+    const physics_main = new Physics(0,0,0,0,0,0);
 
     const hitBox = new HitBox(14,14,1,9)
 
@@ -390,12 +390,14 @@ function initHormiga()
     const frames = new Frames(7, 2);
 
     //Crearemos nuestro objeto physics con el vLimit = 80px/s
-    const physics = new Physics(5,0,0,0,0,0);
+    const physics = new Physics(1,0,0,0,0,0);
 
     const hitBox = new HitBox(14,7,4,8)
 
     //Creamos nuestro sprite
-    const hormiga = new Hormiga(SpriteID.HORMIGA, State.DR, 128, 96, imageSet, frames, physics,hitBox);
+    //110
+    //
+    const hormiga = new Hormiga(SpriteID.HORMIGA, State.DR, 110, 70, imageSet, frames, physics,hitBox);
 
     hormiga.physics.vx = hormiga.physics.vLimit;
     hormiga.physics.vy = hormiga.physics.vLimit;
