@@ -577,20 +577,20 @@ function updateHormiga(sprite) {
     // Máquina de estados
     switch (sprite.state) {
         case State.TL: // Top Left (↖)
-            sprite.physics.vx = -sprite.physics.vLimit; // Izquierda
-            sprite.physics.vy = -sprite.physics.vLimit - 10; // Arriba
+            sprite.physics.vx = -sprite.physics.vLimit ; // Izquierda
+            sprite.physics.vy = -sprite.physics.vLimit ; // Arriba
             break;
         case State.TR: // Top Right (↗)
-            sprite.physics.vx = sprite.physics.vLimit;  // Derecha
-            sprite.physics.vy = -sprite.physics.vLimit - 10; // Arriba
+            sprite.physics.vx = sprite.physics.vLimit ;  // Derecha
+            sprite.physics.vy = -sprite.physics.vLimit ; // Arriba
             break;
         case State.DL: // Down Left (↙)
             sprite.physics.vx = -sprite.physics.vLimit; // Izquierda
-            sprite.physics.vy = sprite.physics.vLimit + 10;  // Abajo
+            sprite.physics.vy = sprite.physics.vLimit ;  // Abajo
             break;
         case State.DR: // Down Right (↘)
             sprite.physics.vx = sprite.physics.vLimit;  // Derecha
-            sprite.physics.vy = sprite.physics.vLimit + 10;  // Abajo
+            sprite.physics.vy = sprite.physics.vLimit ;  // Abajo
             break;
     }
 
