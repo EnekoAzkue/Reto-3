@@ -58,8 +58,18 @@ export default function update()
 
 function loadPlaying()
 {
-    globals.sprites[0].xPos = 32;
-    globals.sprites[0].yPos = 16;
+    let player = globals.sprites[0];
+    let bomb = globals.sprites[1];
+    let gorrocoptero = globals.sprites[2];
+    let hormiga = globals.sprites[3];
+    let trono = globals.sprites[7];
+    let angerBarFill = globals.sprites[9];
+
+
+
+    player.xPos = 32;
+    player.yPos = 16;
+    
     globals.gameState = Game.PLAYING;
 }
 
