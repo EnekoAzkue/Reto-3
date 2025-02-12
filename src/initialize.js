@@ -94,7 +94,7 @@ function loadHandler()
         console.log("Assets finished loading");
 
         //Start the game 
-        globals.gameState = Game.PLAYING;
+        globals.gameState = Game.MAIN;
     }
     console.log(`gameState = ${globals.gameState}`)
 }
@@ -119,7 +119,7 @@ function initMainSprites()
 {
     initMainScreen();
     initPlayer();
-    initThrone();
+    initThroneMain();
 }
 
 function initControlsSprites()
@@ -132,7 +132,7 @@ function initControlsSprites()
 function initOneLifeLessSprites()
 {
     initOneLifeLessScreen();
-    initPlayer();
+    initPlayerLifeLess();
 }
 
 function initStorySprites()
@@ -248,7 +248,7 @@ function initOverScreen()
 function initOneLifeLessScreen()
 {
     let x = 0;
-    let y = 96;
+    let y = 110;
     let xOffset = 16*x + x;
     let yOffset = 16*y + y + 16;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
@@ -257,10 +257,10 @@ function initOneLifeLessScreen()
     //Creamos los datos de la animacion. 8 frames / state
     const frames = new Frames(1);
     //Creamos nuestro sprite
-    const oneLifeLessScreenScreen = new Sprite(SpriteID.ONELIFELESSSCREEN, State.STILL, 0, 0, imageSet, frames);
+    const oneLifeLessScreen = new Sprite(SpriteID.ONELIFELESSSCREEN, State.STILL, 0, 0, imageSet, frames);
 
     //Añadimos el player al array de sprites
-    globals.spritesOneLifeLess.push(oneLifeLessScreenScreen);
+    globals.spritesOneLifeLess.push(oneLifeLessScreen);
 
 }
 
@@ -301,6 +301,27 @@ function initPlayer()
 
 }
 
+function initPlayerLifeLess()
+{
+        //El player solo llega a y = 3 y el maximo de x es 12
+        let x = 0;
+        let y = 0;
+        let xOffset = 16*x + x;
+        let yOffset = 16*y + y;
+        //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
+        const imageSet = new ImageSet(0, 0, 16, 16, 17, 0, 0);
+    
+        //Creamos los datos de la animacion. (2-4 frames / state, 2 velocidad)
+        const frames = new Frames(2, 10);
+
+        const physics = new Physics(20,20,0,0,0,0,-100)
+
+        //Creamos nuestro sprite (id, state, xPos, yPos, imageSet, frames, physics)
+        const player = new Sprite(SpriteID.PLAYER, State.HIT_DOWN, 125, 140, imageSet, frames, physics,0);
+        //Añadimos el player al array de sprites
+        globals.spritesOneLifeLess.push(player);
+
+}
 
 function initBomb()
 {
@@ -365,7 +386,7 @@ function initGorrocoptero()
     const frames = new Frames(4, 2);
 
     //Crearemos nuestro objeto physics con el vLimit = 80px/s
-    const physics_main = new Physics(0,0,0,0,0,0);
+    const physics_main = new Physics(20,0,0,0,0,0);
 
     const hitBox = new HitBox(14,14,1,9)
 
@@ -390,14 +411,14 @@ function initHormiga()
     const frames = new Frames(7, 2);
 
     //Crearemos nuestro objeto physics con el vLimit = 80px/s
-    const physics = new Physics(1,0,0,0,0,0);
+    const physics = new Physics(15,0,0,0,0,0);
 
     const hitBox = new HitBox(14,7,4,8)
 
     //Creamos nuestro sprite
     //110
     //
-    const hormiga = new Hormiga(SpriteID.HORMIGA, State.DR, 110, 70, imageSet, frames, physics,hitBox);
+    const hormiga = new Hormiga(SpriteID.HORMIGA, State.TR, 110, 105, imageSet, frames, physics,hitBox);
 
     hormiga.physics.vx = hormiga.physics.vLimit;
     hormiga.physics.vy = hormiga.physics.vLimit;
@@ -489,13 +510,34 @@ function initThrone()
     const hitBox = new HitBox(27,25,1,2)
 
     //Creamos nuestro sprite
-    const throne_main = new Sprite(SpriteID.THRONE, State.LEFT_1, -400, 70, imageSet, frames, physics_main,0);
     const throne = new Sprite(SpriteID.THRONE, State.LEFT_1, 200, 464, imageSet, frames, physics,hitBox);
 
     //Añadimos el player al array de spritesS
     globals.sprites.push(throne);
-    globals.spritesMain.push(throne_main);
+}
 
+function initThroneMain()
+{
+    let x = 0;
+    let y = 45;
+    let xOffset = 16*x + x;
+    let yOffset = 16*y + y + 15;
+    //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
+    const imageSet = new ImageSet(0, 23, 27, 30, 0, xOffset, yOffset);
+
+    //Creamos los datos de la animacion. 8 frames / state
+    const frames = new Frames(1);
+
+    //Crearemos nuestro objeto physics con el vLimit = 40px/s
+    const physics_main = new Physics(160);
+
+    const hitBox = new HitBox(27,25,1,2)
+
+    //Creamos nuestro sprite
+    const throne_main = new Sprite(SpriteID.THRONE, State.LEFT_1, -400, 70, imageSet, frames, physics_main,0);
+    
+    //Añadimos el player al array de spritesS
+    globals.spritesMain.push(throne_main);
 }
 
 function initAngerBar()
@@ -549,7 +591,8 @@ globals.gameTime = 0;
 function initTimers()
 {
     //Creamos timer de 200, con cambios cada 0.5s
-    globals.levelTime = new Timer(200, 0.5)
+    globals.levelTime = new Timer(200, 0.5);
+    globals.respawnTime = new Timer(5, 1);
 }
 
 function initEvents()
