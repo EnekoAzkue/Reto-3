@@ -200,3 +200,5 @@ export const Collision = {
     BORDER_RIGHT: 3 
 
 }
+
+export const GRAVITY = 160;
