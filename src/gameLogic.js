@@ -1,9 +1,9 @@
 import globals from "./globals.js";
-import {Game, State, SpriteID, Collision} from "./constants.js";
+import {Game, State, SpriteID, Collision, GRAVITY} from "./constants.js";
 import Timer from "./Timer.js";
 import {detectCollisionsPlayer, detectCollisionsExplosion,detectCollisionBetweenGorrocopteroAndMapObstacles, detectCollisionBetweenHormigaAndMapObstacles} from "./collisions.js";
 
-const random = Math.floor((Math.random() * 10) + 1)
+let random = Math.floor((Math.random() * 10) + 1)
 export default function update()
 {
 
@@ -12,6 +12,10 @@ export default function update()
     {
         case Game.LOADING:
             console.log("Loading assets...");
+            break;
+
+        case Game.LOADING_PLAYING:
+            loadPlaying();
             break;
 
         case Game.PLAYING:
@@ -52,6 +56,13 @@ export default function update()
     }
 }
 
+function loadPlaying()
+{
+    globals.sprites[0].xPos = 32;
+    globals.sprites[0].yPos = 16;
+    globals.gameState = Game.PLAYING;
+}
+
 function playGame()
 {
     updateSprites();
@@ -64,6 +75,7 @@ function playGame()
     updateGameTime();
 
     updateLevelTime();
+
     updateLife();
 }
 
@@ -100,6 +112,7 @@ function overScreen()
 function oneLifeLessScreen()
 {
     updateOneLifeLessSprites();
+    updateRespawnTime();
 }
 function updateSprites()
 {
@@ -279,6 +292,8 @@ function updateOneLifeLessSprite(sprite)
             updateOneLifeLessScreen(sprite);
             break;
 
+        case SpriteID.PLAYER:
+            updatePlayerOneLifeLess(sprite);
         default:
 
             break;
@@ -416,7 +431,30 @@ function updatePlayer3Controls(sprite)
     updateAnimationFrame(sprite);
 
 }
+let jumping = 0;
+function updatePlayerOneLifeLess(sprite)
+{
+    sprite.physics.ay = GRAVITY;
 
+    if(jumping === 0)
+    {
+        sprite.physics.vy += sprite.physics.jumpForce;
+        if(sprite.yPos >= 120)
+        {
+            jumping = 1;
+        }
+    }
+    if(jumping === 1)
+    {
+        sprite.physics.vy += sprite.physics.ay * globals.deltaTime;
+    }
+
+    sprite.yPos += sprite.physics.vy * globals.deltaTime;
+
+    
+    updateAnimationFrame(sprite);
+
+}
 function updateBomb(sprite, player) {
     let centerX = player.xPos + player.hitBox.xOffset + player.hitBox.xSize / 2;
     let centerY = player.yPos + player.hitBox.yOffset + player.hitBox.ySize / 2;
@@ -477,7 +515,7 @@ function resetAnimation(sprite) {
 }
 
 function updateExplosions(sprite) {
-    let explosion = globals.sprites[7]; 
+    let explosion = globals.sprites[6]; 
 
     sprite.frames.frameCounter = 1;
     explosion.state = State.EXPLOSION;
@@ -694,14 +732,19 @@ function updateAngerBarFill(sprite, hitNum) {
     if (hitNum === 1) 
     {
         updateAngerBarLvl1(globals.spritesHUD[2]);
+        globals.sprites[5].physics.omega = 0.02;
     }
     else if (hitNum === 2) 
     {
         updateAngerBarLvl2(globals.spritesHUD[2]);
+        globals.sprites[5].physics.omega = 0.04;
+
     } 
     else if (hitNum === 3) 
     {
         updateAngerBarLvl3(globals.spritesHUD[2]);
+        globals.sprites[5].physics.omega = 0.08;
+
     }
 }
 
@@ -709,7 +752,7 @@ function updateHealthPotion(sprite)
 {
 
 
-    setPotionPosition(sprite,random);
+    //setPotionPosition(sprite,random);
 
 
 }
@@ -812,7 +855,7 @@ function updateMainScreen(sprite) {
             globals.gameState = Game.SCORE;
             activateScreenChangeDelay();
         } else if (globals.action.enter) {
-            globals.gameState = Game.PLAYING;
+            globals.gameState = Game.LOADING_PLAYING;
             globals.remainingTime = 180; // 180 segundos
 
         }
@@ -879,7 +922,7 @@ function updateOverScreen(sprite) {
     if(globals.gameState === 2)
     {
         if (globals.action.changeScreenRight) { // Flecha derecha detectada
-            globals.gameState = Game.PLAYING;
+            globals.gameState = Game.LOADING_PLAYING;
             globals.life = 3;   
             globals.remainingTime = 180; // 180 segundos
 
@@ -982,6 +1025,27 @@ function updateLevelTime()
 
         //Resetearemos timeChangerCounter
         globals.levelTime.timeChangeCounter = 0;
+    }
+}
+
+function updateRespawnTime()
+{
+    //Incrementaremos el contador de cambio de valor
+    globals.respawnTime.timeChangeCounter += globals.deltaTime;
+
+    //Si ha pasado el tiempo necesario, cambiamos el valor de timer
+    if (globals.respawnTime.timeChangeCounter > globals.respawnTime.timeChangeValue)
+    {
+        globals.respawnTime.value--;
+
+        //Resetearemos timeChangerCounter
+        globals.respawnTime.timeChangeCounter = 0;
+    }
+
+    if(globals.respawnTime.value < 1)
+    {
+        globals.gameState = Game.LOADING_PLAYING;
+        globals.respawnTime.value = 5;
     }
 }
 
@@ -1115,12 +1179,14 @@ function updateLife() {
     for (let i = 0; i < globals.sprites.length; ++i) {
         const sprite = globals.sprites[i];
 
-        if (sprite.isCollidingWithPlayer && !(sprite.id === 1 || sprite.id === 2 || sprite.id === 3)) {
+        if (sprite.isCollidingWithPlayer && !(sprite.id === 1 ||sprite.id === 2 || sprite.id === 3)) {
             if (sprite.id === 8) {
-                // Incrementa la vida si el jugador recoge el objeto adecuado
+                setPotionPosition(globals.sprites[4],Math.floor(Math.random() * 10 + 1));
+
                 if (globals.life < 3) 
                 {
                     globals.life++;
+
                 }
             } 
             else 
@@ -1128,7 +1194,12 @@ function updateLife() {
                 if (!invulnerable && globals.life > 0) {
                     // Reduce la vida si no está en invulnerabilidad
                     globals.life--;
+                    player.xPos = 32;
+                    player.yPos = 16;
                     globals.hitNum++;
+                    globals.spritesOneLifeLess[1].yPos = 140;
+                    jumping = 0;
+                    //oneLifeLess();
                     updateAngerBarFill(globals.spritesHUD[1], globals.hitNum)
 
                     // Cambia al estado HIT_* correspondiente
@@ -1228,4 +1299,9 @@ function calculateCollisionWithFourBorders (sprite)
     {
         sprite.collisionBorder = Collision.NO_COLLISION;
     }
+}
+
+function oneLifeLess()
+{
+    globals.gameState = Game.ONE_LIFE_LESS;
 }
