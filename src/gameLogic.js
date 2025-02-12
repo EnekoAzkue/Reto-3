@@ -41,7 +41,7 @@ export default function update()
 
         case Game.STORY:
             storyScreen();
-        break;
+            break;
 
         case Game.OVER:
             overScreen();
@@ -58,23 +58,15 @@ export default function update()
 
 function loadPlaying()
 {
-    let player = globals.sprites[0];
-    let bomb = globals.sprites[1];
-    let gorrocoptero = globals.sprites[2];
-    let hormiga = globals.sprites[3];
-    let trono = globals.sprites[7];
-    let angerBarFill = globals.sprites[9];
+    setSprites();
+    setSpritesHUD();
 
-
-
-    player.xPos = 32;
-    player.yPos = 16;
-    
     globals.gameState = Game.PLAYING;
 }
 
 function playGame()
 {
+
     updateSprites();
     updateSpritesHUD();
 
@@ -142,6 +134,24 @@ function updateSpritesHUD()
     }
 }
 
+function setSprites()
+{
+    for(let i = 0; i < globals.sprites.length; i++)
+    {
+        const sprite = globals.sprites[i];
+        setSprite(sprite);
+    }
+}
+
+function setSpritesHUD()
+{
+    for(let i = 0; i < globals.spritesHUD.length; i++)
+    {
+        const sprite = globals.spritesHUD[i];
+        setSpriteHUD(sprite);
+    }
+}
+
 function updateSprite(sprite)
 {
     const type = sprite.id
@@ -170,6 +180,39 @@ function updateSprite(sprite)
 
         case SpriteID.THRONE:
             updateThrone(sprite);
+            break;
+            
+        //Caso del enemigo
+        default:
+
+            break;
+    }
+}
+
+function setSprite(sprite)
+{
+    const type = sprite.id
+    switch(type)
+    {
+        //Caso del jugador
+        case SpriteID.PLAYER:
+            setPlayer(sprite);
+            break;
+
+        case SpriteID.BOMB:
+            setBomb(sprite);
+            break;
+        
+        case SpriteID.GORROCOPTERO:
+            setGorrocoptero(sprite);
+            break;
+
+        case SpriteID.HORMIGA:
+            setHormiga(sprite);
+            break;
+        
+        case SpriteID.THRONE:
+            setThrone(sprite);
             break;
             
         //Caso del enemigo
@@ -326,6 +369,33 @@ function updateSpriteHUD(sprite)
     }
 }
 
+function setSpriteHUD(sprite)
+{
+    const type = sprite.id
+    switch(type)
+    {
+        case SpriteID.HEART:
+            setHeart(sprite);
+            break;
+    
+        case SpriteID.ANGERBAR:
+            setAngerBar(sprite);
+            break;
+
+        case SpriteID.ANGERBARFILL:
+            setAngerBarFill(sprite);
+        default:
+
+
+
+            break;
+    }
+}
+function setPlayer(sprite)
+{
+    sprite.xPos         = 32;
+    sprite.yPos         = 16;
+}
 //Funcion que actualiza el presonaje
 function updatePlayer(sprite)
 {
@@ -465,6 +535,12 @@ function updatePlayerOneLifeLess(sprite)
     updateAnimationFrame(sprite);
 
 }
+function setBomb(sprite)
+{
+    sprite.xPos           = 16;
+    sprite.yPos           = 16;
+
+}
 function updateBomb(sprite, player) {
     let centerX = player.xPos + player.hitBox.xOffset + player.hitBox.xSize / 2;
     let centerY = player.yPos + player.hitBox.yOffset + player.hitBox.ySize / 2;
@@ -567,16 +643,10 @@ function updateBombControls(sprite)
     
 }
 
-function updateMazeBlock1(sprite)
+function setGorrocoptero(sprite)
 {
-
-
-    sprite.xPos = 96;
-    sprite.yPos = 96;
-
-    sprite.frames.frameCounter = 0;
-
-    sprite.state = State.STILL;
+    sprite.xPos   = 150;
+    sprite.yPos   = 16;
 }
 
 function updateGorrocoptero(sprite) {
@@ -620,7 +690,11 @@ setInterval(() => {
     }
 }, 10000);
 
-
+function setHormiga(sprite)
+{
+    sprite.xPos        = 110;
+    sprite.yPos        = 105;
+}
 function updateHormiga(sprite) {
     // Máquina de estados
     switch (sprite.state) {
@@ -695,14 +769,20 @@ function updateHormiga(sprite) {
     calculateCollisionWithFourBorders(sprite);
 }
 
+function setHeart(sprite)
+{
 
+}
 function updateHeart(sprite)
 {
 
     sprite.frames.frameCounter = 0;
 
 }
-
+function setAngerBar(sprite)
+{
+    sprite.frames.frameCounter = 0;
+}
 function updateAngerBarLvl1(sprite)
 {
     sprite.frames.frameCounter = 1;
@@ -716,6 +796,10 @@ function updateAngerBarLvl2(sprite)
 function updateAngerBarLvl3(sprite)
 {
     sprite.frames.frameCounter = 3;
+}
+function setAngerBarFill(sprite)
+{
+    sprite.imageSet.xSize = 0;
 }
 function updateAngerBarFill(sprite, hitNum) {
     if (sprite.angerAnimation) 
@@ -822,7 +906,11 @@ function setPotionPosition(sprite,random)
     }
 }
 
-
+function setThrone(sprite)
+{
+    sprite.xPos          = 200;
+    sprite.yPos          = 464;
+}
 function updateThrone(sprite)
 {
     //Actualizamos el angulo de giro
@@ -1184,7 +1272,7 @@ function updateLife() {
 
     if(globals.life < 1)
     {
-        globals.gameState = Game.OVER;
+        oneLifeLess();
     }
     for (let i = 0; i < globals.sprites.length; ++i) {
         const sprite = globals.sprites[i];
@@ -1208,8 +1296,9 @@ function updateLife() {
                     player.yPos = 16;
                     globals.hitNum++;
                     globals.spritesOneLifeLess[1].yPos = 140;
-                    jumping = 0;
+
                     //oneLifeLess();
+                    globals.gameState = Game.LOADING_PLAYING;
                     updateAngerBarFill(globals.spritesHUD[1], globals.hitNum)
 
                     // Cambia al estado HIT_* correspondiente
