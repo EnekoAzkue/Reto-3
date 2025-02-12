@@ -54,6 +54,8 @@ export default
     //Temporizacion nivel
     levelTime: {},
 
+    respawnTime: {},
+
     //Objeto que guarda el estado de la tecla pulsada
     action: {},
 
