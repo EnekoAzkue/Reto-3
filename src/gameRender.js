@@ -41,6 +41,12 @@ export default function render()
         case Game.OVER:
             drawOver();
             break;
+
+        case Game.ONE_LIFE_LESS:
+            drawOneLifeLess();
+            break;
+    
+        
         default:
             console.error("Error: Game State invalid");
     }
@@ -85,6 +91,33 @@ function drawOver()
     globals.ctx.fillText("GAME"     , 20, 80);
     globals.ctx.strokeText("OVER"   , 74, 125);
     globals.ctx.fillText("OVER"     , 74, 125);
+
+}
+
+function drawOneLifeLess()
+{
+
+    //Borramos la pantalla entera 
+    globals.ctx.clearRect(0, 0, globals.canvas.width, globals.canvas.height);
+    globals.ctxHUD.clearRect(0, 0, globals.canvasHUD.width, globals.canvasHUD.height);
+
+    renderOneLifeLessScreen();
+    globals.ctx.strokeStyle = 'black';
+    globals.ctx.font = '40px zwackery';
+    globals.ctx.fillStyle = 'red';
+    globals.ctx.strokeText("YOU"    , 55, 70);
+    globals.ctx.fillText("YOU"      , 55, 70);
+    globals.ctx.strokeText("DIED"   , 115, 105);
+    globals.ctx.fillText("DIED"     , 115, 105);
+    renderOneLifeLessSprite();
+
+
+    renderHUDOneLifeLess();
+
+
+
+
+
 
 }
 
@@ -677,6 +710,85 @@ function renderOverScreen()
     }
 }
 
+function renderOneLifeLessScreen()
+{
+
+
+        let sprite = globals.spritesOneLifeLess[0];
+
+        //Calculamos la posicion del tile de inicio
+        const xPosInit = sprite.imageSet.initCol * sprite.imageSet.gridSize; 
+        const yPosInit = sprite.imageSet.initFil * sprite.imageSet.gridSize;
+        //console.log(`xPosInit: ${xPosInit}`)
+        //console.log(`yPosInit: ${yPosInit}`)
+
+
+        //Calculamos la posicion en el tilemap a dibujar
+        const xTile = xPosInit + sprite.frames.frameCounter * sprite.imageSet.gridSize + sprite.imageSet.xOffset;
+        const yTile = yPosInit + sprite.state * sprite.imageSet.gridSize + sprite.imageSet.yOffset;
+
+
+        const xPos = Math.floor(sprite.xPos);
+        const yPos = Math.floor(sprite.yPos);
+
+        //Dibujamos el nuevo fotograma del sprite en la posicion adecuada
+        globals.ctx.drawImage(                              
+            globals.tileSets[Tile.SIZE_16],                 // The image file
+            xTile, yTile,                                   // The source x and y position
+            sprite.imageSet.xSize, sprite.imageSet.ySize,   // The source heignt and width
+            xPos, yPos,                                     // The destinaton x and y position
+            sprite.imageSet.xSize, sprite.imageSet.ySize    // The destinaton heignt and width
+        );
+}
+
+function renderOneLifeLessSprite()
+{
+    let sprite = globals.spritesOneLifeLess[1];
+    sprite.rotationAngle = sprite.rotationAngle || 0; // Inicializa el ángulo si no existe
+    
+    // Aumentar el ángulo en cada frame antes de dibujar
+    sprite.rotationAngle += 10;
+    if (sprite.rotationAngle >= 360) {
+        sprite.rotationAngle = 0; // Reinicia el ángulo cuando llega a 360°
+    }
+    
+    // Calculamos la posición del tile de inicio
+    const xPosInit = sprite.imageSet.initCol * sprite.imageSet.gridSize; 
+    const yPosInit = sprite.imageSet.initFil * sprite.imageSet.gridSize;
+    
+    // Calculamos la posición en el tilemap
+    const xTile = xPosInit + sprite.frames.frameCounter * sprite.imageSet.gridSize + sprite.imageSet.xOffset;
+    const yTile = yPosInit + sprite.state * sprite.imageSet.gridSize + sprite.imageSet.yOffset;
+    
+    // Posición en pantalla
+    const xPos = Math.floor(sprite.xPos);
+    const yPos = Math.floor(sprite.yPos);
+    
+    globals.ctx.save(); // Guardamos el estado del contexto
+    
+    // Trasladamos al centro del sprite
+    globals.ctx.translate(xPos + sprite.imageSet.xSize / 2, yPos + sprite.imageSet.ySize / 2);
+    
+    // Convertimos el ángulo a radianes y rotamos
+    let angleRadians = sprite.rotationAngle * Math.PI / 180;
+    globals.ctx.rotate(angleRadians);
+    
+    // Escalamos si es necesario
+    globals.ctx.scale(2, 2);
+    
+    // Dibujamos el sprite centrado en el origen actual
+    globals.ctx.drawImage(
+        globals.tileSets[Tile.SIZE_16],  // Imagen
+        xTile, yTile,                    // Posición en el tilemap
+        sprite.imageSet.xSize, sprite.imageSet.ySize, // Tamaño del sprite
+        -sprite.imageSet.xSize / 2, -sprite.imageSet.ySize / 2, // Centrado
+        sprite.imageSet.xSize, sprite.imageSet.ySize  // Tamaño destino
+    );
+    
+    globals.ctx.restore(); // Restauramos el contexto
+    
+}
+
 function renderHUD()
 {
     //TEST: datos metidos en bruto
@@ -776,6 +888,18 @@ function renderHUDOver()
     globals.ctxHUD.fillText("CONTINUE", 218, 10);
     globals.ctxHUD.fillStyle = 'lightgrey';
     globals.ctxHUD.fillText(" -->", 232, 20);
+}
+
+function renderHUDOneLifeLess()
+{
+    const score = 1500;
+
+    const time = 420;
+
+    globals.ctxHUD.fillStyle = 'white';
+    globals.ctxHUD.font = '10px emulogic';
+    globals.ctxHUD.fillText("Respawning in: "     , 60, 15);
+    globals.ctxHUD.fillText(globals.respawnTime.value , 200, 15);
 }
 
 function renderHUDControls()
