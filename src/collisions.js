@@ -111,13 +111,13 @@ function getMapTileId(xPos,yPos)
 
 }
 
-function isCollidingWithObstacleAt(xPos,yPos,obstacleId1,obstacleId2,obstacleId3,obstacleId4,obstacleId5,obstacleId6,obstacleId7,obstacleId8,obstacleId9,obstacleId10)
+function isCollidingWithObstacleAt(xPos,yPos,obstacleId1,obstacleId2,obstacleId3,obstacleId4,obstacleId5,obstacleId6,obstacleId7,obstacleId8,obstacleId9,obstacleId10,obstacleId11,obstacleId12)
 {
     let isColliding;
 
     const id = getMapTileId(xPos,yPos);
 
-    if(id === obstacleId1 || id === obstacleId2 || id === obstacleId3 || id === obstacleId4 || id === obstacleId5 || id === obstacleId6 || id === obstacleId7 || id === obstacleId8 || id === obstacleId9 || id === obstacleId10)
+    if(id === obstacleId1 || id === obstacleId2 || id === obstacleId3 || id === obstacleId4 || id === obstacleId5 || id === obstacleId6 || id === obstacleId7 || id === obstacleId8 || id === obstacleId9 || id === obstacleId10 || id === obstacleId11 || id === obstacleId12)
     {
         isColliding = true;
     }
@@ -165,8 +165,10 @@ function detectCollisionBetweenPlayerAndMapObstacles()
     const obstacleId9 = Block.MAZE_BOT_WALL_3;
     const obstacleId10 = Block.MAZE_BOT_WALL_4;
     const obstacleId11 = Block.BLOCK;
+    const obstacleId12 = Block.MAZE_LEFT_WALL_5;
+    const obstacleId13 = Block.MAZE_RIGHT_WALL_4;
 
-    //const obstacleId = Block.MAZE_RIGHT_WALL_2
+
 
     switch(direction)
     {
@@ -175,12 +177,12 @@ function detectCollisionBetweenPlayerAndMapObstacles()
             //Primera colision en (xPos + xSize - 1, yPos)
             xPos = player.xPos + player.hitBox.xOffset + player.hitBox.xSize + 1;
             yPos = player.yPos + player.hitBox.yOffset;
-            isCollidingOnPos1 = isCollidingWithObstacleAt(xPos,yPos,obstacleId4,obstacleId5,obstacleId6,obstacleId11);
-
+            isCollidingOnPos1 = isCollidingWithObstacleAt(xPos,yPos,0,0,0,obstacleId4,obstacleId5,obstacleId6,0,0,0,0,obstacleId11,obstacleId13);
+            
 
             //Segunda colision en (xPos + xSize - 1, yPos + ySize - 1)
             yPos = player.yPos + player.hitBox.yOffset + player.hitBox.ySize;
-            isCollidingOnPos2 = isCollidingWithObstacleAt(xPos,yPos,obstacleId4,obstacleId5,obstacleId6,obstacleId11);
+            isCollidingOnPos2 = isCollidingWithObstacleAt(xPos,yPos,0,0,0,obstacleId4,obstacleId5,obstacleId6,0,0,0,0,obstacleId11,obstacleId13);
 
 
             //Habra colision si toca alguno de los 2 bloques
@@ -203,10 +205,10 @@ function detectCollisionBetweenPlayerAndMapObstacles()
             case State.LEFT:
             xPos = player.xPos + player.hitBox.xOffset;
             yPos = player.yPos + player.hitBox.yOffset;
-            isCollidingOnPos1 = isCollidingWithObstacleAt(xPos, yPos, obstacleId3, obstacleId4, obstacleId5,obstacleId11);
+            isCollidingOnPos1 = isCollidingWithObstacleAt(xPos, yPos, obstacleId3, obstacleId4, obstacleId5,obstacleId11,obstacleId12);
 
             yPos = player.yPos + player.hitBox.yOffset + player.hitBox.ySize ;
-            isCollidingOnPos2 = isCollidingWithObstacleAt(xPos, yPos, obstacleId3, obstacleId4, obstacleId5,obstacleId11);
+            isCollidingOnPos2 = isCollidingWithObstacleAt(xPos, yPos, obstacleId3, obstacleId4, obstacleId5,obstacleId11,obstacleId12);
 
             isColliding = isCollidingOnPos1 || isCollidingOnPos2;
 
@@ -518,6 +520,9 @@ export function detectCollisionBetweenGorrocopteroAndMapObstacles()
     const obstacleId9 = Block.MAZE_BOT_WALL_3;
     const obstacleId10 = Block.MAZE_BOT_WALL_4;
     const obstacleId11 = Block.BLOCK;
+    const obstacleId12 = Block.MAZE_LEFT_WALL_5;
+    const obstacleId13 = Block.MAZE_RIGHT_WALL_4;
+
 
     switch(direction)
     {
@@ -526,12 +531,12 @@ export function detectCollisionBetweenGorrocopteroAndMapObstacles()
             //Primera colision en (xPos + xSize - 1, yPos)
             xPos = gorrocoptero.xPos + gorrocoptero.hitBox.xOffset + gorrocoptero.hitBox.xSize + 1;
             yPos = gorrocoptero.yPos + gorrocoptero.hitBox.yOffset;
-            isCollidingOnPos1 = isCollidingWithObstacleAt(xPos,yPos,obstacleId4,obstacleId5,obstacleId6,obstacleId11);
+            isCollidingOnPos1 = isCollidingWithObstacleAt(xPos,yPos,obstacleId4,obstacleId5,obstacleId6,obstacleId11,obstacleId13);
 
 
             //Segunda colision en (xPos + xSize - 1, yPos + ySize - 1)
             yPos = gorrocoptero.yPos + gorrocoptero.hitBox.yOffset + gorrocoptero.hitBox.ySize;
-            isCollidingOnPos2 = isCollidingWithObstacleAt(xPos,yPos,obstacleId4,obstacleId5,obstacleId6,obstacleId11);
+            isCollidingOnPos2 = isCollidingWithObstacleAt(xPos,yPos,obstacleId4,obstacleId5,obstacleId6,obstacleId11,obstacleId13);
 
 
             //Habra colision si toca alguno de los 2 bloques
@@ -561,10 +566,10 @@ export function detectCollisionBetweenGorrocopteroAndMapObstacles()
             case State.LEFT_1:
             xPos = gorrocoptero.xPos + gorrocoptero.hitBox.xOffset;
             yPos = gorrocoptero.yPos + gorrocoptero.hitBox.yOffset;
-            isCollidingOnPos1 = isCollidingWithObstacleAt(xPos, yPos, obstacleId3, obstacleId4, obstacleId5,obstacleId11);
+            isCollidingOnPos1 = isCollidingWithObstacleAt(xPos, yPos, obstacleId3, obstacleId4, obstacleId5,obstacleId11,obstacleId12);
 
             yPos = gorrocoptero.yPos + gorrocoptero.hitBox.yOffset + gorrocoptero.hitBox.ySize ;
-            isCollidingOnPos2 = isCollidingWithObstacleAt(xPos, yPos, obstacleId3, obstacleId4, obstacleId5,obstacleId11);
+            isCollidingOnPos2 = isCollidingWithObstacleAt(xPos, yPos, obstacleId3, obstacleId4, obstacleId5,obstacleId11,obstacleId12);
 
             isColliding = isCollidingOnPos1 || isCollidingOnPos2;
 
@@ -701,26 +706,29 @@ export function detectCollisionBetweenHormigaAndMapObstacles() {
     const obstacleId9 = Block.MAZE_BOT_WALL_3;
     const obstacleId10 = Block.MAZE_BOT_WALL_4;
     const obstacleId11 = Block.BLOCK;
+    const obstacleId12 = Block.MAZE_LEFT_WALL_5;
+    const obstacleId13 = Block.MAZE_RIGHT_WALL_4;
+
 
     switch (direction) {
         case State.TR:
             // Primera colisión en (xPos + xSize, yPos)
             xPos = ant.xPos + ant.hitBox.xOffset + ant.hitBox.xSize - 10;
             yPos = ant.yPos + ant.hitBox.yOffset -1;
-            isCollidingOnPos1 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId6, obstacleId11);
+            isCollidingOnPos1 = isCollidingWithObstacleAt(xPos, yPos, obstacleId1,obstacleId2, obstacleId4, obstacleId5, obstacleId6, obstacleId11,);
 
             // Segunda colision en (xPos, yPos)
             xPos = ant.xPos + ant.hitBox.xOffset -1;
-            isCollidingOnPos2 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId6, obstacleId11);
+            isCollidingOnPos2 = isCollidingWithObstacleAt(xPos, yPos, obstacleId1,obstacleId2,obstacleId4, obstacleId5, obstacleId6, obstacleId11);
 
             // Tercera colisión en (xPos + xSize - 1, yPos + ySize - 1)
             xPos = ant.xPos + ant.hitBox.xOffset + ant.hitBox.xSize - 6;
             yPos = ant.yPos + ant.hitBox.yOffset +2;
-            isCollidingOnPos3 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId6, obstacleId11);
+            isCollidingOnPos3 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId6, obstacleId11,obstacleId13);
             
             // Cuarta colisión en (xPos + xSize - 1, yPos + ySize - 1)
             yPos = ant.yPos + ant.hitBox.yOffset + ant.hitBox.ySize + 2;
-            isCollidingOnPos4 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId6, obstacleId11);
+            isCollidingOnPos4 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId6, obstacleId11,obstacleId13);
             
             isCollidingTop = isCollidingOnPos1 || isCollidingOnPos2;
             isCollidingRight = isCollidingOnPos3 || isCollidingOnPos4;
@@ -753,20 +761,20 @@ export function detectCollisionBetweenHormigaAndMapObstacles() {
             // Calcular la posición para la primera colisión
             xPos = ant.xPos + ant.hitBox.xOffset;
             yPos = ant.yPos + ant.hitBox.yOffset -1;
-            isCollidingOnPos1 = isCollidingWithObstacleAt(xPos, yPos, obstacleId3, obstacleId4, obstacleId5, obstacleId11);
+            isCollidingOnPos1 = isCollidingWithObstacleAt(xPos, yPos, obstacleId1,obstacleId2, obstacleId3, obstacleId4, obstacleId5, obstacleId11);
     
             // Calcular la posición para la segunda colisión
             xPos = ant.xPos + ant.hitBox.xOffset + ant.hitBox.xSize - 9 ;
-            isCollidingOnPos2 = isCollidingWithObstacleAt(xPos, yPos, obstacleId3, obstacleId4, obstacleId5, obstacleId11);
+            isCollidingOnPos2 = isCollidingWithObstacleAt(xPos, yPos, obstacleId1,obstacleId2, obstacleId3, obstacleId4, obstacleId5, obstacleId11);
 
             // Tercera colisión en (xPos + xSize - 1, yPos + ySize - 1)
             xPos = ant.xPos + ant.hitBox.xOffset -2;
             yPos = ant.yPos + ant.hitBox.yOffset +2;
-            isCollidingOnPos3 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId6, obstacleId11);
+            isCollidingOnPos3 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId6, obstacleId11,obstacleId12);
             
             // Cuarta colisión en (xPos + xSize - 1, yPos + ySize - 1)
             yPos = ant.yPos + ant.hitBox.yOffset + ant.hitBox.ySize + 2;
-            isCollidingOnPos4 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId6, obstacleId11);
+            isCollidingOnPos4 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId6, obstacleId11,obstacleId12);
             
             // Verificar si hay colisión
             isCollidingTop = isCollidingOnPos1 || isCollidingOnPos2;
@@ -809,11 +817,11 @@ export function detectCollisionBetweenHormigaAndMapObstacles() {
             // Primera colisión en (xPos + xSize, yPos)
             xPos = ant.xPos + ant.hitBox.xOffset + ant.hitBox.xSize -7;
             yPos = ant.yPos + ant.hitBox.yOffset;
-            isCollidingOnPos3 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId6, obstacleId11);
+            isCollidingOnPos3 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId6, obstacleId11,obstacleId12);
 
             // Segunda colision en (xPos, yPos)
             yPos = ant.yPos + ant.hitBox.yOffset + (ant.hitBox.ySize - 1) ;
-            isCollidingOnPos4 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId6, obstacleId11);
+            isCollidingOnPos4 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId6, obstacleId11,obstacleId12);
 
 
             // Habrá colisión si toca alguno de los 2 bloques
@@ -856,11 +864,11 @@ export function detectCollisionBetweenHormigaAndMapObstacles() {
             // Primera colisión en (xPos + xSize, yPos)
             xPos = ant.xPos + ant.hitBox.xOffset - 1;
             yPos = ant.yPos + ant.hitBox.yOffset ;
-            isCollidingOnPos3 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId6, obstacleId11);
+            isCollidingOnPos3 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId6, obstacleId11,obstacleId12);
 
             // Segunda colision en (xPos, yPos)
             yPos = ant.yPos + ant.hitBox.yOffset + ant.hitBox.ySize + 3;
-            isCollidingOnPos4 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId6, obstacleId11);
+            isCollidingOnPos4 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId6, obstacleId11,obstacleId12);
 
             // Verificar si hay colisión
             isCollidingBot = isCollidingOnPos1 || isCollidingOnPos2;

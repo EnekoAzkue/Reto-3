@@ -8,6 +8,7 @@ import Timer from "./Timer.js";
 import Physics from "./Physics.js";
 import { keydownHandler, keyupHandler } from "./events.js";
 import HitBox from "./hitbox.js";
+import Camera from "./camera.js";
 
 globals.hitNum = 0;
 //Funcion que inicializa los elementos HTML
@@ -411,14 +412,14 @@ function initHormiga()
     const frames = new Frames(7, 2);
 
     //Crearemos nuestro objeto physics con el vLimit = 80px/s
-    const physics = new Physics(15,0,0,0,0,0);
+    const physics = new Physics(20,0,0,0,0,0);
 
     const hitBox = new HitBox(14,7,4,8)
 
     //Creamos nuestro sprite
     //110
     //
-    const hormiga = new Hormiga(SpriteID.HORMIGA, State.TR, 110, 105, imageSet, frames, physics,hitBox);
+    const hormiga = new Hormiga(SpriteID.HORMIGA, State.TL, 110, 105, imageSet, frames, physics,hitBox);
 
     hormiga.physics.vx = hormiga.physics.vLimit;
     hormiga.physics.vy = hormiga.physics.vLimit;
@@ -602,7 +603,10 @@ function initEvents()
     window.addEventListener("keyup", keyupHandler, false);
 }
 
-
+function initCamera()
+{
+    globals.camera = new Camera(0,0);
+}
 
 
 //Exportamos las funciones 
@@ -620,5 +624,6 @@ export
     initOverSprites,
     initOneLifeLessSprites,
     initTimers,
-    initEvents
+    initEvents,
+    initCamera
 }

@@ -13,6 +13,10 @@ export default function render()
             //Draw loading spinner
             break;
 
+        case Game.LOADING_PLAYING:
+            console.log("hay que hacer cositas, como el spinner");
+            break;
+
         case Game.PLAYING:
             drawGame();
             break;
@@ -62,11 +66,15 @@ function drawGame()
     //Pintamos los FPS en pantalla
     //globals.ctx.fillText("FPS: " + 1 / globals.deltaTime, 30, 30);
 
+    moveCamera();
+
     //Dibujamos el mapa(nivel)
     renderMap();
 
     //Dibujamos los elementos
     drawSprites();
+
+    restoreCamera();
     drawSpritesHUD();
 
     //Dibujamos el HUD
@@ -113,11 +121,6 @@ function drawOneLifeLess()
 
 
     renderHUDOneLifeLess();
-
-
-
-
-
 
 }
 
@@ -898,7 +901,7 @@ function renderHUDOneLifeLess()
 
     globals.ctxHUD.fillStyle = 'white';
     globals.ctxHUD.font = '10px emulogic';
-    globals.ctxHUD.fillText("Respawning in: "     , 60, 15);
+    globals.ctxHUD.fillText("Exit in: "     , 60, 15);
     globals.ctxHUD.fillText(globals.respawnTime.value , 200, 15);
 }
 
@@ -966,4 +969,28 @@ function drawHitBox(sprite)
 
     globals.ctx.strokeStyle = "red";
     globals.ctx.strokeRect(x1,y1,h1,w1);
+}
+
+function moveCamera() {
+    const canvas = document.getElementById("gameScreen");
+    const mapWidth = 600; // Ancho total del mapa en píxeles
+    const mapHeight = 384; // Alto total del mapa en píxeles
+
+    const viewportWidth = canvas.width;
+    const viewportHeight = canvas.height;
+
+    // Limitar la cámara para que no se salga del borde
+    globals.camera.x = Math.max(0, Math.min(globals.camera.x, mapWidth - viewportWidth));
+    globals.camera.y = Math.max(0, Math.min(globals.camera.y, mapHeight - viewportHeight));
+
+    const xTranslation = -globals.camera.x;
+    const yTranslation = -globals.camera.y;
+
+    globals.ctx.setTransform(1, 0, 0, 1, xTranslation, yTranslation);
+}
+
+
+function restoreCamera()
+{
+    globals.ctx.setTransform(1,0,0,1,0,0);
 }

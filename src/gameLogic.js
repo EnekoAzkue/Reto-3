@@ -15,10 +15,13 @@ export default function update()
             break;
 
         case Game.LOADING_PLAYING:
+            console.log("loadplaying")
             loadPlaying();
             break;
 
         case Game.PLAYING:
+            console.log("playing")
+
             playGame();
             break;
 
@@ -73,6 +76,7 @@ function playGame()
     detectCollisionsPlayer();
     detectCollisionBetweenGorrocopteroAndMapObstacles();
 
+    updateCamera();
 
     updateGameTime();
 
@@ -378,21 +382,12 @@ function setSpriteHUD(sprite)
             setHeart(sprite);
             break;
     
-        case SpriteID.ANGERBAR:
-            setAngerBar(sprite);
-            break;
 
-        case SpriteID.ANGERBARFILL:
-            setAngerBarFill(sprite);
-        default:
-
-
-
-            break;
     }
 }
 function setPlayer(sprite)
 {
+    invulnerable = false;
     sprite.xPos         = 32;
     sprite.yPos         = 16;
 }
@@ -452,6 +447,7 @@ function updatePlayer(sprite)
 function updatePlayerMain(sprite)
 
 {
+    globals.life = 3;
     sprite.physics.vx = sprite.physics.vLimit;
     sprite.yPos = 172;
 
@@ -537,8 +533,10 @@ function updatePlayerOneLifeLess(sprite)
 }
 function setBomb(sprite)
 {
-    sprite.xPos           = 16;
-    sprite.yPos           = 16;
+    sprite.state = State.BLUE;
+    sprite.frames.frameCounter = 5;
+    sprite.xPos           = 360;
+    sprite.yPos           = 360;
 
 }
 function updateBomb(sprite, player) {
@@ -692,8 +690,9 @@ setInterval(() => {
 
 function setHormiga(sprite)
 {
-    sprite.xPos        = 110;
-    sprite.yPos        = 105;
+    sprite.state = State.TR;
+    sprite.xPos        = 39
+    sprite.yPos        = 90;
 }
 function updateHormiga(sprite) {
     // Máquina de estados
@@ -707,11 +706,11 @@ function updateHormiga(sprite) {
             sprite.physics.vy = -sprite.physics.vLimit ; // Arriba
             break;
         case State.DL: // Down Left (↙)
-            sprite.physics.vx = -sprite.physics.vLimit; // Izquierda
+            sprite.physics.vx = -sprite.physics.vLimit ; // Izquierda
             sprite.physics.vy = sprite.physics.vLimit ;  // Abajo
             break;
         case State.DR: // Down Right (↘)
-            sprite.physics.vx = sprite.physics.vLimit;  // Derecha
+            sprite.physics.vx = sprite.physics.vLimit ;  // Derecha
             sprite.physics.vy = sprite.physics.vLimit ;  // Abajo
             break;
     }
@@ -779,10 +778,7 @@ function updateHeart(sprite)
     sprite.frames.frameCounter = 0;
 
 }
-function setAngerBar(sprite)
-{
-    sprite.frames.frameCounter = 0;
-}
+
 function updateAngerBarLvl1(sprite)
 {
     sprite.frames.frameCounter = 1;
@@ -797,10 +793,7 @@ function updateAngerBarLvl3(sprite)
 {
     sprite.frames.frameCounter = 3;
 }
-function setAngerBarFill(sprite)
-{
-    sprite.imageSet.xSize = 0;
-}
+
 function updateAngerBarFill(sprite, hitNum) {
     if (sprite.angerAnimation) 
     {
@@ -1012,21 +1005,12 @@ function updateOverScreen(sprite) {
     sprite.xPos = 0;
     sprite.yPos = 0;
 
-    sprite.frames.frameCounter = 0;
 
-    sprite.state = State.STILL;
-
-    // Detectar las teclas de flecha derecha e izquierda
-    if(globals.gameState === 2)
+    if(globals.respawnTime.value <= 0)
     {
-        if (globals.action.changeScreenRight) { // Flecha derecha detectada
-            globals.gameState = Game.LOADING_PLAYING;
-            globals.life = 3;   
-            globals.remainingTime = 180; // 180 segundos
+        globals.life = 3;
+        globals.gameState = Game.SCORE;
 
-        } else if (globals.action.changeScreenLeft) { // Flecha izquierda detectada
-            globals.gameState = Game.MAIN;
-        }
     }
 }
 
@@ -1037,18 +1021,16 @@ function updateOneLifeLessScreen(sprite) {
     sprite.frames.frameCounter = 0;
 
     sprite.state = State.STILL;
+    if(globals.respawnTime.value <= 3)
+        {
+            console.log("hola");
+        }
+    if(globals.respawnTime.value <= 1)
+    {
 
-    // Detectar las teclas de flecha derecha e izquierda
-    // if(globals.gameState === 2)
-    // {
-    //     if (globals.action.changeScreenRight) { // Flecha derecha detectada
-    //         globals.gameState = Game.PLAYING;
-    //         globals.remainingTime = 180; // 180 segundos
+        globals.gameState = Game.SCORE;
 
-    //     } else if (globals.action.changeScreenLeft) { // Flecha izquierda detectada
-    //         globals.gameState = Game.MAIN;
-    //     }
-    // }
+    }
 }
 
 function updateMainSprites()
@@ -1272,6 +1254,7 @@ function updateLife() {
 
     if(globals.life < 1)
     {
+        invulnerable = true;
         oneLifeLess();
     }
     for (let i = 0; i < globals.sprites.length; ++i) {
@@ -1292,13 +1275,12 @@ function updateLife() {
                 if (!invulnerable && globals.life > 0) {
                     // Reduce la vida si no está en invulnerabilidad
                     globals.life--;
-                    player.xPos = 32;
-                    player.yPos = 16;
+
                     globals.hitNum++;
                     globals.spritesOneLifeLess[1].yPos = 140;
 
                     //oneLifeLess();
-                    globals.gameState = Game.LOADING_PLAYING;
+
                     updateAngerBarFill(globals.spritesHUD[1], globals.hitNum)
 
                     // Cambia al estado HIT_* correspondiente
@@ -1314,6 +1296,9 @@ function updateLife() {
                         const originalState = restoreOriginalState(hitState);
                         player.state = originalState;
                         invulnerable = false;
+                        player.xPos = 32;
+                        player.yPos = 16;
+                        globals.gameState = Game.LOADING_PLAYING;
                     }, INVULNERABLE_TIME); // ← Asegúrate de que INVULNERABLE_TIME está definido
                 }
             }
@@ -1375,21 +1360,21 @@ function calculateCollisionWithFourBorders (sprite)
     let collision = detectCollisionBetweenHormigaAndMapObstacles();
 
 
-    if (sprite.xPos + sprite.imageSet.xSize > globals.canvas.width || collision === 1)
+    if (collision === 1)
     {
         sprite.collisionBorder = Collision.BORDER_RIGHT;
     }
-    else if (sprite.xPos < 0 || collision === 2)
+    else if (collision === 2)
     {
         sprite.collisionBorder = Collision.BORDER_LEFT;
 
     }
-    else if (sprite.yPos < 0 || collision === 4)
+    else if (collision === 4)
     {
         sprite.collisionBorder = Collision.BORDER_UP;
 
     }
-    else if (sprite.yPos + sprite.imageSet.ySize > globals.canvas.height || collision === 3)
+    else if (collision === 3)
     {
         sprite.collisionBorder = Collision.BORDER_DOWN;
 
@@ -1403,4 +1388,13 @@ function calculateCollisionWithFourBorders (sprite)
 function oneLifeLess()
 {
     globals.gameState = Game.ONE_LIFE_LESS;
+}
+
+function updateCamera()
+{
+    const player = globals.sprites[0];
+
+    globals.camera.x = Math.floor(player.xPos) + Math.floor((player.imageSet.xSize - globals.canvas.width) / 2);
+    globals.camera.y = Math.floor(player.yPos) + Math.floor((player.imageSet.ySize - globals.canvas.height) / 2);
+
 }
