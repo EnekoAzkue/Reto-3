@@ -795,16 +795,14 @@ function renderOneLifeLessSprite()
 function renderHUD()
 {
     //TEST: datos metidos en bruto
-    const score = 1500;
     const highscore = 130000;
-    const angerLvl = 50;
 
     //Draw score
     globals.ctxHUD.font = '8px emulogic';
     globals.ctxHUD.fillStyle = 'darkred';
     globals.ctxHUD.fillText("SCORE", 8, 8);
     globals.ctxHUD.fillStyle = 'lightgrey';
-    globals.ctxHUD.fillText("" + score, 8, 19);
+    globals.ctxHUD.fillText("" + globals.score, 8, 19);
 
     //Draw Highscore
     globals.ctxHUD.fillStyle = 'darkred';
@@ -853,7 +851,7 @@ function renderHUD()
     //Draw timer
     globals.ctxHUD.fillStyle = 'white';
 
-    globals.ctxHUD.fillText("" + Math.ceil(globals.remainingTime), 130, 22);
+    globals.ctxHUD.fillText("" + Math.ceil(globals.enemycount), 130, 22);
 
 }
 
@@ -973,7 +971,7 @@ function drawHitBox(sprite)
 
 function moveCamera() {
     const canvas = document.getElementById("gameScreen");
-    const mapWidth = 600; // Ancho total del mapa en píxeles
+    const mapWidth = 480; // Ancho total del mapa en píxeles
     const mapHeight = 384; // Alto total del mapa en píxeles
 
     const viewportWidth = canvas.width;
