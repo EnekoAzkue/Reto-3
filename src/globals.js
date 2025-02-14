@@ -61,13 +61,6 @@ export default
 
     //Life
     life: 0,
-    lifehormiga: 0,
-    lifegorrocoptero1: 0,
-    lifegorrocoptero2: 0,
-    lifegorrocoptero3: 0,
-    lifegorrocoptero4: 0,
-    lifegorrocoptero5: 0,
-    lifegorrocoptero6: 0,
 
     enemycount: 0,
 
