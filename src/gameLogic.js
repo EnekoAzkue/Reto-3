@@ -15,12 +15,10 @@ export default function update()
             break;
 
         case Game.LOADING_PLAYING:
-            console.log("loadplaying")
             loadPlaying();
             break;
 
         case Game.PLAYING:
-            console.log("playing")
 
             playGame();
             break;
@@ -83,6 +81,8 @@ function playGame()
     updateLevelTime();
 
     updateLife();
+    updateEnemyLife();
+    updateScore();
 }
 
 function gameOver()
@@ -439,7 +439,7 @@ function updatePlayer(sprite)
         // Opcional: Restablecer la variable después de un tiempo si quieres permitir otra bomba
         setTimeout(() => {
             globals.bombPlanted = false; // Permite plantar otra bomba después de un tiempo
-        }, 4000); // Ajusta el tiempo según necesites (3000ms = 3 segundos)
+        }, 2600); // Ajusta el tiempo según necesites (3000ms = 3 segundos)
     }
     
 }
@@ -554,19 +554,19 @@ function updateBomb(sprite, player) {
 
         sprite.state = (sprite.state === State.RED) ? State.BLUE : State.RED;
 
-        if (timeElapsed >= 1 && timeElapsed < 2) {
+        if (timeElapsed >= 0.5 && timeElapsed < 1) {
             sprite.frames.frameCounter = 2;
-        } else if (timeElapsed >= 2) {
+        } else if (timeElapsed >= 1) {
             sprite.frames.frameCounter = 3;
         }
 
-        if (timeElapsed >= 1) {
+        if (timeElapsed >= 0.5) {
             blinkRate = 100;
         }
-        if (timeElapsed >= 2) {
+        if (timeElapsed >= 1) {
             blinkRate = 50;
         }
-        if (timeElapsed >= 3) {
+        if (timeElapsed >= 2) {
 
             sprite.frames.frameCounter = 1;
             sprite.state = State.EXPLOSION; // Cambia al estado de explosión
@@ -599,8 +599,19 @@ function resetAnimation(sprite) {
 }
 
 function updateExplosions(sprite) {
-    let explosion = globals.sprites[6]; 
+    let explosion;
+    let explosionCount = 0;
 
+    for (let i = 0; i < globals.sprites.length; i++) {
+        const sprite = globals.sprites[i];
+        if (sprite.id === 1) {
+            explosionCount++;
+            if (explosionCount === 2) {
+                explosion = sprite;
+                break;
+            }
+        }
+    }
     sprite.frames.frameCounter = 1;
     explosion.state = State.EXPLOSION;
 
@@ -643,8 +654,9 @@ function updateBombControls(sprite)
 
 function setGorrocoptero(sprite)
 {
-    sprite.xPos   = 150;
-    sprite.yPos   = 16;
+    // sprite.state = State.RIGHT_1;
+    // sprite.xPos   = 80;
+    // sprite.yPos   = 55;
 }
 
 function updateGorrocoptero(sprite) {
@@ -690,9 +702,9 @@ setInterval(() => {
 
 function setHormiga(sprite)
 {
-    sprite.state = State.TR;
-    sprite.xPos        = 39
-    sprite.yPos        = 90;
+    sprite.state = State.TL;
+    sprite.xPos        = 192;
+    sprite.yPos        = 104;
 }
 function updateHormiga(sprite) {
     // Máquina de estados
@@ -816,23 +828,32 @@ function updateAngerBarFill(sprite, hitNum) {
         }
     }, 50); 
 
+    let thorne;
+    for (let i = 0; i < globals.sprites.length; i++) {
+        const sprite = globals.sprites[i];
+        if (sprite.id === 9) {
+            thorne = sprite;
+            break;
+        }
+    }
+
     if (hitNum === 1) 
-    {
-        updateAngerBarLvl1(globals.spritesHUD[2]);
-        globals.sprites[5].physics.omega = 0.02;
-    }
-    else if (hitNum === 2) 
-    {
-        updateAngerBarLvl2(globals.spritesHUD[2]);
-        globals.sprites[5].physics.omega = 0.04;
+        {
+            updateAngerBarLvl1(globals.spritesHUD[2]);
+            thorne.physics.omega = 0.005;
+        }
+        else if (hitNum === 2) 
+        {
+            updateAngerBarLvl2(globals.spritesHUD[2]);
+            thorne.physics.omega = 0.0175;
+        } 
+        else if (hitNum === 3) 
+        {
+            updateAngerBarLvl3(globals.spritesHUD[2]);
+            thorne.physics.omega = 0.025;
+        }
 
-    } 
-    else if (hitNum === 3) 
-    {
-        updateAngerBarLvl3(globals.spritesHUD[2]);
-        globals.sprites[5].physics.omega = 0.08;
 
-    }
 }
 
 function updateHealthPotion(sprite)
@@ -947,7 +968,6 @@ function updateMainScreen(sprite) {
             activateScreenChangeDelay();
         } else if (globals.action.enter) {
             globals.gameState = Game.LOADING_PLAYING;
-            globals.remainingTime = 180; // 180 segundos
 
         }
     }
@@ -1194,6 +1214,7 @@ function updateAnimationFrame(sprite)
     {
         //Cambios de frame y reseteamos el contador de cambio de frame 
         sprite.frames.frameCounter++;
+
         sprite.frames.frameChangeCounter = 0;
     }
 
@@ -1211,11 +1232,11 @@ function setThronePosition(sprite)
     //x = xCentre + Acos(angle)
     //y = yCentre + Asin(angle)
 
-    const radiusA = 200;
-    const radiusB = 100;
+    const radiusA = 400;
+    const radiusB = 200;
 
-    const K = 30;
-    const Kp = 25;
+    const K = 181;
+    const Kp = -169;
 
     sprite.xPos = sprite.physics.xRotCenter + radiusA * Math.cos(K * sprite.physics.angle)
     sprite.yPos = sprite.physics.yRotCenter + radiusB * Math.sin(Kp * sprite.physics.angle)
@@ -1255,7 +1276,7 @@ function updateLife() {
     if(globals.life < 1)
     {
         invulnerable = true;
-        oneLifeLess();
+        //oneLifeLess();
     }
     for (let i = 0; i < globals.sprites.length; ++i) {
         const sprite = globals.sprites[i];
@@ -1304,6 +1325,46 @@ function updateLife() {
             }
         }
     }
+}
+
+function updateEnemyLife() {
+    let explosion;
+    for (let i = 0; i < globals.sprites.length; i++) {
+        const sprite = globals.sprites[i];
+        if (sprite.id === 1) {
+            explosion = sprite;
+        }
+    }
+
+    for (let i = 0; i < globals.sprites.length; ++i) {
+        const sprite = globals.sprites[i];
+
+        if (sprite.isCollidingWithExplosion) 
+        {
+            if (sprite === globals.sprites[2]) {
+                globals.sprites.splice(2, 1);
+                globals.score += 1000;
+                globals.enemycount += 1;
+            } else if (sprite === globals.sprites[3]) {
+                globals.sprites.splice(3, 1);
+                globals.score += 1000;
+                globals.enemycount += 1;
+            } else if (sprite === globals.sprites[4]) {
+                globals.sprites.splice(4, 1);
+                globals.score += 1000;
+                globals.enemycount += 1;
+            } else if (sprite === globals.sprites[5]) {
+                globals.sprites.splice(5, 1);
+                globals.score += 1000;
+                globals.enemycount += 1;
+            } else if (sprite === globals.sprites[6]) {
+                globals.sprites.splice(6, 1);
+                globals.score += 1000;
+                globals.enemycount += 1;
+            }
+        }
+    }
+
 }
 
 
@@ -1396,5 +1457,10 @@ function updateCamera()
 
     globals.camera.x = Math.floor(player.xPos) + Math.floor((player.imageSet.xSize - globals.canvas.width) / 2);
     globals.camera.y = Math.floor(player.yPos) + Math.floor((player.imageSet.ySize - globals.canvas.height) / 2);
+
+}
+
+function updateScore()
+{
 
 }
