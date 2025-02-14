@@ -13,7 +13,8 @@ export default class Sprite
         this.frames                                 = frames;   //Datos de los frames de animacion
         this.physics                                = physics;  //Datos de las fisicas
         this.hitBox                                 = hitBox;
-        this.isCollidingWithPlayer                  = false; 
+        this.isCollidingWithPlayer                  = false;
+        this.isCollidingWithExplosion               = false;
         this.isCollidingWithObstacleOnTheTop        = false;
         this.isCollidingWithObstacleOnTheLeft       = false;
         this.isCollidingWithObstacleOnTheBottom     = false;
