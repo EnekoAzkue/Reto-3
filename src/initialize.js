@@ -281,7 +281,7 @@ function initPlayer()
 
 
     //Crearemos nuestro objeto physics con el vLimit = 80px/s
-    const physics = new Physics(40,0,0,0,0,0);
+    const physics = new Physics(80,0,0,0,0,0);
     const physics_main = new Physics(80,0,0,0,0,0);
     //Creamos nuestro objeto hitBox(xSize, ySize, xOffset, yOffset)
     const hitBox = new HitBox(8,8,4,6)
@@ -383,19 +383,30 @@ function initGorrocoptero()
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
     const imageSet = new ImageSet(0, 0, 16, 24, 25, xOffset, yOffset);
 
-    //Creamos los datos de la animacion. (2-4 frames / state, 2 velocidad)
+    //Creamos los datos de la animacion. 
     const frames = new Frames(4, 2);
 
-    //Crearemos nuestro objeto physics con el vLimit = 80px/s
-    const physics_main = new Physics(20,0,0,0,0,0);
+    //Crearemos nuestro objeto physics con el vLimit
+    const physics = new Physics(50,0,0,0,0,0);
 
-    const hitBox = new HitBox(14,14,1,9)
+    const hitBox = new HitBox(14,14,1,9);
 
-    //Creamos nuestro sprite
-    const gorrocoptero = new Sprite(SpriteID.GORROCOPTERO, State.DOWN_1, 96, 24, imageSet, frames, physics_main,hitBox);
+    const attributes = 
+    [
+        { state: State.RIGHT_1, xPos: 80, yPos: 55 },
+        { state: State.LEFT_1, xPos: 384, yPos: 55 },
+        { state: State.LEFT_1, xPos: 160, yPos: 216 },
+        { state: State.RIGHT_1, xPos: 304, yPos: 216 },
+        { state: State.RIGHT_1, xPos: 192, yPos: 136 },
+        { state: State.RIGHT_1, xPos: 272, yPos: 136 },
+    ];
 
-    //Añadimos el player al array de sprites
-    globals.sprites.push(gorrocoptero);
+    for (let i = 0; i < attributes.length; i++) {
+        const { state, xPos, yPos } = attributes[i];
+        const gorrocoptero = new Sprite(SpriteID.GORROCOPTERO, state, xPos, yPos, imageSet, frames, physics, hitBox);
+        globals.sprites.push(gorrocoptero);
+    }
+
 
 }
 
@@ -499,13 +510,12 @@ function initThrone()
 
     //Valores iniciales para Physics
     const initAngle = 90 + Math.PI / 100;
-    const omega = 0.01;
-    const xRotCenter = globals.canvas.width/2
-    const yRotCenter = globals.canvas.height/2
+    const omega = 0.005;
+    const xRotCenter = globals.canvas.width
+    const yRotCenter = globals.canvas.height
 
 
     //Crearemos nuestro objeto physics con el vLimit = 40px/s
-    const physics_main = new Physics(160);
     const physics = new Physics(80,0,omega,initAngle,xRotCenter,yRotCenter);
 
     const hitBox = new HitBox(27,25,1,2)
