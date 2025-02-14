@@ -53,7 +53,6 @@ function init() {
     initCamera();
 
     // Inicializamos el temporizador global
-    globals.remainingTime = 180; // 180 segundos
 
     // Estado inicial del juego
     globals.gameState = Game.PLAYING;
@@ -78,18 +77,7 @@ function gameLoop(timeStamp)
     // Tiempo anterior del ciclo de ejecución 
     globals.previousCycleMilliseconds = timeStamp ;
 
-    // Reducir el temporizador global si el juego está en estado PLAYING
-    if (globals.gameState === Game.PLAYING) 
-    {
-        globals.remainingTime -= elapsedCycleSeconds * 1.5;
 
-        // Verificar si el tiempo se agotó
-        if (globals.remainingTime <= 0) {
-            globals.remainingTime = 0; // Evitar valores negativos
-            globals.gameState = Game.OVER; // Cambiamos el estado del juego a OVER
-            return; // Salimos del bucle para evitar más lógica del frame
-        }
-    }
 
 
     // Variable que corrige el tiempo de frame debido a retrasos con respecto al tiempo objetivo (frameTimeObj)
