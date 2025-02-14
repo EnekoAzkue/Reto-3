@@ -850,8 +850,11 @@ function renderHUD()
 
     //Draw timer
     globals.ctxHUD.fillStyle = 'white';
-
-    globals.ctxHUD.fillText("" + Math.ceil(globals.enemycount), 130, 22);
+    if(globals.enemycount >= 2
+    )
+    {
+        globals.ctxHUD.fillText("" + Math.ceil(globals.enemycount), 130, 22);
+    }
 
 }
 
