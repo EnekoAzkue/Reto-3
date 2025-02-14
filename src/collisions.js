@@ -1,5 +1,5 @@
 import globals from "./globals.js";
-import { Block, State } from "./constants.js";
+import { Block, State, SpriteID } from "./constants.js";
 
 export function detectCollisionsPlayer() {
     // Calculamos colisión del player con cada uno de los sprites
@@ -486,8 +486,14 @@ function detectCollisionBetweenExplosionAndMapObstacles()
 
 export function detectCollisionBetweenGorrocopteroAndMapObstacles()
 {
+    for (let i = 0; i < globals.sprites.length; i++) 
+    {
+        const sprite = globals.sprites[i];
+        if (sprite.id === SpriteID.GORROCOPTERO) 
+        {
+            const gorrocoptero = sprite;
 
-    const gorrocoptero = globals.sprites[2];
+
 
     
 
@@ -553,7 +559,6 @@ export function detectCollisionBetweenGorrocopteroAndMapObstacles()
             // Lista de posibles nuevas direcciones
             let possibleStates = [];
         
-            if (gorrocoptero.state !== State.LEFT_1) possibleStates.push(State.LEFT_1);
             if (gorrocoptero.state !== State.UP_1) possibleStates.push(State.UP_1);
             if (gorrocoptero.state !== State.DOWN_1) possibleStates.push(State.DOWN_1);
         
@@ -585,7 +590,6 @@ export function detectCollisionBetweenGorrocopteroAndMapObstacles()
                 // Lista de posibles nuevas direcciones
                 let possibleStates = [];
 
-                if (gorrocoptero.state !== State.RIGHT_1) possibleStates.push(State.RIGHT_1);
                 if (gorrocoptero.state !== State.UP_1) possibleStates.push(State.UP_1);
                 if (gorrocoptero.state !== State.DOWN_1) possibleStates.push(State.DOWN_1);
             
@@ -626,7 +630,6 @@ export function detectCollisionBetweenGorrocopteroAndMapObstacles()
                 let possibleStates = [];
                 if (gorrocoptero.state !== State.LEFT_1) possibleStates.push(State.LEFT_1);
                 if (gorrocoptero.state !== State.RIGHT_1) possibleStates.push(State.RIGHT_1);
-                if (gorrocoptero.state !== State.UP_1) possibleStates.push(State.UP_1);
             
                 // Selecciona una dirección aleatoria de las 3 restantes
                 gorrocoptero.state = possibleStates[Math.floor(Math.random() * possibleStates.length)];
@@ -660,7 +663,6 @@ export function detectCollisionBetweenGorrocopteroAndMapObstacles()
                 let possibleStates = [];
                 if (gorrocoptero.state !== State.LEFT_1) possibleStates.push(State.LEFT_1);
                 if (gorrocoptero.state !== State.RIGHT_1) possibleStates.push(State.RIGHT_1);
-                if (gorrocoptero.state !== State.DOWN_1) possibleStates.push(State.DOWN_1);
             
                 // Selecciona una dirección aleatoria de las 3 restantes
                 gorrocoptero.state = possibleStates[Math.floor(Math.random() * possibleStates.length)];
@@ -668,11 +670,19 @@ export function detectCollisionBetweenGorrocopteroAndMapObstacles()
             break;
 
     }
+}
+}
 
 }
 
 export function detectCollisionBetweenHormigaAndMapObstacles() {
-    const ant = globals.sprites[3];
+    for (let i = 0; i < globals.sprites.length; i++) 
+        {
+            const sprite = globals.sprites[i];
+            if (sprite.id === SpriteID.HORMIGA) 
+            {
+                const ant = sprite;
+
 
     // Reset collision state
     ant.isCollidingWithObstacleOnTheRight = false;
@@ -807,7 +817,7 @@ export function detectCollisionBetweenHormigaAndMapObstacles() {
         case State.DR:
             // Primera colisión en (xPos + xSize - 1, yPos)
             xPos = ant.xPos + ant.hitBox.xOffset +1;
-            yPos = ant.yPos + ant.hitBox.yOffset + ant.hitBox.ySize + 4;
+            yPos = ant.yPos + ant.hitBox.yOffset + ant.hitBox.ySize + 3;
             isCollidingOnPos1 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId7, obstacleId8, obstacleId9, obstacleId10, obstacleId11);
     
             // Segunda colisión en (xPos + xSize - 1, yPos + ySize - 1)
@@ -815,7 +825,7 @@ export function detectCollisionBetweenHormigaAndMapObstacles() {
             isCollidingOnPos2 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId7, obstacleId8, obstacleId9, obstacleId10, obstacleId11);
     
             // Primera colisión en (xPos + xSize, yPos)
-            xPos = ant.xPos + ant.hitBox.xOffset + ant.hitBox.xSize -7;
+            xPos = ant.xPos + ant.hitBox.xOffset + ant.hitBox.xSize -6;
             yPos = ant.yPos + ant.hitBox.yOffset;
             isCollidingOnPos3 = isCollidingWithObstacleAt(xPos, yPos, obstacleId4, obstacleId5, obstacleId6, obstacleId11,obstacleId12);
 
@@ -845,7 +855,7 @@ export function detectCollisionBetweenHormigaAndMapObstacles() {
     
                 // AJUSTE: Calculamos solapamiento (overlap) y lo eliminamos
                 overlap = Math.floor(xPos) % brickSize;
-                ant.xPos -= overlap +2;
+                ant.xPos -= overlap +1;
     
                 return 1;
             }
@@ -898,4 +908,6 @@ export function detectCollisionBetweenHormigaAndMapObstacles() {
             }
             break;
     }
+}
+}
 }    
