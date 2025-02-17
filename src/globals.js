@@ -56,6 +56,8 @@ export default
 
     respawnTime: {},
 
+    StoryTime: {},
+
     //Objeto que guarda el estado de la tecla pulsada
     action: {},
 
