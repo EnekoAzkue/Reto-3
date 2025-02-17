@@ -276,12 +276,12 @@ function initPlayer()
     const imageSet = new ImageSet(0, 0, 16, 16, 17, 0, 0);
 
     //Creamos los datos de la animacion. (2-4 frames / state, 2 velocidad)
-    const frames = new Frames(4, 5);
+    const frames = new Frames(4, 4);
     const framesMain = new Frames(4, 2);
 
 
     //Crearemos nuestro objeto physics con el vLimit = 80px/s
-    const physics = new Physics(80,0,0,0,0,0);
+    const physics = new Physics(60,0,0,0,0,0);
     const physics_main = new Physics(80,0,0,0,0,0);
     //Creamos nuestro objeto hitBox(xSize, ySize, xOffset, yOffset)
     const hitBox = new HitBox(8,8,4,6)
@@ -350,29 +350,31 @@ function initBomb()
 
 }
 
-function initMazeBlock()
+function initBombControls()
 {
+    //La bomba empieza desde y = 4 hasta y = 6,
     let x = 0;
-    let y = 27;
+    let y = 16;
     let xOffset = 16*x + x;
-    let yOffset = 16*y + y +1;
+    let yOffset = 16*y + y;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
     const imageSet = new ImageSet(0, 0, 16, 16, 17, xOffset, yOffset);
 
     //Creamos los datos de la animacion. 8 frames / state
-    const frames = new Frames(8);
+    const frames = new Frames(3 , 1);
 
-    const hitBox = new HitBox(14,14,1,1)
 
 
     //Creamos nuestro sprite
-    const mazeBlock = new Sprite(SpriteID.MAZE_BLOCK, State.STILL, 96, 96, imageSet, frames,0,hitBox);
-
+    const bombC = new Sprite(SpriteID.BOMB, State.BLUE, 16, 16, imageSet, frames,0, 0);
 
     //Añadimos el player al array de sprites
-    globals.sprites.push(mazeBlock);
+    globals.spritesControls.push(bombC);
+
 
 }
+
+
 
 function initGorrocoptero()
 {
@@ -428,8 +430,6 @@ function initHormiga()
     const hitBox = new HitBox(14,7,4,8)
 
     //Creamos nuestro sprite
-    //110
-    //
     const hormiga = new Hormiga(SpriteID.HORMIGA, State.TL, 110, 105, imageSet, frames, physics,hitBox);
 
     hormiga.physics.vx = hormiga.physics.vLimit;
@@ -604,6 +604,7 @@ function initTimers()
     //Creamos timer de 200, con cambios cada 0.5s
     globals.levelTime = new Timer(200, 0.5);
     globals.respawnTime = new Timer(5, 1);
+    globals.StoryTime = new Timer(0, 1);
 }
 
 function initEvents()
