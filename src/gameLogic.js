@@ -3,7 +3,8 @@ import {Game, State, SpriteID, Collision, GRAVITY} from "./constants.js";
 import Timer from "./Timer.js";
 import {detectCollisionsPlayer, detectCollisionsExplosion,detectCollisionBetweenGorrocopteroAndMapObstacles, detectCollisionBetweenHormigaAndMapObstacles} from "./collisions.js";
 
-let random = Math.floor((Math.random() * 10) + 1)
+let random = Math.floor((Math.random() * 7) + 1)
+//let random = 7;
 export default function update()
 {
 
@@ -108,6 +109,7 @@ function controlsScreen()
 function storyScreen()
 {
     updateStorySprites();
+    updateStoryTime();
 }
 
 function overScreen()
@@ -387,6 +389,9 @@ function setSpriteHUD(sprite)
 }
 function setPlayer(sprite)
 {
+    sprite.frameCounter = 4;
+    sprite.frameChangeCounter = 1;
+
     invulnerable = false;
     sprite.xPos         = 32;
     sprite.yPos         = 16;
@@ -428,6 +433,8 @@ function updatePlayer(sprite)
     
     sprite.xPos += sprite.physics.vx * globals.deltaTime;
     sprite.yPos += sprite.physics.vy * globals.deltaTime
+
+    sprite.frames.speed = 5; // Configura la velocidad de animación para la pantalla de juego
 
     updateAnimationFrame(sprite);
 
@@ -641,15 +648,12 @@ function updateExplosions(sprite) {
 
 
 
-function updateBombControls(sprite)
-{
-    sprite.xPos = 240;
+function updateBombControls(sprite) {
+
+    sprite.frames.frameCounter = 1;
+
+    sprite.xPos = 235;
     sprite.yPos = 108;
-
-    sprite.state = State.BLUE;
-    sprite.frames.frameCounter = 0;
-
-    
 }
 
 function setGorrocoptero(sprite)
@@ -840,17 +844,17 @@ function updateAngerBarFill(sprite, hitNum) {
     if (hitNum === 1) 
         {
             updateAngerBarLvl1(globals.spritesHUD[2]);
-            thorne.physics.omega = 0.005;
+            thorne.physics.omega = 0.001;
         }
         else if (hitNum === 2) 
         {
             updateAngerBarLvl2(globals.spritesHUD[2]);
-            thorne.physics.omega = 0.0175;
+            thorne.physics.omega = 0.002;
         } 
         else if (hitNum === 3) 
         {
             updateAngerBarLvl3(globals.spritesHUD[2]);
-            thorne.physics.omega = 0.025;
+            thorne.physics.omega = 0.004;
         }
 
 
@@ -860,7 +864,7 @@ function updateHealthPotion(sprite)
 {
 
 
-    //setPotionPosition(sprite,random);
+    setPotionPosition(sprite,random);
 
 
 }
@@ -870,58 +874,57 @@ function setPotionPosition(sprite,random)
     const TILE_SIZE = 16;  
 
     if (random === 1) { 
-        sprite.xPos = 7 * TILE_SIZE;  
-        sprite.yPos = 9 * TILE_SIZE;
+        sprite.xPos = 9 * TILE_SIZE;  
+        sprite.yPos = 4 * TILE_SIZE;
     }
 
     if (random === 2) { 
-        sprite.xPos = 11 * TILE_SIZE; 
-        sprite.yPos = 9 * TILE_SIZE;
+        sprite.xPos = 20 * TILE_SIZE; 
+        sprite.yPos = 4 * TILE_SIZE;
     }
 
     if (random === 3) { 
-        sprite.xPos = 3 * TILE_SIZE;  
-        sprite.yPos = 5 * TILE_SIZE;
+        sprite.xPos = 9 * TILE_SIZE;  
+        sprite.yPos = 6 * TILE_SIZE;
     }
 
     if (random === 4) { 
-        sprite.xPos = 12 * TILE_SIZE; 
-        sprite.yPos = 3 * TILE_SIZE;
+        sprite.xPos = 20 * TILE_SIZE; 
+        sprite.yPos = 6 * TILE_SIZE;
     }
 
     if (random === 5) { 
-        sprite.xPos = 12 * TILE_SIZE; 
+        sprite.xPos = 14 * TILE_SIZE; 
         sprite.yPos = 10 * TILE_SIZE;
     }
 
     if (random === 6) { 
-        sprite.xPos = 6 * TILE_SIZE;  
-        sprite.yPos = 10 * TILE_SIZE;
+        sprite.xPos = 7 * TILE_SIZE;  
+        sprite.yPos = 19 * TILE_SIZE;
     }
 
     if (random === 7) { 
-        sprite.xPos = 4 * TILE_SIZE;  
-        sprite.yPos = 7 * TILE_SIZE;
+        sprite.xPos = 22 * TILE_SIZE;  
+        sprite.yPos = 19 * TILE_SIZE;
     }
 
-    if (random === 8) { 
-        sprite.xPos = 8 * TILE_SIZE;  
-        sprite.yPos = 5 * TILE_SIZE;
-    }
-
-    if (random === 9) { 
-        sprite.xPos = 2 * TILE_SIZE;  
-        sprite.yPos = 11 * TILE_SIZE;
-    }
-
-    if (random === 10) { 
-        sprite.xPos = 14 * TILE_SIZE; 
-        sprite.yPos = 3 * TILE_SIZE;
-    }
 }
+
+
 
 function setThrone(sprite)
 {
+    let thorne;
+for (let i = 0; i < globals.sprites.length; i++) {
+    const sprite = globals.sprites[i];
+    if (sprite.id === 9) {
+        thorne = sprite;
+        break;
+    }
+}
+
+    thorne.physics.omega = 0.001;
+
     sprite.xPos          = 200;
     sprite.yPos          = 464;
 }
@@ -1149,6 +1152,21 @@ function updateRespawnTime()
     }
 }
 
+function updateStoryTime()
+{
+    //Incrementaremos el contador de cambio de valor
+    globals.StoryTime.timeChangeCounter += globals.deltaTime;
+
+    //Si ha pasado el tiempo necesario, cambiamos el valor de timer
+    if (globals.StoryTime.timeChangeCounter > globals.StoryTime.timeChangeValue)
+    {
+        globals.StoryTime.value++;
+
+        //Resetearemos timeChangerCounter
+        globals.StoryTime.timeChangeCounter = 0;
+    }
+}
+
 function updateAnimationFrame(sprite)
 {
     if(sprite.id == 0)
@@ -1236,7 +1254,7 @@ function setThronePosition(sprite)
     const radiusB = 200;
 
     const K = 181;
-    const Kp = -169;
+    const Kp = -111;
 
     sprite.xPos = sprite.physics.xRotCenter + radiusA * Math.cos(K * sprite.physics.angle)
     sprite.yPos = sprite.physics.yRotCenter + radiusB * Math.sin(Kp * sprite.physics.angle)
@@ -1267,11 +1285,27 @@ function readKeyboardAndAssignState(sprite)
 
 }
 
-let invulnerable = false; // Estado de invulnerabilidad global
-const INVULNERABLE_TIME = 1500; // Tiempo de invulnerabilidad en milisegundos
+let invulnerable = false; 
+const INVULNERABLE_TIME = 1500;
 
 function updateLife() {
-    const player = globals.sprites[0]; // Suponemos que el jugador está en sprites[0]
+    let player;
+    let potion;
+
+    for(let i = 0; i < globals.sprites.length; i++)
+    {
+
+        const sprite = globals.sprites[i];
+        if(sprite.id === 0)
+        {
+            player = sprite;
+        }
+        if(sprite.id === 8)
+            {
+                potion = sprite;
+            }
+    
+    }
 
     if(globals.life < 1)
     {
@@ -1280,14 +1314,15 @@ function updateLife() {
     }
     for (let i = 0; i < globals.sprites.length; ++i) {
         const sprite = globals.sprites[i];
-
         if (sprite.isCollidingWithPlayer && !(sprite.id === 1 ||sprite.id === 2 || sprite.id === 3)) {
+
             if (sprite.id === 8) {
-                setPotionPosition(globals.sprites[4],Math.floor(Math.random() * 10 + 1));
 
                 if (globals.life < 3) 
                 {
                     globals.life++;
+                    setPotionPosition(potion, Math.floor(Math.random() * 7 + 1));
+                    
 
                 }
             } 
