@@ -168,8 +168,8 @@ function drawMain()
     // Calcular la posición X para centrar el texto
     const x2 = (globals.ctx.canvas.width - textWidth2) / 2;
     
-    globals.ctx.strokeText(texto[1], x2, 70);
-    globals.ctx.fillText(texto[1], x2, 70);
+    globals.ctx.strokeText(texto[1], x2, 75);
+    globals.ctx.fillText(texto[1], x2, 75);
 
     // Texto 3 con parpadeo
     const currentTime = Date.now();
@@ -258,9 +258,6 @@ globals.ctx.fillText(texto[7], 175, 120);
 
 }
 
-
-function drawStory()
-{
 let texto = [
     "After managing to escape from the claws,",
     "claws of the throne, Joseph must,",
@@ -272,60 +269,63 @@ let texto = [
     "since the throne follows him,",
     "very closely."
 ];
+
+let yOffset = 250; // Posición inicial del texto
+const TEXT_SCROLL_SPEED = 0.2; // Velocidad de desplazamiento del texto
+const TEXT_SCALE_SPEED = 0.001; // Velocidad de reducción del texto
+
+function drawStory() {
+    if (globals.gameState !== Game.STORY) {
+        return; // Salir si el estado del juego no es STORY
+    }
+
     globals.ctx.clearRect(0, 0, globals.canvas.width, globals.canvas.height);
     globals.ctxHUD.clearRect(0, 0, globals.canvasHUD.width, globals.canvasHUD.height);
 
     renderStoryScreen();
-
     renderHUDStory();
+
+    globals.ctx.save(); // Guardar el estado del contexto
+
+    // Aplicar transformación para el efecto de desplazamiento y reducción
+    globals.ctx.translate(globals.canvas.width / 2, yOffset);
+    globals.ctx.scale(1 - TEXT_SCALE_SPEED * (300 - yOffset), 1 - TEXT_SCALE_SPEED * (300 - yOffset));
 
     globals.ctx.font = '24px emulogic';
     globals.ctx.fillStyle = 'red';
     globals.ctx.strokeStyle = 'black';          
     globals.ctx.lineWidth = 2;                  
-    globals.ctx.strokeText("STORY", 80, 50);    
-    globals.ctx.fillText("STORY", 80, 50);      
+    globals.ctx.strokeText("STORY", -globals.ctx.measureText("STORY").width / 2, 0);    
+    globals.ctx.fillText("STORY", -globals.ctx.measureText("STORY").width / 2, 0);      
 
     globals.ctx.font = '8px emulogic';
-    globals.ctx.fillStyle = 'white';
     globals.ctx.strokeStyle = 'black'; 
     globals.ctx.lineWidth = 1;         
 
+    for (let i = 0; i < texto.length; i++) {
+        if (i === texto.length - 1) {
+            globals.ctx.font = '20px emulogic';
+            globals.ctx.fillStyle = 'red'; // Última línea en rojo
+        } else {
+            globals.ctx.fillStyle = 'white'; // Otras líneas en blanco
+        }
+        globals.ctx.strokeText(texto[i], -globals.ctx.measureText(texto[i]).width / 2, 30 + i * 20);  
+        globals.ctx.fillText(texto[i], -globals.ctx.measureText(texto[i]).width / 2, 30 + i * 20);    
+    }
 
-    
-    globals.ctx.strokeText(texto[0], 5, 90);  
-    globals.ctx.fillText(texto[0], 5, 90);    
+    globals.ctx.restore(); // Restaurar el estado del contexto
 
-    globals.ctx.strokeText(texto[1], 8, 98);  
-    globals.ctx.fillText(texto[1], 8, 98);    
-
-    globals.ctx.strokeText(texto[2], 7, 106); 
-    globals.ctx.fillText(texto[2], 7, 106);   
-
-    globals.ctx.strokeText(texto[3], 9, 114); 
-    globals.ctx.fillText(texto[3], 9, 114);   
-
-    globals.ctx.strokeText(texto[4], 15, 122); 
-    globals.ctx.fillText(texto[4], 15, 122);   
-
-    globals.ctx.strokeText(texto[5], 10, 130); 
-    globals.ctx.fillText(texto[5], 10, 130);   
-
-    globals.ctx.strokeText(texto[6], 20, 138); 
-    globals.ctx.fillText(texto[6], 20, 138);   
-
-    globals.ctx.strokeText(texto[7], 18, 146); 
-    globals.ctx.fillText(texto[7], 18, 146);   
-
-    globals.ctx.font = '20px emulogic';
-    globals.ctx.fillStyle = 'red';
-    globals.ctx.strokeStyle = 'black';  
-    globals.ctx.lineWidth = 2;          
-    globals.ctx.strokeText(texto[8], 10, 166); 
-    globals.ctx.fillText(texto[8], 10, 166);   
-
-
+    // Actualizar la posición y el tamaño del texto
+    if (yOffset > -texto.length * 20) {
+        yOffset -= TEXT_SCROLL_SPEED;
+    }
 }
+
+setInterval(() => {
+    if (globals.gameState === Game.STORY) {
+        drawStory();
+    }
+}, 16); 
 
 function drawScore()
 {
