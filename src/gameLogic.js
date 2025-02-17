@@ -83,7 +83,6 @@ function playGame()
 
     updateLife();
     updateEnemyLife();
-    updateScore();
 }
 
 function gameOver()
@@ -1048,7 +1047,7 @@ function updateOneLifeLessScreen(sprite) {
         {
             console.log("hola");
         }
-    if(globals.respawnTime.value <= 1)
+    if(globals.respawnTime.value <= 0)
     {
 
         globals.gameState = Game.SCORE;
@@ -1310,7 +1309,7 @@ function updateLife() {
     if(globals.life < 1)
     {
         invulnerable = true;
-        //oneLifeLess();
+        oneLifeLess();
     }
     for (let i = 0; i < globals.sprites.length; ++i) {
         const sprite = globals.sprites[i];
@@ -1492,10 +1491,5 @@ function updateCamera()
 
     globals.camera.x = Math.floor(player.xPos) + Math.floor((player.imageSet.xSize - globals.canvas.width) / 2);
     globals.camera.y = Math.floor(player.yPos) + Math.floor((player.imageSet.ySize - globals.canvas.height) / 2);
-
-}
-
-function updateScore()
-{
 
 }
