@@ -91,6 +91,7 @@ export const State =
     //Estados de BOMBILLA
     INACTIVE:   0,
     ACTIVE:     1,
+    DEACTIVATING: 2,
 
     //Estados de HEART, HEALTHPOTION, THRONE, MAINSCREEN
     STILL:      0,
@@ -202,3 +203,15 @@ export const Collision = {
 }
 
 export const GRAVITY = 160;
+
+export const ParticleID =
+{
+    EXPLOSION   : 0,
+}
+
+export const ParticleState =
+{
+    ON: 0,
+    FADE: 1,
+    OFF: -1,
+}
