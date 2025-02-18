@@ -4,7 +4,7 @@ import
     initHTMLelements, loadAssets, initSprites, initVars, initLevel,
     initMainSprites, initControlsSprites, initStorySprites,
     initScoreSprites, initTimers, initEvents, initOverSprites,
-    initOneLifeLessSprites, initCamera
+    initOneLifeLessSprites, initCamera, initParticles
 } from "./initialize.js";
 import update from "./gameLogic.js";
 import render from "./gameRender.js";
@@ -52,7 +52,7 @@ function init() {
 
     initCamera();
 
-    // Inicializamos el temporizador global
+    //initParticles();
 
     // Estado inicial del juego
     globals.gameState = Game.PLAYING;
