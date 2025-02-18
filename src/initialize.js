@@ -1,5 +1,5 @@
 import globals from "./globals.js";
-import {Game, SpriteID, State, FPS} from "./constants.js";
+import {Game, SpriteID, State, FPS, ParticleState, ParticleID} from "./constants.js";
 import Sprite, { Hormiga } from "./sprite.js";
 import ImageSet from "./imageSet.js";
 import Frames from "./frames.js";
@@ -9,6 +9,7 @@ import Physics from "./Physics.js";
 import { keydownHandler, keyupHandler } from "./events.js";
 import HitBox from "./hitbox.js";
 import Camera from "./camera.js";
+import ExplosionParticle from "./particle.js";
 
 globals.hitNum = 0;
 //Funcion que inicializa los elementos HTML
@@ -107,12 +108,12 @@ function initSprites()
     initBomb();
     initGorrocoptero();
     initHormiga();
-    initBombilla();
     initHeart();
     initHealthPotion();
     initThrone();
     initAngerBarrFill();
     initAngerBar();
+    initBombilla();
 
 }
 
@@ -442,19 +443,31 @@ function initHormiga()
 function initBombilla()
 {
     let x = 0;
-    let y = 17;
+    let y = 41;
     let xOffset = 16*x + x;
     let yOffset = 16*y + y;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
-    const imageSet = new ImageSet(0, 19, 16, 24, 0, xOffset, yOffset);
+    const imageSet = new ImageSet(0, 0, 16, 16, 17, xOffset, yOffset);
 
     //Creamos los datos de la animacion. 8 frames / state
-    const frames = new Frames(8);
-    //Creamos nuestro sprite
-    const bombilla = new Sprite(SpriteID.GORROCOPTERO, State.LEFT_1, 100, 70, imageSet, frames);
+    const frames = new Frames(5, 8);
 
-    //Añadimos el player al array de sprites
-    //globals.sprites.push(bombilla);
+    const hitBox = new HitBox(16,16,0,0)
+
+    //Creamos nuestro sprite
+
+    const attributes = 
+    [
+        { xPos: 144, yPos: 272 },
+        { xPos: 320, yPos: 272 },
+
+    ];
+
+    for (let i = 0; i < attributes.length; i++) {
+        const { xPos, yPos } = attributes[i];
+        const bombilla = new Sprite(SpriteID.BOMBILLA, State.INACTIVE, xPos, yPos, imageSet, frames, 0, hitBox);
+        globals.sprites.push(bombilla);
+    }
 }
 
 function initHeart()
@@ -605,6 +618,7 @@ function initTimers()
     globals.levelTime = new Timer(200, 0.5);
     globals.respawnTime = new Timer(5, 1);
     globals.StoryTime = new Timer(0, 1);
+    globals.bombillaTime = new Timer(0, 1);
 }
 
 function initEvents()
@@ -619,6 +633,37 @@ function initCamera()
     globals.camera = new Camera(0,0);
 }
 
+function initParticles()
+{
+    initExplosion();
+}
+
+function initExplosion()
+{
+    const numParticles = 10;
+    const xInit = 100;
+    const yInit = 100;
+    const radius= 2.5;
+    const timeToFadeMax = 5;   
+    const alpha = 1.0;
+
+    for(let i = 0; i < numParticles; i++)
+    {
+        const velocity = Math.random() * 25 + 5;
+        const physics = new Physics(velocity);
+
+        const timeToFade = timeToFadeMax * Math.random() + 1;
+        const particle = new ExplosionParticle(ParticleID.EXPLOSION, ParticleState.ON, xInit, yInit, radius,alpha,physics,timeToFade);
+        
+        //Asignamos velocidades segun angulo aleatorio
+        const randomAngle = Math.random() * 2 * Math.PI;
+        particle.physics.vx = particle.physics.vLimit * Math.cos(randomAngle);
+        particle.physics.vy = particle.physics.vLimit * Math.sin(randomAngle);
+
+
+        globals.particles.push(particle);
+    }
+}
 
 //Exportamos las funciones 
 export 
@@ -636,5 +681,6 @@ export
     initOneLifeLessSprites,
     initTimers,
     initEvents,
-    initCamera
+    initCamera,
+    initParticles
 }
