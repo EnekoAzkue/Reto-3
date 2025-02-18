@@ -8,3 +8,5 @@
 bug:
 
 cuando inicias el juego despues de ir a controles la animacion del player se rompe
+
+particle.xPos e yPos no funciona, cuando hago log de particle(en initialize) sale, pero al hacerlo en el array las posiciones pasan a NaN
