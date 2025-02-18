@@ -1,7 +1,8 @@
 - sonidos
 - tabla de scores
 - particulas
-
+- hacer que loadplaying tenga una pantalla para ver el nivel
+- he añadido la bombilla, tiene un estado nuevo por lo que habra que editar el sprite sheet para hacer la animacion de desactivacion
 
 ----------
 bug:
