@@ -1,5 +1,5 @@
 import globals from "./globals.js";
-import {Game, SpriteID, State, Tile} from "./constants.js";
+import {Game, ParticleState, Tile, ParticleID} from "./constants.js";
 
 
 //Funcion que renderiza los graficos 
@@ -74,6 +74,7 @@ function drawGame()
     //Dibujamos los elementos
     drawSprites();
 
+
     restoreCamera();
     drawSpritesHUD();
 
@@ -136,6 +137,9 @@ function drawMain()
 
     renderMainScreen();
 
+
+
+
     //Dibujamos el HUD
     renderHUDMain();
 
@@ -190,6 +194,8 @@ function drawMain()
         globals.ctx.strokeText(texto[2], x3, 120);
         globals.ctx.fillText(texto[2], x3, 120);
     }
+
+    renderParticles();
 }
 
 
@@ -994,4 +1000,42 @@ function moveCamera() {
 function restoreCamera()
 {
     globals.ctx.setTransform(1,0,0,1,0,0);
+}
+
+function renderParticles()
+{
+    for(let i = 0; i < globals.particles.length; i++)
+    {
+        const particle = globals.particles[i];
+        renderParticle(particle);
+    }
+}
+
+function renderParticle(particle)
+{
+    const type = particle.id;
+    switch(type)
+    {
+        //Caso del jugador
+        case ParticleID.EXPLOSION:
+            renderExplosionParticle (particle);
+            break;
+        
+
+        default:
+            break;
+    }
+}
+
+function renderExplosionParticle(particle)
+{
+    if(particle.state != ParticleState.OFF)
+    {
+        globals.ctx.fillStyle = "blue";
+        globals.ctx.globalAlpha = particle.alpha;
+        globals.ctx.beginPath();
+        globals.ctx.arc(particle.xPos, particle.yPos, particle.radius, 0, Math.PI * 2);
+        globals.ctx.fill();
+        globals.ctx.globalAlpha = 1.0;
+    }
 }
