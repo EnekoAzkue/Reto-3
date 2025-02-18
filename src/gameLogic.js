@@ -1,5 +1,5 @@
 import globals from "./globals.js";
-import {Game, State, SpriteID, Collision, GRAVITY} from "./constants.js";
+import {Game, State, SpriteID, Collision, GRAVITY, ParticleState,ParticleID} from "./constants.js";
 import Timer from "./Timer.js";
 import {detectCollisionsPlayer, detectCollisionsExplosion,detectCollisionBetweenGorrocopteroAndMapObstacles, detectCollisionBetweenHormigaAndMapObstacles} from "./collisions.js";
 
@@ -93,6 +93,8 @@ function gameOver()
 function mainScreen()
 {
     updateMainSprites();
+    updateParticles();
+
 }
 
 function scoreScreen()
@@ -187,6 +189,9 @@ function updateSprite(sprite)
             updateThrone(sprite);
             break;
             
+        case SpriteID.BOMBILLA:
+            updateBombilla(sprite);
+            break;
         //Caso del enemigo
         default:
 
@@ -955,6 +960,47 @@ function updateThroneMain(sprite)
 
 }
 
+function updateBombilla(sprite) {
+
+    if(sprite.state === State.ACTIVE)
+    {
+        updateBombillaTime();
+    }
+
+    if(globals.bombillaTime.value >= 5)
+    {
+        sprite.state = State.INACTIVE;
+        globals.bombillaTime.value = 0;
+        //bombillaAnimationDown(sprite);
+    }
+
+    if(sprite.state === State.INACTIVE)
+    {
+    bombillaAnimationUp(sprite);    
+    }
+
+}
+
+function bombillaAnimationUp(sprite)
+{
+    // Actualizamos el contador de frames
+    sprite.frames.frameChangeCounter++;
+
+    if(sprite.state === State.INACTIVE)
+    {
+    // Cambiamos de frame cuando el contador alcanza la velocidad de animación
+    if (sprite.frames.frameChangeCounter >= sprite.frames.speed) {
+        sprite.frames.frameCounter++;
+        sprite.frames.frameChangeCounter = 0;
+    }
+
+    // Si hemos llegado al máximo de frames, reiniciamos el contador (animación cíclica)
+    if (sprite.frames.frameCounter >= sprite.frames.framesPerState) {
+        sprite.state = State.ACTIVE;
+        sprite.frames.frameCounter = 0;
+    }
+    }
+}
 let canChangeScreen = true; // Controla el retraso en el cambio de pantalla
 const SCREEN_CHANGE_DELAY = 250; // Tiempo de retraso en milisegundos
 
@@ -1151,6 +1197,25 @@ function updateRespawnTime()
     }
 }
 
+
+function updateBombillaTime()
+{
+    console.log(globals.bombillaTime.value)
+
+        //Incrementaremos el contador de cambio de valor
+        globals.bombillaTime.timeChangeCounter += globals.deltaTime;
+    
+        //Si ha pasado el tiempo necesario, cambiamos el valor de timer
+        if (globals.bombillaTime.timeChangeCounter > globals.bombillaTime.timeChangeValue)
+        {
+            globals.bombillaTime.value++;
+    
+            //Resetearemos timeChangerCounter
+            globals.bombillaTime.timeChangeCounter = 0;
+        }
+}
+
+
 function updateStoryTime()
 {
     //Incrementaremos el contador de cambio de valor
@@ -1206,19 +1271,39 @@ function updateAnimationFrame(sprite)
         }
         }
 
-        if(sprite.id == 5)
+    if(sprite.id == 5)
+    {
+        switch(sprite.state)
+        {
+            case State.TL:
+            case State.TR:
+            case State.DL:
+            case State.DR:
+                sprite.frameCounter = 8;
+                sprite.frameChangeCounter = 1;
+                sprite.frames.speed = 2;
+                break;
+    
+            
+        }
+    }
+
+    if(sprite.id == 6)
         {
             switch(sprite.state)
             {
-                case State.TL:
-                case State.TR:
-                case State.DL:
-                case State.DR:
-                    sprite.frameCounter = 8;
+                case State.INACTIVE:
+
+                    sprite.frameCounter = 5;
                     sprite.frameChangeCounter = 1;
-                    sprite.frames.speed = 2;
+                    sprite.frames.speed = 5;
                     break;
         
+                case State.ACTIVE:
+                    sprite.frameCounter = 1;
+                    sprite.frameChangeCounter = 0;
+                    sprite.frames.speed = 0;
+                    break;
                 
             }
         }
@@ -1491,5 +1576,58 @@ function updateCamera()
 
     globals.camera.x = Math.floor(player.xPos) + Math.floor((player.imageSet.xSize - globals.canvas.width) / 2);
     globals.camera.y = Math.floor(player.yPos) + Math.floor((player.imageSet.ySize - globals.canvas.height) / 2);
+
+}
+
+function updateParticles()
+{
+    for(let i = 0; i < globals.particles.length; i++)
+    {
+        const particle = globals.particles[i];
+        updateParticle(particle);
+    }
+}
+
+function updateParticle(particle)
+{
+    const type = particle.id;
+    switch(type)
+    {
+        case ParticleID.EXPLOSION:
+
+            updateExplosionParticle(particle);
+            break;
+    }
+}
+
+function updateExplosionParticle(particle)
+{
+    particle.fadeCounter += globals.deltaTime;
+
+    //Cogemos las velocidades de los arrays
+    switch(particle.state)
+    {
+        case ParticleState.ON:
+            if(particle.fadeCounter > particle.timeToFade)
+            {
+                particle.fadeCounter = 0;
+                particle.state = ParticleState.FADE;
+            }
+            break;
+
+        case ParticleState.FADE:
+            particle.alpha -= 0.01;
+
+            if(particle.alpha <= 0)
+            {
+                particle.state = ParticleState.OFF;
+            }
+            break;
+
+        case ParticleState.OFF:
+            break;
+    }
+    particle.xPos += particle.vx * globals.deltaTime;
+    particle.yPos += particle.vy * globals.deltaTime;
 
 }
