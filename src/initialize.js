@@ -110,10 +110,11 @@ function initSprites()
     initHormiga();
     initHeart();
     initHealthPotion();
+    initBombilla();
     initThrone();
     initAngerBarrFill();
     initAngerBar();
-    initBombilla();
+
 
 }
 
@@ -155,9 +156,9 @@ function initOverSprites()
 function initMainScreen()
 {
     let x = 0;
-    let y = 49;
+    let y = 42;
     let xOffset = 16*x + x;
-    let yOffset = 16*y + y + 7; 
+    let yOffset = 16*y + y + 6; 
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
     const imageSet = new ImageSet(0, 0, 272, 208, 0, xOffset, yOffset);
 
@@ -174,9 +175,9 @@ function initMainScreen()
 function initControlsScreen()
 {
     let x = 0;
-    let y = 98;
+    let y = 91;
     let xOffset = 16*x + x;
-    let yOffset = 16*y + y + 10;
+    let yOffset = 16*y + y + 9;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
     const imageSet = new ImageSet(0, 0, 272, 208, 0, xOffset, yOffset);
 
@@ -193,9 +194,9 @@ function initControlsScreen()
 function initStoryScreen()
 {
     let x = 0;
-    let y = 74;
+    let y = 67;
     let xOffset = 16*x + x;
-    let yOffset = 16*y + y ;
+    let yOffset = 16*y + y  - 1;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
     const imageSet = new ImageSet(0, 0, 272, 208, 0, xOffset, yOffset);
 
@@ -212,9 +213,9 @@ function initStoryScreen()
 function initScoreScreen()
 {
     let x = 0;
-    let y = 86;
+    let y = 79;
     let xOffset = 16*x + x;
-    let yOffset = 16*y + y + 5;
+    let yOffset = 16*y + y + 4;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
     const imageSet = new ImageSet(0, 0, 272, 208, 0, xOffset, yOffset);
 
@@ -231,7 +232,7 @@ function initScoreScreen()
 function initOverScreen()
 {
     let x = 0;
-    let y = 61;
+    let y = 53;
     let xOffset = 16*x + x;
     let yOffset = 16*y + y + 12;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
@@ -250,7 +251,7 @@ function initOverScreen()
 function initOneLifeLessScreen()
 {
     let x = 0;
-    let y = 110;
+    let y = 102;
     let xOffset = 16*x + x;
     let yOffset = 16*y + y + 16;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
@@ -380,9 +381,9 @@ function initBombControls()
 function initGorrocoptero()
 {
     let x = 0;
-    let y = 29;
+    let y = 21;
     let xOffset = 16*x + x;
-    let yOffset = 16*y + y + 1;
+    let yOffset = 16*y + y ;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
     const imageSet = new ImageSet(0, 0, 16, 24, 25, xOffset, yOffset);
 
@@ -416,7 +417,7 @@ function initGorrocoptero()
 function initHormiga()
 {
     let x = 0;
-    let y = 35;
+    let y = 27;
     let xOffset = 16*x + x;
     let yOffset = 16*y + y;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
@@ -443,14 +444,14 @@ function initHormiga()
 function initBombilla()
 {
     let x = 0;
-    let y = 41;
+    let y = 33;
     let xOffset = 16*x + x;
-    let yOffset = 16*y + y;
+    let yOffset = 16*y + y - 2;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
     const imageSet = new ImageSet(0, 0, 16, 16, 17, xOffset, yOffset);
 
     //Creamos los datos de la animacion. 8 frames / state
-    const frames = new Frames(5, 8);
+    const frames = new Frames(31, 4);
 
     const hitBox = new HitBox(16,16,0,0)
 
@@ -465,15 +466,55 @@ function initBombilla()
 
     for (let i = 0; i < attributes.length; i++) {
         const { xPos, yPos } = attributes[i];
-        const bombilla = new Sprite(SpriteID.BOMBILLA, State.INACTIVE, xPos, yPos, imageSet, frames, 0, hitBox);
+        const bombilla = new Sprite(SpriteID.BOMBILLA, State.ACTIVE, xPos, yPos, imageSet, frames, 0, hitBox);
         globals.sprites.push(bombilla);
     }
+}
+
+function initShot1()
+{
+    let x = 0;
+    let y = 36;
+    let xOffset = 16*x + x;
+    let yOffset = 16*y + y - 2;
+    //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
+    const imageSet = new ImageSet(0, 0, 16, 16, 17, xOffset, yOffset);
+
+    //Creamos los datos de la animacion. 8 frames / state
+    const frames = new Frames(2, 4);
+
+    const physics = new Physics(20,0,0,0,0,0);
+
+    const hitBox = new HitBox(16,16,0,0)
+
+    const shot = new Sprite(SpriteID.SHOT, State.STILL, 144, 272, imageSet, frames, physics, hitBox);
+    globals.sprites.push(shot);
+}
+
+function initShot2()
+{
+    let x = 0;
+    let y = 36;
+    let xOffset = 16*x + x;
+    let yOffset = 16*y + y - 2;
+    //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
+    const imageSet = new ImageSet(0, 0, 16, 16, 17, xOffset, yOffset);
+
+    //Creamos los datos de la animacion. 8 frames / state
+    const frames = new Frames(2, 4);
+
+    const physics = new Physics(20,0,0,0,0,0);
+
+    const hitBox = new HitBox(16,16,0,0)
+
+    const shot = new Sprite(SpriteID.SHOT, State.STILL, 320, 272, imageSet, frames, physics, hitBox);
+    globals.sprites.push(shot);
 }
 
 function initHeart()
 {
     let x = 0;
-    let y = 44;
+    let y = 37;
     let xOffset = 16*x + x;
     let yOffset = 16*y + y;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
@@ -491,7 +532,7 @@ function initHeart()
 function initHealthPotion()
 {
     let x = 0;
-    let y = 45;
+    let y = 38;
     let xOffset = 16*x + x;
     let yOffset = 16*y + y - 1;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
@@ -512,7 +553,7 @@ function initHealthPotion()
 function initThrone()
 {
     let x = 0;
-    let y = 45;
+    let y = 38;
     let xOffset = 16*x + x;
     let yOffset = 16*y + y + 15;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
@@ -543,7 +584,7 @@ function initThrone()
 function initThroneMain()
 {
     let x = 0;
-    let y = 45;
+    let y = 38;
     let xOffset = 16*x + x;
     let yOffset = 16*y + y + 15;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
@@ -567,9 +608,9 @@ function initThroneMain()
 function initAngerBar()
 {
     let x = 0;
-    let y = 47;
+    let y = 40;
     let xOffset = 54*x + x;
-    let yOffset = 16*y + y + 13;
+    let yOffset = 16*y + y + 12;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
     const imageSet = new ImageSet(0, 0, 54, 16, 55, xOffset, yOffset);
 
@@ -585,9 +626,9 @@ function initAngerBar()
 function initAngerBarrFill()
 {
     let x = 0;
-    let y = 48;
+    let y = 41;
     let xOffset = 16*x + x;
-    let yOffset = 16*y + y + 12;
+    let yOffset = 16*y + y + 11;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
     const imageSet = new ImageSet(0, 0, 0, 11, 13, xOffset, yOffset);
 
@@ -618,7 +659,8 @@ function initTimers()
     globals.levelTime = new Timer(200, 0.5);
     globals.respawnTime = new Timer(5, 1);
     globals.StoryTime = new Timer(0, 1);
-    globals.bombillaTime = new Timer(0, 1);
+
+
 }
 
 function initEvents()
@@ -682,5 +724,7 @@ export
     initTimers,
     initEvents,
     initCamera,
-    initParticles
+    initParticles,
+    initShot1,
+    initShot2,
 }
