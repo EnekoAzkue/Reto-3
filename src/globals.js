@@ -58,7 +58,6 @@ export default
 
     StoryTime: {},
 
-    bombillaTime: {},
 
     //Objeto que guarda el estado de la tecla pulsada
     action: {},
@@ -74,5 +73,7 @@ export default
 
     particles: [],
 
+    shot1Active: false,
+    shot2Active: false,
 
 };
