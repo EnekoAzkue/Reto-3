@@ -2,11 +2,10 @@
 - tabla de scores
 - particulas
 - hacer que loadplaying tenga una pantalla para ver el nivel
-- he añadido la bombilla, tiene un estado nuevo por lo que habra que editar el sprite sheet para hacer la animacion de desactivacion
 
 ----------
 bug:
 
-cuando inicias el juego despues de ir a controles la animacion del player se rompe
+la hormiga tiene mal la colision de abajo derecha
 
 particle.xPos e yPos no funciona, cuando hago log de particle(en initialize) sale, pero al hacerlo en el array las posiciones pasan a NaN
