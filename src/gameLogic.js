@@ -2,9 +2,11 @@ import globals from "./globals.js";
 import {Game, State, SpriteID, Collision, GRAVITY, ParticleState,ParticleID} from "./constants.js";
 import Timer from "./Timer.js";
 import {detectCollisionsPlayer, detectCollisionsExplosion,detectCollisionBetweenGorrocopteroAndMapObstacles, detectCollisionBetweenHormigaAndMapObstacles} from "./collisions.js";
-
+import { initShot1, initShot2 } from "./initialize.js";
 let random = Math.floor((Math.random() * 7) + 1)
 //let random = 7;
+let playerXPos;
+let playerYPos;
 export default function update()
 {
 
@@ -191,6 +193,10 @@ function updateSprite(sprite)
             
         case SpriteID.BOMBILLA:
             updateBombilla(sprite);
+            break;
+
+        case SpriteID.SHOT:
+            updateShot(sprite);
             break;
         //Caso del enemigo
         default:
@@ -961,46 +967,124 @@ function updateThroneMain(sprite)
 }
 
 function updateBombilla(sprite) {
+    let bombilla1 = null;
+    let bombilla2 = null;
+    let bombillaShot = false; // Inicializamos bombillaShot como false
 
-    if(sprite.state === State.ACTIVE)
-    {
-        updateBombillaTime();
-    }
+    // Buscamos bombilla1 y bombilla2 en globals.sprites
+    bombilla1 = globals.sprites.find(sprite => sprite.id === 6);
+    bombilla2 = globals.sprites.find(sprite => sprite.id === 6);
 
-    if(globals.bombillaTime.value >= 5)
-    {
-        sprite.state = State.INACTIVE;
-        globals.bombillaTime.value = 0;
-        //bombillaAnimationDown(sprite);
-    }
+    // Si no encontramos la bombilla1 o bombilla2, devolvemos para evitar errores
+    if (!bombilla1 && !bombilla2) return;
 
-    if(sprite.state === State.INACTIVE)
-    {
-    bombillaAnimationUp(sprite);    
-    }
+    if (!sprite) return; // Evita errores si el sprite no existe
 
-}
-
-function bombillaAnimationUp(sprite)
-{
-    // Actualizamos el contador de frames
+    // Aumentamos el contador de tiempo de frames
     sprite.frames.frameChangeCounter++;
 
-    if(sprite.state === State.INACTIVE)
-    {
-    // Cambiamos de frame cuando el contador alcanza la velocidad de animación
-    if (sprite.frames.frameChangeCounter >= sprite.frames.speed) {
+    // Cambiamos de frame cuando el lag de animación alcanza animSpeed
+    if (sprite.frames.frameChangeCounter === sprite.frames.speed) {
         sprite.frames.frameCounter++;
         sprite.frames.frameChangeCounter = 0;
     }
 
     // Si hemos llegado al máximo de frames, reiniciamos el contador (animación cíclica)
-    if (sprite.frames.frameCounter >= sprite.frames.framesPerState) {
-        sprite.state = State.ACTIVE;
+    if (sprite.frames.frameCounter === sprite.frames.framesPerState) {
         sprite.frames.frameCounter = 0;
     }
+
+    // Comprobamos si el frameCounter de bombilla1 está en los valores 16, 17 o 18
+    if (bombilla1 !== null) {
+        if (bombilla1.frames.frameCounter >= 16 && bombilla1.frames.frameCounter <= 18) {
+            bombillaShot = true;
+        }
+    }
+
+    // Generamos el número aleatorio solo si no están activos los disparos y bombillaShot es verdadero
+    if ((globals.shot1Active === false || globals.shot2Active === false) && bombillaShot) {
+        let randomNumber = Math.random();
+        console.log(`Número aleatorio generado: ${randomNumber}`);
+
+        // Llamamos a la función de disparo si el número es menor a 0.1
+        if (randomNumber < 0.1) { 
+            // Guardamos la última posición conocida del jugador
+            playerXPos = globals.sprites[0].xPos;
+            playerYPos = globals.sprites[0].yPos;
+
+            // Solo se crea el disparo si no hay otro activo y si la bombilla no ha sido destruida
+            if (!globals.shot1Active && bombilla1 !== null) {
+                initShot1(bombilla1);
+                globals.shot1Active = true;
+            } 
+            if (!globals.shot2Active && bombilla2 !== null) {
+                initShot2(bombilla2);
+                globals.shot2Active = true;
+            }
+        }
     }
 }
+
+
+
+function updateShot(sprite) {
+    updateAnimationFrame(sprite);
+
+    // Actualizamos la posición inicial de los disparos con la posición de las bombillas
+    if (sprite.id === 14) {  // Para el primer disparo
+        sprite.xPos = globals.sprites[10].xPos;
+        sprite.yPos = globals.sprites[10].yPos;
+    } else if (sprite.id === 15) {  // Para el segundo disparo
+        sprite.xPos = globals.sprites[11].xPos;
+        sprite.yPos = globals.sprites[11].yPos;
+    }
+
+    // Usamos la última posición conocida del jugador como objetivo
+    let targetX = playerXPos;
+    let targetY = playerYPos;
+
+    // Calculamos la diferencia en posición entre el disparo y el objetivo
+    let deltaX = targetX - sprite.xPos;
+    let deltaY = targetY - sprite.yPos;
+
+    // Normalizamos el vector para que tenga una longitud de 1
+    let distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    if (distance !== 0) {
+        deltaX /= distance;
+        deltaY /= distance;
+    }
+
+    // Ajustamos la velocidad en función de la distancia (por ejemplo, mayor distancia = mayor velocidad)
+    let speedMultiplier = Math.max(2, distance / 50); // Se ajusta 50 según lo que consideres adecuado
+    sprite.physics.vx = deltaX * sprite.physics.vLimit * speedMultiplier;
+    sprite.physics.vy = deltaY * sprite.physics.vLimit * speedMultiplier;
+
+    // Calculamos la nueva posición según la velocidad
+    sprite.xPos += sprite.physics.vx * globals.deltaTime;  // Calculamos el movimiento en X
+    sprite.yPos += sprite.physics.vy * globals.deltaTime;  // Calculamos el movimiento en Y
+
+    // Verificamos la nueva posición después de moverse
+    console.log("Nueva posición del disparo (ID: " + sprite.id + "):", sprite.xPos, sprite.yPos);
+
+    // Temporizador para eliminar el sprite después de 5 segundos
+    setTimeout(() => {
+        const index = globals.sprites.indexOf(sprite);
+        if (index > -1) {
+            globals.sprites.splice(index, 1);
+            console.log(`Sprite eliminado en la posición ${index}`);
+            
+            // Restablecemos los indicadores de disparo una vez que el sprite ha sido eliminado
+            globals.shot1Active = false;
+            globals.shot2Active = false;
+        }
+    }, 5000); 
+}
+
+
+
+
+
+
 let canChangeScreen = true; // Controla el retraso en el cambio de pantalla
 const SCREEN_CHANGE_DELAY = 250; // Tiempo de retraso en milisegundos
 
@@ -1196,25 +1280,6 @@ function updateRespawnTime()
         globals.respawnTime.value = 5;
     }
 }
-
-
-function updateBombillaTime()
-{
-    console.log(globals.bombillaTime.value)
-
-        //Incrementaremos el contador de cambio de valor
-        globals.bombillaTime.timeChangeCounter += globals.deltaTime;
-    
-        //Si ha pasado el tiempo necesario, cambiamos el valor de timer
-        if (globals.bombillaTime.timeChangeCounter > globals.bombillaTime.timeChangeValue)
-        {
-            globals.bombillaTime.value++;
-    
-            //Resetearemos timeChangerCounter
-            globals.bombillaTime.timeChangeCounter = 0;
-        }
-}
-
 
 function updateStoryTime()
 {
@@ -1478,6 +1543,14 @@ function updateEnemyLife() {
                 globals.enemycount += 1;
             } else if (sprite === globals.sprites[6]) {
                 globals.sprites.splice(6, 1);
+                globals.score += 1000;
+                globals.enemycount += 1;
+            } else if (sprite === globals.sprites[10]) {
+                globals.sprites.splice(10, 1);
+                globals.score += 1000;
+                globals.enemycount += 1;
+            } else if (sprite === globals.sprites[11]) {
+                globals.sprites.splice(11, 1);
                 globals.score += 1000;
                 globals.enemycount += 1;
             }
