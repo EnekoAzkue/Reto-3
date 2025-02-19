@@ -43,6 +43,7 @@ export const SpriteID =
     ONELIFELESSSCREEN:  20,
     ANGERBAR:           21,
     ANGERBARFILL:       22,
+    SHOT:               23,
 }
 
 //Identificador de estado de sprite(direccion)
