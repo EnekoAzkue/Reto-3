@@ -31,3 +31,13 @@ export class Hormiga extends Sprite
         this.collisionBorder = Collision.NO_COLLISION;
     }
 }
+
+export class Bombilla extends Sprite
+{
+    constructor (id, state, xPos, yPos, imageSet, frames, physics, hitBox, isActive)
+    {
+        super(id, state, xPos, yPos, imageSet, frames, physics, hitBox)
+
+        this.isActive = isActive;
+    }
+}
