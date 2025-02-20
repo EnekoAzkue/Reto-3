@@ -49,7 +49,10 @@ export default
     spritesOneLifeLess: [],
     
     //Datos del nivel
+    currentLevel: 0,
+    levels: [],
     Level: {},
+    Level2: {},
 
     //Timepo de juego
     gameTime: -1,
