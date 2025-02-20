@@ -3,7 +3,7 @@ import {Game, SpriteID, State, FPS, ParticleState, ParticleID} from "./constants
 import Sprite, { Bombilla, Hormiga } from "./sprite.js";
 import ImageSet from "./imageSet.js";
 import Frames from "./frames.js";
-import {Level, level1} from "./level.js";
+import {Level, level1, level2} from "./level.js";
 import Timer from "./Timer.js";
 import Physics from "./Physics.js";
 import { keydownHandler, keyupHandler } from "./events.js";
@@ -232,9 +232,9 @@ function initScoreScreen()
 function initOverScreen()
 {
     let x = 0;
-    let y = 53;
+    let y = 54;
     let xOffset = 16*x + x;
-    let yOffset = 16*y + y + 12;
+    let yOffset = 16*y + y + 11;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
     const imageSet = new ImageSet(0, 0, 272, 208, 0, xOffset, yOffset);
 
@@ -251,9 +251,9 @@ function initOverScreen()
 function initOneLifeLessScreen()
 {
     let x = 0;
-    let y = 102;
+    let y = 103;
     let xOffset = 16*x + x;
-    let yOffset = 16*y + y + 16;
+    let yOffset = 16*y + y + 15;
     //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
     const imageSet = new ImageSet(0, 0, 272, 208, 0, xOffset, yOffset);
 
@@ -647,7 +647,12 @@ function initLevel()
     const imageSet = new ImageSet(0, 0, 16, 16, 16, 0, 0);
 
     //Creamos y gurdamos nuestro nivel
-    globals.Level = new Level(level1, imageSet)
+
+    const Level1 = new Level(level1, imageSet);
+    const Level2 = new Level(level2, imageSet);
+
+    globals.levels.push(Level1);
+    globals.levels.push(Level2);
 }
 
 //Inicializamos el contador de juego
