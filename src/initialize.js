@@ -1,6 +1,6 @@
 import globals from "./globals.js";
 import {Game, SpriteID, State, FPS, ParticleState, ParticleID} from "./constants.js";
-import Sprite, { Hormiga } from "./sprite.js";
+import Sprite, { Bombilla, Hormiga } from "./sprite.js";
 import ImageSet from "./imageSet.js";
 import Frames from "./frames.js";
 import {Level, level1} from "./level.js";
@@ -408,7 +408,7 @@ function initGorrocoptero()
     for (let i = 0; i < attributes.length; i++) {
         const { state, xPos, yPos } = attributes[i];
         const gorrocoptero = new Sprite(SpriteID.GORROCOPTERO, state, xPos, yPos, imageSet, frames, physics, hitBox);
-        globals.sprites.push(gorrocoptero);
+        globals.spritesGorrocopteros.push(gorrocoptero);
     }
 
 
@@ -438,7 +438,7 @@ function initHormiga()
     hormiga.physics.vy = hormiga.physics.vLimit;
 
     //Añadimos el player al array de sprites
-    globals.sprites.push(hormiga);
+    globals.spritesHormigas.push(hormiga);
 }
 
 function initBombilla()
@@ -466,8 +466,8 @@ function initBombilla()
 
     for (let i = 0; i < attributes.length; i++) {
         const { xPos, yPos } = attributes[i];
-        const bombilla = new Sprite(SpriteID.BOMBILLA, State.ACTIVE, xPos, yPos, imageSet, frames, 0, hitBox);
-        globals.sprites.push(bombilla);
+        const bombilla = new Bombilla(SpriteID.BOMBILLA, State.ACTIVE, xPos, yPos, imageSet, frames, 0, hitBox, true);
+        globals.spritesBombillas.push(bombilla);
     }
 }
 
