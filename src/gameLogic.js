@@ -7,6 +7,7 @@ let random = Math.floor((Math.random() * 7) + 1)
 //let random = 7;
 let playerXPos;
 let playerYPos;
+let isLeftActive = true;
 export default function update()
 {
 
@@ -63,6 +64,9 @@ export default function update()
 function loadPlaying()
 {
     setSprites();
+    setGorrocopteroSprites();
+    setHormigaSprites();
+    setPotionPosition(globals.sprites[2],random);
     setSpritesHUD();
 
     globals.gameState = Game.PLAYING;
@@ -72,6 +76,10 @@ function playGame()
 {
 
     updateSprites();
+    updateGorrocopteroSprites();
+    updateHomrigaSprites();
+    updateBombillaSprites();
+
     updateSpritesHUD();
 
     detectCollisionsPlayer();
@@ -134,6 +142,33 @@ function updateSprites()
     }
 }
 
+function updateGorrocopteroSprites()
+{
+    for(let i = 0; i < globals.spritesGorrocopteros.length; i++)
+    {
+        const sprite = globals.spritesGorrocopteros[i];
+        updateGorrocopteroSprite(sprite);
+    }
+}
+
+function updateHomrigaSprites()
+{
+    for(let i = 0; i < globals.spritesHormigas.length; i++)
+        {
+            const sprite = globals.spritesHormigas[i];
+            updateHormigaSprite(sprite);
+        }
+}
+
+function updateBombillaSprites()
+{
+    for(let i = 0; i < globals.spritesBombillas.length; i++)
+        {
+            const sprite = globals.spritesBombillas[i];
+            updateBombillaSprite(sprite);
+        }
+}
+
 function updateSpritesHUD()
 {
     for(let i = 0; i < globals.spritesHUD.length; i++)
@@ -149,6 +184,24 @@ function setSprites()
     {
         const sprite = globals.sprites[i];
         setSprite(sprite);
+    }
+}
+
+function setGorrocopteroSprites()
+{
+    for(let i = 0; i < globals.spritesGorrocopteros.length; i++)
+    {
+        const sprite = globals.spritesGorrocopteros[i];
+        setGorrocopteroSprite(sprite);
+    }
+}
+
+function setHormigaSprites()
+{
+    for(let i = 0; i < globals.spritesHormigas.length; i++)
+    {
+        const sprite = globals.spritesHormigas[i];
+        setHormigaSprite(sprite);
     }
 }
 
@@ -170,35 +223,60 @@ function updateSprite(sprite)
         case SpriteID.PLAYER:
             updatePlayer(sprite);
             break;
-        
-        case SpriteID.MAZE_BLOCK:
-            updateMazeBlock1(sprite);
-            break;
-        
-        case SpriteID.GORROCOPTERO:
-            updateGorrocoptero(sprite);
-            break;
-
-        case SpriteID.HORMIGA:
-            updateHormiga(sprite);
-            break;
-        
-        case SpriteID.HEALTHPOTION:
-            updateHealthPotion(sprite);
-            break;
 
         case SpriteID.THRONE:
             updateThrone(sprite);
             break;
             
-        case SpriteID.BOMBILLA:
-            updateBombilla(sprite);
-            break;
-
         case SpriteID.SHOT:
             updateShot(sprite);
             break;
         //Caso del enemigo
+        default:
+
+            break;
+    }
+}
+
+function updateGorrocopteroSprite(sprite)
+{
+    const type = sprite.id
+    switch(type)
+    {
+        case SpriteID.GORROCOPTERO:
+            updateGorrocoptero(sprite);
+            break;
+
+        default:
+
+            break;
+    }
+}
+
+function updateHormigaSprite(sprite)
+{
+    const type = sprite.id
+    switch(type)
+    {
+        case SpriteID.HORMIGA:
+            updateHormiga(sprite);
+            break;
+
+        default:
+
+            break;
+    }
+}
+
+function updateBombillaSprite(sprite)
+{
+    const type = sprite.id
+    switch(type)
+    {
+        case SpriteID.BOMBILLA:
+            updateBombilla(sprite);
+            break;
+
         default:
 
             break;
@@ -219,19 +297,47 @@ function setSprite(sprite)
             setBomb(sprite);
             break;
         
-        case SpriteID.GORROCOPTERO:
-            setGorrocoptero(sprite);
-            break;
 
-        case SpriteID.HORMIGA:
-            setHormiga(sprite);
-            break;
+
+
         
         case SpriteID.THRONE:
             setThrone(sprite);
             break;
             
         //Caso del enemigo
+        default:
+
+            break;
+    }
+}
+
+function setGorrocopteroSprite(sprite)
+{
+    const type = sprite.id
+    switch(type)
+    {
+
+        case SpriteID.GORROCOPTERO:
+            setGorrocoptero(sprite);
+            break;
+
+        default:
+
+            break;
+    }
+}
+
+function setHormigaSprite(sprite)
+{
+    const type = sprite.id
+    switch(type)
+    {
+
+        case SpriteID.HORMIGA:
+            setHormiga(sprite);
+            break;
+
         default:
 
             break;
@@ -703,14 +809,14 @@ function updateGorrocoptero(sprite) {
 
 // Función para cambiar el estado del sprite aleatoriamente cada 5 segundos
 setInterval(() => {
-    if (globals.sprites[2].state === State.UP_1 || globals.sprites[2].state === State.DOWN_1) {
+    if (globals.spritesGorrocopteros[2].state === State.UP_1 || globals.spritesGorrocopteros[2].state === State.DOWN_1) {
         // Si está en UP o DOWN, cambiar a LEFT o RIGHT
         const horizontalStates = [State.LEFT_1, State.RIGHT_1];
-        globals.sprites[2].state = horizontalStates[Math.floor(Math.random() * horizontalStates.length)];
+        globals.spritesGorrocopteros[2].state = horizontalStates[Math.floor(Math.random() * horizontalStates.length)];
     } else {
         // Si está en LEFT o RIGHT, cambiar a UP o DOWN
         const verticalStates = [State.UP_1, State.DOWN_1];
-        globals.sprites[2].state = verticalStates[Math.floor(Math.random() * verticalStates.length)];
+        globals.spritesGorrocopteros[2].state = verticalStates[Math.floor(Math.random() * verticalStates.length)];
     }
 }, 10000);
 
@@ -870,54 +976,49 @@ function updateAngerBarFill(sprite, hitNum) {
 
 }
 
-function updateHealthPotion(sprite)
-{
 
 
-    setPotionPosition(sprite,random);
 
-
+function setPotionPosition(sprite, random) {
+    const TILE_SIZE = 16;
+    const positions = [
+        { xPos: 9 * TILE_SIZE, yPos: 4 * TILE_SIZE },
+        { xPos: 20 * TILE_SIZE, yPos: 4 * TILE_SIZE },
+        { xPos: 9 * TILE_SIZE, yPos: 6 * TILE_SIZE },
+        { xPos: 20 * TILE_SIZE, yPos: 6 * TILE_SIZE },
+        { xPos: 14 * TILE_SIZE, yPos: 10 * TILE_SIZE },
+        { xPos: 7 * TILE_SIZE, yPos: 19 * TILE_SIZE },
+        { xPos: 22 * TILE_SIZE, yPos: 19 * TILE_SIZE }
+    ];
+    
+    if (random >= 1 && random <= positions.length) {
+        let selectedPosition = positions[random - 1];
+        sprite.xPos = selectedPosition.xPos;
+        sprite.yPos = selectedPosition.yPos;
+    }
 }
 
-function setPotionPosition(sprite,random) 
-{
-    const TILE_SIZE = 16;  
 
-    if (random === 1) { 
-        sprite.xPos = 9 * TILE_SIZE;  
-        sprite.yPos = 4 * TILE_SIZE;
-    }
+function updatePotionPosition(sprite) {
 
-    if (random === 2) { 
-        sprite.xPos = 20 * TILE_SIZE; 
-        sprite.yPos = 4 * TILE_SIZE;
-    }
-
-    if (random === 3) { 
-        sprite.xPos = 9 * TILE_SIZE;  
-        sprite.yPos = 6 * TILE_SIZE;
-    }
-
-    if (random === 4) { 
-        sprite.xPos = 20 * TILE_SIZE; 
-        sprite.yPos = 6 * TILE_SIZE;
-    }
-
-    if (random === 5) { 
-        sprite.xPos = 14 * TILE_SIZE; 
-        sprite.yPos = 10 * TILE_SIZE;
-    }
-
-    if (random === 6) { 
-        sprite.xPos = 7 * TILE_SIZE;  
-        sprite.yPos = 19 * TILE_SIZE;
-    }
-
-    if (random === 7) { 
-        sprite.xPos = 22 * TILE_SIZE;  
-        sprite.yPos = 19 * TILE_SIZE;
-    }
-
+    const TILE_SIZE = 16;
+    const positions = [
+        { xPos: 9 * TILE_SIZE, yPos: 4 * TILE_SIZE },
+        { xPos: 20 * TILE_SIZE, yPos: 4 * TILE_SIZE },
+        { xPos: 9 * TILE_SIZE, yPos: 6 * TILE_SIZE },
+        { xPos: 20 * TILE_SIZE, yPos: 6 * TILE_SIZE },
+        { xPos: 14 * TILE_SIZE, yPos: 10 * TILE_SIZE },
+        { xPos: 7 * TILE_SIZE, yPos: 19 * TILE_SIZE },
+        { xPos: 22 * TILE_SIZE, yPos: 19 * TILE_SIZE }
+    ];
+    
+    let randomIndex = Math.floor(Math.random() * positions.length);
+    let randomPosition = positions[randomIndex];
+    
+    sprite.xPos = randomPosition.xPos;
+    sprite.yPos = randomPosition.yPos;
+    
+    console.log("Posición seteada", randomPosition);
 }
 
 
@@ -972,8 +1073,8 @@ function updateBombilla(sprite) {
     let bombillaShot = false; // Inicializamos bombillaShot como false
 
     // Buscamos bombilla1 y bombilla2 en globals.sprites
-    bombilla1 = globals.sprites.find(sprite => sprite.id === 6);
-    bombilla2 = globals.sprites.find(sprite => sprite.id === 6);
+    bombilla1 = globals.spritesBombillas[0];
+    bombilla2 = globals.spritesBombillas[1];
 
     // Si no encontramos la bombilla1 o bombilla2, devolvemos para evitar errores
     if (!bombilla1 && !bombilla2) return;
@@ -1001,10 +1102,10 @@ function updateBombilla(sprite) {
         }
     }
 
+
     // Generamos el número aleatorio solo si no están activos los disparos y bombillaShot es verdadero
     if ((globals.shot1Active === false || globals.shot2Active === false) && bombillaShot) {
         let randomNumber = Math.random();
-        console.log(`Número aleatorio generado: ${randomNumber}`);
 
         // Llamamos a la función de disparo si el número es menor a 0.1
         if (randomNumber < 0.1) { 
@@ -1013,11 +1114,11 @@ function updateBombilla(sprite) {
             playerYPos = globals.sprites[0].yPos;
 
             // Solo se crea el disparo si no hay otro activo y si la bombilla no ha sido destruida
-            if (!globals.shot1Active && bombilla1 !== null) {
+            if (!globals.shot1Active && bombilla1.isActive === true) {
                 initShot1(bombilla1);
                 globals.shot1Active = true;
             } 
-            if (!globals.shot2Active && bombilla2 !== null) {
+            if (!globals.shot2Active ) {
                 initShot2(bombilla2);
                 globals.shot2Active = true;
             }
@@ -1032,11 +1133,11 @@ function updateShot(sprite) {
 
     // Actualizamos la posición inicial de los disparos con la posición de las bombillas
     if (sprite.id === 14) {  // Para el primer disparo
-        sprite.xPos = globals.sprites[10].xPos;
-        sprite.yPos = globals.sprites[10].yPos;
+        sprite.xPos = globals.spritesBombillas[0].xPos;
+        sprite.yPos = globals.spritesBombillas[0].yPos;
     } else if (sprite.id === 15) {  // Para el segundo disparo
-        sprite.xPos = globals.sprites[11].xPos;
-        sprite.yPos = globals.sprites[11].yPos;
+        sprite.xPos = globals.spritesBombillas[1].xPos;
+        sprite.yPos = globals.spritesBombillas[1].yPos;
     }
 
     // Usamos la última posición conocida del jugador como objetivo
@@ -1064,14 +1165,12 @@ function updateShot(sprite) {
     sprite.yPos += sprite.physics.vy * globals.deltaTime;  // Calculamos el movimiento en Y
 
     // Verificamos la nueva posición después de moverse
-    console.log("Nueva posición del disparo (ID: " + sprite.id + "):", sprite.xPos, sprite.yPos);
 
     // Temporizador para eliminar el sprite después de 5 segundos
     setTimeout(() => {
         const index = globals.sprites.indexOf(sprite);
         if (index > -1) {
             globals.sprites.splice(index, 1);
-            console.log(`Sprite eliminado en la posición ${index}`);
             
             // Restablecemos los indicadores de disparo una vez que el sprite ha sido eliminado
             globals.shot1Active = false;
@@ -1438,17 +1537,14 @@ let invulnerable = false;
 const INVULNERABLE_TIME = 1500;
 
 function updateLife() {
-    let player;
+    let player = globals.sprites[0];
     let potion;
 
     for(let i = 0; i < globals.sprites.length; i++)
     {
 
         const sprite = globals.sprites[i];
-        if(sprite.id === 0)
-        {
-            player = sprite;
-        }
+
         if(sprite.id === 8)
             {
                 potion = sprite;
@@ -1470,7 +1566,7 @@ function updateLife() {
                 if (globals.life < 3) 
                 {
                     globals.life++;
-                    setPotionPosition(potion, Math.floor(Math.random() * 7 + 1));
+                    updatePotionPosition(potion);
                     
 
                 }
@@ -1509,8 +1605,75 @@ function updateLife() {
             }
         }
     }
+    for (let i = 0; i < globals.spritesGorrocopteros.length; ++i) {
+        const sprite = globals.spritesGorrocopteros[i];
+        if (sprite.isCollidingWithPlayer && !(sprite.id === 1 ||sprite.id === 2 || sprite.id === 3)) {
+
+
+            
+                if (!invulnerable && globals.life > 0) {
+                    gotHit(player,invulnerable);
+                }
+            
+        }
+    }
+    for (let i = 0; i < globals.spritesHormigas.length; ++i) {
+        const sprite = globals.spritesHormigas[i];
+        if (sprite.isCollidingWithPlayer && !(sprite.id === 1 ||sprite.id === 2 || sprite.id === 3)) {
+
+
+            
+                if (!invulnerable && globals.life > 0) {
+                    // Reduce la vida si no está en invulnerabilidad
+                    gotHit(player,invulnerable);
+                }
+            
+        }
+    }
+    for (let i = 0; i < globals.spritesBombillas.length; ++i) {
+        const sprite = globals.spritesBombillas[i];
+        if (sprite.isCollidingWithPlayer && !(sprite.id === 1 ||sprite.id === 2 || sprite.id === 3)) {
+
+            
+                if (!invulnerable && globals.life > 0) {
+                    // Reduce la vida si no está en invulnerabilidad
+                    gotHit(player);   
+                }
+            
+        }
+    }
 }
 
+function gotHit(player,)
+{
+    globals.life--;
+
+    globals.hitNum++;
+    globals.spritesOneLifeLess[1].yPos = 140;
+
+    //oneLifeLess();
+
+    updateAngerBarFill(globals.spritesHUD[1], globals.hitNum)
+
+    // Cambia al estado HIT_* correspondiente
+    const hitState = getHitState(player.state);
+
+    player.state = hitState;
+
+    // Activa la invulnerabilidad
+    invulnerable = true;
+
+    // Configura un temporizador para restaurar el estado original y desactivar invulnerabilidad
+    setTimeout(() => {
+        const originalState = restoreOriginalState(hitState);
+        player.state = originalState;
+        invulnerable = false;
+        player.xPos = 32;
+        player.yPos = 16;
+        globals.gameState = Game.LOADING_PLAYING;
+    }, INVULNERABLE_TIME); // ← Asegúrate de que INVULNERABLE_TIME está definido
+
+}
 function updateEnemyLife() {
     let explosion;
     for (let i = 0; i < globals.sprites.length; i++) {
@@ -1520,39 +1683,71 @@ function updateEnemyLife() {
         }
     }
 
-    for (let i = 0; i < globals.sprites.length; ++i) {
-        const sprite = globals.sprites[i];
+    for (let i = 0; i < globals.spritesGorrocopteros.length; ++i) {
+        const sprite = globals.spritesGorrocopteros[i];
 
         if (sprite.isCollidingWithExplosion) 
         {
-            if (sprite === globals.sprites[2]) {
-                globals.sprites.splice(2, 1);
+            if (sprite === globals.spritesGorrocopteros[0]) {
+                globals.spritesGorrocopteros.splice(0, 1);
                 globals.score += 1000;
                 globals.enemycount += 1;
-            } else if (sprite === globals.sprites[3]) {
-                globals.sprites.splice(3, 1);
+            } else if (sprite === globals.spritesGorrocopteros[1]) {
+                globals.spritesGorrocopteros.splice(1, 1);
                 globals.score += 1000;
                 globals.enemycount += 1;
-            } else if (sprite === globals.sprites[4]) {
-                globals.sprites.splice(4, 1);
+            } else if (sprite === globals.spritesGorrocopteros[2]) {
+                globals.spritesGorrocopteros.splice(2, 1);
                 globals.score += 1000;
                 globals.enemycount += 1;
-            } else if (sprite === globals.sprites[5]) {
-                globals.sprites.splice(5, 1);
+            } else if (sprite === globals.spritesGorrocopteros[3]) {
+                globals.spritesGorrocopteros.splice(3, 1);
                 globals.score += 1000;
                 globals.enemycount += 1;
-            } else if (sprite === globals.sprites[6]) {
-                globals.sprites.splice(6, 1);
+            } else if (sprite === globals.spritesGorrocopteros[4]) {
+                globals.spritesGorrocopteros.splice(4, 1);
                 globals.score += 1000;
                 globals.enemycount += 1;
-            } else if (sprite === globals.sprites[10]) {
-                globals.sprites.splice(10, 1);
+            } else if (sprite === globals.spritesGorrocopteros[5]) {
+                globals.spritesGorrocopteros.splice(5, 1);
                 globals.score += 1000;
                 globals.enemycount += 1;
-            } else if (sprite === globals.sprites[11]) {
-                globals.sprites.splice(11, 1);
+            }
+        }
+    }
+
+    for (let i = 0; i < globals.spritesHormigas.length; ++i) {
+        const sprite = globals.spritesHormigas[i];
+
+        if (sprite.isCollidingWithExplosion) 
+        {
+            if (sprite === globals.spritesHormigas[0]) {
+                globals.spritesHormigas.splice(0, 1);
+                globals.score += 2000;
+                globals.enemycount += 1;
+            } else if (sprite === globals.spritesHormigas[1]) {
+                globals.spritesHormigas.splice(1, 1);
+                globals.score += 2000;
+                globals.enemycount += 1;
+            }
+        }
+    }
+
+    for (let i = 0; i < globals.spritesBombillas.length; ++i) {
+        const sprite = globals.spritesBombillas[i];
+
+        if (sprite.isCollidingWithExplosion) 
+        {
+            if (sprite === globals.spritesBombillas[0]) {
+                globals.spritesBombillas.splice(0, 1);
                 globals.score += 1000;
                 globals.enemycount += 1;
+                globals.spritesBombillas[0].isActive = false;
+            } else if (sprite === globals.spritesBombillas[1]) {
+                globals.spritesBombillas.splice(1, 1);
+                globals.score += 1000;
+                globals.enemycount += 1;
+                globals.spritesBombillas[1].isActive = false;
             }
         }
     }
