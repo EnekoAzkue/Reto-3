@@ -37,6 +37,9 @@ export default
 
     //Array con los datos de los sprites
     sprites: [],
+    spritesGorrocopteros: [],
+    spritesHormigas: [],
+    spritesBombillas: [],
     spritesHUD: [],
     spritesMain: [],
     spritesControls: [],
