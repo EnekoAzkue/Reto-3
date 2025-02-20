@@ -69,7 +69,9 @@ function drawGame()
     moveCamera();
 
     //Dibujamos el mapa(nivel)
+
     renderMap();
+    
 
     //Dibujamos los elementos
     drawSprites();
@@ -276,16 +278,19 @@ let texto = [
     "with his weapons, but that will",
     "be the least of his problems",
     "since the throne follows him,",
-    "very closely."
+    "very",
+    "closely."
 ];
 
-let yOffset = 250; // Posición inicial del texto
-const TEXT_SCROLL_SPEED = 0.2; // Velocidad de desplazamiento del texto
-const TEXT_SCALE_SPEED = 0.001; // Velocidad de reducción del texto
+let yOffset = 400; 
+const INITIAL_TEXT_SCROLL_SPEED = 1.05; // Velocidad inicial más rápida
+let textScrollSpeed = INITIAL_TEXT_SCROLL_SPEED; // Velocidad dinámica
+const TEXT_SCALE_SPEED = 0.0005; // Reducción del texto 
+const DECELERATION_FACTOR = 0.998; // Factor de desaceleración
 
 function drawStory() {
     if (globals.gameState !== Game.STORY) {
-        return; // Salir si el estado del juego no es STORY
+        return;
     }
 
     globals.ctx.clearRect(0, 0, globals.canvas.width, globals.canvas.height);
@@ -294,11 +299,11 @@ function drawStory() {
     renderStoryScreen();
     renderHUDStory();
 
-    globals.ctx.save(); // Guardar el estado del contexto
+    globals.ctx.save();
 
-    // Aplicar transformación para el efecto de desplazamiento y reducción
     globals.ctx.translate(globals.canvas.width / 2, yOffset);
-    globals.ctx.scale(1 - TEXT_SCALE_SPEED * (300 - yOffset), 1 - TEXT_SCALE_SPEED * (300 - yOffset));
+    let scale = Math.max(0.5, 1 - TEXT_SCALE_SPEED * (400 - yOffset));
+    globals.ctx.scale(scale, scale); 
 
     globals.ctx.font = '24px emulogic';
     globals.ctx.fillStyle = 'red';
@@ -312,23 +317,41 @@ function drawStory() {
     globals.ctx.lineWidth = 1;         
 
     for (let i = 0; i < texto.length; i++) {
-        if (i === texto.length - 1) {
-            globals.ctx.font = '20px emulogic';
-            globals.ctx.fillStyle = 'red'; // Última línea en rojo
-        } else {
-            globals.ctx.fillStyle = 'white'; // Otras líneas en blanco
+        let textWidth = globals.ctx.measureText(texto[i]).width;
+        if (textWidth > globals.canvas.width * 0.8) {
+            globals.ctx.font = '8px emulogic';
         }
-        globals.ctx.strokeText(texto[i], -globals.ctx.measureText(texto[i]).width / 2, 30 + i * 20);  
-        globals.ctx.fillText(texto[i], -globals.ctx.measureText(texto[i]).width / 2, 30 + i * 20);    
+        let yPos = 50 + i * 20;
+        if (i === texto.length - 2) {
+            globals.ctx.font = '40px emulogic';
+            globals.ctx.fillStyle = 'red'; 
+            yPos += 25; // Separar más las últimas dos líneas
+        }
+        else if(i === texto.length - 1) 
+        {
+            yPos += 50; 
+            globals.ctx.font = '40px emulogic';
+        }
+        else 
+        {
+            globals.ctx.fillStyle = 'white'; 
+        }
+        globals.ctx.strokeText(texto[i], -globals.ctx.measureText(texto[i]).width / 2, yPos);  
+        globals.ctx.fillText(texto[i], -globals.ctx.measureText(texto[i]).width / 2, yPos);    
     }
+    
 
     globals.ctx.restore(); // Restaurar el estado del contexto
 
-    // Actualizar la posición y el tamaño del texto
-    if (yOffset > -texto.length * 20) {
-        yOffset -= TEXT_SCROLL_SPEED;
+    // Actualizar la posición y el tamaño del texto con desaceleración progresiva
+    if (yOffset > -texto.length * 40) {
+        yOffset -= textScrollSpeed;
+        textScrollSpeed *= DECELERATION_FACTOR; 
     }
 }
+
+
+
 
 setInterval(() => {
     if (globals.gameState === Game.STORY) {
@@ -575,8 +598,8 @@ function drawSpritesHUD()
 //Funcion que dibuja el mapa
 function renderMap()
 {
-    const brickSize = globals.Level.imageSet.gridSize;
-    const levelData = globals.Level.data;
+    const brickSize = globals.levels[globals.currentLevel].imageSet.gridSize;
+    const levelData = globals.levels[globals.currentLevel].data;
 
     //Dibujamos el mapa
     const num_fil = levelData.length;
@@ -611,6 +634,7 @@ function renderMap()
         }
     }
 }
+
 
 function renderMainScreen()
 {
