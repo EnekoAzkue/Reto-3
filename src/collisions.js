@@ -5,7 +5,25 @@ export function detectCollisionsPlayer() {
     // Calculamos colisión del player con cada uno de los sprites
     for (let i = 1; i < globals.sprites.length; i++) {
         const sprite = globals.sprites[i];
-        if (sprite.id > 0) {
+        if (sprite.id != 0) {
+            detectCollisionBetweenPlayerAndSprite(sprite);  // Colisión con sprite
+        }
+    }
+    for (let i = 0; i < globals.spritesGorrocopteros.length; i++) {
+        const sprite = globals.spritesGorrocopteros[i];
+        if (sprite.id != 0) {
+            detectCollisionBetweenPlayerAndSprite(sprite);  // Colisión con sprite
+        }
+    }
+    for (let i = 0; i < globals.spritesHormigas.length; i++) {
+        const sprite = globals.spritesHormigas[i];
+        if (sprite.id != 0) {
+            detectCollisionBetweenPlayerAndSprite(sprite);  // Colisión con sprite
+        }
+    }
+    for (let i = 0; i < globals.spritesBombillas.length; i++) {
+        const sprite = globals.spritesBombillas[i];
+        if (sprite.id != 0) {
             detectCollisionBetweenPlayerAndSprite(sprite);  // Colisión con sprite
         }
     }
@@ -18,6 +36,27 @@ export function detectCollisionsExplosion() {
     // Calculamos colisión de la explosion con cada uno de los sprites
     for (let i = 0; i < globals.sprites.length; i++) {
         const sprite = globals.sprites[i];
+        if (sprite.id != 1) 
+        {
+            detectCollisionBetweenExplosionAndSprite(sprite);  // Colisión con sprite
+        }
+    }
+    for (let i = 0; i < globals.spritesGorrocopteros.length; i++) {
+        const sprite = globals.spritesGorrocopteros[i];
+        if (sprite.id != 1) 
+        {
+            detectCollisionBetweenExplosionAndSprite(sprite);  // Colisión con sprite
+        }
+    }
+    for (let i = 0; i < globals.spritesHormigas.length; i++) {
+        const sprite = globals.spritesHormigas[i];
+        if (sprite.id != 1) 
+        {
+            detectCollisionBetweenExplosionAndSprite(sprite);  // Colisión con sprite
+        }
+    }
+    for (let i = 0; i < globals.spritesBombillas.length; i++) {
+        const sprite = globals.spritesBombillas[i];
         if (sprite.id != 1) 
         {
             detectCollisionBetweenExplosionAndSprite(sprite);  // Colisión con sprite
@@ -50,7 +89,6 @@ function detectCollisionBetweenPlayerAndSprite(sprite) {
     {
         // Si hay colisión, marcarla como tal
         sprite.isCollidingWithPlayer = true;
-
     }
 }
 
@@ -486,9 +524,9 @@ function detectCollisionBetweenExplosionAndMapObstacles()
 
 export function detectCollisionBetweenGorrocopteroAndMapObstacles()
 {
-    for (let i = 0; i < globals.sprites.length; i++) 
+    for (let i = 0; i < globals.spritesGorrocopteros.length; i++) 
     {
-        const sprite = globals.sprites[i];
+        const sprite = globals.spritesGorrocopteros[i];
         if (sprite.id === SpriteID.GORROCOPTERO) 
         {
             const gorrocoptero = sprite;
@@ -676,9 +714,9 @@ export function detectCollisionBetweenGorrocopteroAndMapObstacles()
 }
 
 export function detectCollisionBetweenHormigaAndMapObstacles() {
-    for (let i = 0; i < globals.sprites.length; i++) 
+    for (let i = 0; i < globals.spritesHormigas.length; i++) 
         {
-            const sprite = globals.sprites[i];
+            const sprite = globals.spritesHormigas[i];
             if (sprite.id === SpriteID.HORMIGA) 
             {
                 const ant = sprite;
