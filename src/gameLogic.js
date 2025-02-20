@@ -93,6 +93,7 @@ function playGame()
 
     updateLife();
     updateEnemyLife();
+    updateMap();
 }
 
 function gameOver()
@@ -515,8 +516,8 @@ function setPlayer(sprite)
 //Funcion que actualiza el presonaje
 function updatePlayer(sprite)
 {
+    console.log(sprite.frames.frameChangeCounter);
     //Aqui actualizariamos el estado de las variables del player
-
     readKeyboardAndAssignState(sprite);
 
     switch (sprite.state)
@@ -1476,7 +1477,7 @@ function updateAnimationFrame(sprite)
     sprite.frames.frameChangeCounter++;
 
     //Cambiamos de frame cuando el lag de animacion alcanza animSpeed
-    if (sprite.frames.frameChangeCounter === sprite.frames.speed)
+    if (sprite.frames.frameChangeCounter >= sprite.frames.speed)
     {
         //Cambios de frame y reseteamos el contador de cambio de frame 
         sprite.frames.frameCounter++;
@@ -1897,5 +1898,22 @@ function updateExplosionParticle(particle)
     }
     particle.xPos += particle.vx * globals.deltaTime;
     particle.yPos += particle.vy * globals.deltaTime;
+
+}
+
+function updateMap()
+{
+    if(globals.score >= 0)
+    {
+        globals.levels[globals.currentLevel].data[11][14] = 43
+        globals.levels[globals.currentLevel].data[11][15] = 43
+        globals.levels[globals.currentLevel].data[12][14] = 43
+        globals.levels[globals.currentLevel].data[12][15] = 43
+    }
+
+    if((globals.sprites[0].xPos >= 224 && globals.sprites[0].xPos <= 256) && (globals.sprites[0].yPos >= 176 && globals.sprites[0].yPos <= 208))
+    {
+        globals.gameState = Game.OVER;
+    }
 
 }
