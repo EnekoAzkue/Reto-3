@@ -73,6 +73,9 @@ function drawGame()
 
     //Dibujamos los elementos
     drawSprites();
+    drawGorrocopteros();
+    drawHormigas();
+    drawBombillas();
 
 
     restoreCamera();
@@ -472,6 +475,66 @@ function drawSprites()
     for(let i = 0; i < globals.sprites.length; i++)
     {
         const sprite = globals.sprites[i];
+
+
+
+        //TEST: Dibuja un rectangulo alrededor del sprite(hitbox)
+        //drawSpriteRectangle(sprite);
+
+        renderSprite(sprite);
+
+        //TEST: Dibuja el hitBox
+        //drawHitBox(sprite);
+    }
+
+}
+
+function drawGorrocopteros()
+{
+
+    for(let i = 0; i < globals.spritesGorrocopteros.length; i++)
+    {
+        const sprite = globals.spritesGorrocopteros[i];
+
+
+
+        //TEST: Dibuja un rectangulo alrededor del sprite(hitbox)
+        //drawSpriteRectangle(sprite);
+
+        renderSprite(sprite);
+
+        //TEST: Dibuja el hitBox
+        //drawHitBox(sprite);
+    }
+
+}
+
+function drawHormigas()
+{
+
+    for(let i = 0; i < globals.spritesHormigas.length; i++)
+    {
+        const sprite = globals.spritesHormigas[i];
+
+
+
+        //TEST: Dibuja un rectangulo alrededor del sprite(hitbox)
+        //drawSpriteRectangle(sprite);
+
+        renderSprite(sprite);
+
+        //TEST: Dibuja el hitBox
+        //drawHitBox(sprite);
+    }
+
+}
+
+function drawBombillas()
+{
+
+    for(let i = 0; i < globals.spritesBombillas.length; i++)
+    {
+        const sprite = globals.spritesBombillas[i];
 
 
 
