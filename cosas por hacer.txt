@@ -2,7 +2,9 @@
 - tabla de scores
 - particulas
 - hacer que loadplaying tenga una pantalla para ver el nivel
-
+- nuevo enemigo que ponga bloques por donde pasa
+- cuando mueran todos los enemigos cambiar el mapa
+    - hacer que cargue el mapa bien, hay que cambiar todas las colisiones y mas cosas
 ----------
 bug:
 
