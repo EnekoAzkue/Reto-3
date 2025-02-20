@@ -138,8 +138,8 @@ function rectIntersect(x1,y1,w1,h1,x2,y2,w2,h2)
 
 function getMapTileId(xPos,yPos)
 {
-    const brickSize = globals.Level.imageSet.gridSize;
-    const levelData = globals.Level.data;
+    const brickSize = globals.levels[globals.currentLevel].imageSet.gridSize;
+    const levelData = globals.levels[globals.currentLevel].data;
 
     const fil = Math.floor(xPos/brickSize);
     const col = Math.floor(yPos/brickSize);
@@ -186,7 +186,7 @@ function detectCollisionBetweenPlayerAndMapObstacles()
     let isColliding;
     let overlap;
 
-    const brickSize = globals.Level.imageSet.gridSize;
+    const brickSize = globals.levels[globals.currentLevel].imageSet.gridSize;
     const direction = player.state;
 
     //ID del obstaculo
@@ -341,7 +341,7 @@ function detectCollisionBetweenExplosionAndMapObstacles()
     let isCollidingOnPos7;
     let isCollidingOnPos8;
 
-    const brickSize = globals.Level.imageSet.gridSize;
+    const brickSize = globals.levels[globals.currentLevel].imageSet.gridSize;
 
     //ID del obstaculo
     //obstaculos:
@@ -445,7 +445,7 @@ function detectCollisionBetweenExplosionAndMapObstacles()
         const fil = Math.floor((xPos - 16)/brickSize);
         const col = Math.floor((yPos - 16)/brickSize);
 
-        globals.Level.data[col - 1][fil - 1] = 4;
+        globals.levels[globals.currentLevel].data[col - 1][fil - 1] = 4;
     }
     if(isCollidingOnPos2)
     {
@@ -455,7 +455,7 @@ function detectCollisionBetweenExplosionAndMapObstacles()
         const fil = Math.floor((xPos)/brickSize);
         const col = Math.floor((yPos - 16)/brickSize);
 
-        globals.Level.data[col - 1][fil - 1] = 4;
+        globals.levels[globals.currentLevel].data[col - 1][fil - 1] = 4;
     }
     if(isCollidingOnPos3)
     {
@@ -465,7 +465,7 @@ function detectCollisionBetweenExplosionAndMapObstacles()
         const fil = Math.floor((xPos + 16)/brickSize);
         const col = Math.floor((yPos - 16)/brickSize);
 
-        globals.Level.data[col - 1][fil - 1] = 4;
+        globals.levels[globals.currentLevel].data[col - 1][fil - 1] = 4;
     }
     if(isCollidingOnPos4)
     {
@@ -475,7 +475,7 @@ function detectCollisionBetweenExplosionAndMapObstacles()
         const fil = Math.floor((xPos - 16)/brickSize);
         const col = Math.floor((yPos)/brickSize);
 
-        globals.Level.data[col - 1][fil - 1] = 4;
+        globals.levels[globals.currentLevel].data[col - 1][fil - 1] = 4;
     }
     if(isCollidingOnPos5)
     {
@@ -485,7 +485,7 @@ function detectCollisionBetweenExplosionAndMapObstacles()
         const fil = Math.floor((xPos + 16)/brickSize);
         const col = Math.floor((yPos)/brickSize);
 
-        globals.Level.data[col - 1][fil - 1] = 4;
+        globals.levels[globals.currentLevel].data[col - 1][fil - 1] = 4;
     }
     if(isCollidingOnPos6)
     {
@@ -495,7 +495,7 @@ function detectCollisionBetweenExplosionAndMapObstacles()
         const fil = Math.floor((xPos - 16)/brickSize);
         const col = Math.floor((yPos + 16)/brickSize);
 
-        globals.Level.data[col - 1][fil - 1] = 4;
+        globals.levels[globals.currentLevel].data[col - 1][fil - 1] = 4;
     }
     if(isCollidingOnPos7)
     {
@@ -505,7 +505,7 @@ function detectCollisionBetweenExplosionAndMapObstacles()
         const fil = Math.floor((xPos)/brickSize);
         const col = Math.floor((yPos + 16)/brickSize);
 
-        globals.Level.data[col - 1][fil - 1] = 4;
+        globals.levels[globals.currentLevel].data[col - 1][fil - 1] = 4;
     }
     if(isCollidingOnPos8)
     {
@@ -515,7 +515,7 @@ function detectCollisionBetweenExplosionAndMapObstacles()
         const fil = Math.floor((xPos + 16)/brickSize);
         const col = Math.floor((yPos + 16)/brickSize);
 
-        globals.Level.data[col - 1][fil - 1] = 4;
+        globals.levels[globals.currentLevel].data[col - 1][fil - 1] = 4;
     }
     
 
@@ -547,7 +547,7 @@ export function detectCollisionBetweenGorrocopteroAndMapObstacles()
     let isColliding;
     let overlap;
 
-    const brickSize = globals.Level.imageSet.gridSize;
+    const brickSize = globals.levels[globals.currentLevel].imageSet.gridSize;
     const direction = gorrocoptero.state;
 
     //ID del obstaculo
@@ -739,7 +739,7 @@ export function detectCollisionBetweenHormigaAndMapObstacles() {
     
     let overlap;
 
-    const brickSize = globals.Level.imageSet.gridSize;
+    const brickSize = globals.levels[globals.currentLevel].imageSet.gridSize;
     const direction = ant.state;
 
     // ID del obstáculo
