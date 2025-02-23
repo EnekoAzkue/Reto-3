@@ -38,8 +38,12 @@ export default
     //Array con los datos de los sprites
     sprites: [],
     spritesGorrocopteros: [],
+    spritesGorrocopteroslvl2: [],
     spritesHormigas: [],
+    spritesHormigaslvl2: [],
     spritesBombillas: [],
+    spritesBombillaslvl2: [],
+
     spritesHUD: [],
     spritesMain: [],
     spritesControls: [],
@@ -50,6 +54,7 @@ export default
     
     //Datos del nivel
     currentLevel: 0,
+    currentWorld: 0,
     levels: [],
     Level: {},
     Level2: {},
@@ -72,6 +77,7 @@ export default
     life: 0,
 
     enemycount: 0,
+    gorroCounter: 0,
 
     score: 0,
 
@@ -81,5 +87,6 @@ export default
 
     shot1Active: false,
     shot2Active: false,
-
+    shot3Active: false,
+    shot4Active: false,
 };
