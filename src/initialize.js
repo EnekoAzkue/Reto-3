@@ -108,9 +108,9 @@ function initSprites()
     initBomb();
     initGorrocoptero();
     initHormiga();
+    initBombilla();
     initHeart();
     initHealthPotion();
-    initBombilla();
     initThrone();
     initAngerBarrFill();
     initAngerBar();
@@ -395,20 +395,33 @@ function initGorrocoptero()
 
     const hitBox = new HitBox(14,14,1,9);
 
-    const attributes = 
-    [
-        { state: State.RIGHT_1, xPos: 80, yPos: 55 },
-        { state: State.LEFT_1, xPos: 384, yPos: 55 },
-        { state: State.LEFT_1, xPos: 160, yPos: 216 },
-        { state: State.RIGHT_1, xPos: 304, yPos: 216 },
-        { state: State.RIGHT_1, xPos: 192, yPos: 136 },
-        { state: State.RIGHT_1, xPos: 272, yPos: 136 },
-    ];
+    let attributes = [
+        [
+            { state: State.RIGHT_1, xPos: 80, yPos: 55 },
+            { state: State.LEFT_1, xPos: 384, yPos: 55 },
+            { state: State.LEFT_1, xPos: 160, yPos: 216 },
+            { state: State.RIGHT_1, xPos: 304, yPos: 216 },
+            { state: State.RIGHT_1, xPos: 192, yPos: 136 },
+            { state: State.RIGHT_1, xPos: 272, yPos: 136 },
+        ],
+        [
+            { state: State.RIGHT_1, xPos: 192, yPos: 64 },
+            { state: State.LEFT_1, xPos: 192, yPos: 256 },
+            { state: State.LEFT_1, xPos: 80, yPos: 160 },
+            { state: State.RIGHT_1, xPos: 304, yPos: 160 },
+        ]
+    ]
 
-    for (let i = 0; i < attributes.length; i++) {
-        const { state, xPos, yPos } = attributes[i];
-        const gorrocoptero = new Sprite(SpriteID.GORROCOPTERO, state, xPos, yPos, imageSet, frames, physics, hitBox);
+
+    for (let i = 0; i < attributes[0].length; i++) {
+        const { state, xPos, yPos } = attributes[0][i];
+        const gorrocoptero = new Bombilla(SpriteID.GORROCOPTERO, state, xPos, yPos, imageSet, frames, physics, hitBox);
         globals.spritesGorrocopteros.push(gorrocoptero);
+    }
+    for (let i = 0; i < attributes[1].length; i++) {
+        const { state, xPos, yPos } = attributes[1][i];
+        const gorrocoptero = new Bombilla(SpriteID.GORROCOPTERO, state, xPos, yPos, imageSet, frames, physics, hitBox);
+        globals.spritesGorrocopteroslvl2.push(gorrocoptero);
     }
 
 
@@ -430,15 +443,29 @@ function initHormiga()
     const physics = new Physics(20,0,0,0,0,0);
 
     const hitBox = new HitBox(14,7,4,8)
+    let attributes = [
+        [
+            { state: State.TL, xPos: 192, yPos: 88 },
+            { state: State.DR, xPos: 280, yPos: 88 },
+        ],
+        [
+            { state: State.TL, xPos: 192, yPos: 176 },
+            { state: State.DR, xPos: 272, yPos: 176 },
+        ]
+    ]
 
-    //Creamos nuestro sprite
-    const hormiga = new Hormiga(SpriteID.HORMIGA, State.TL, 110, 105, imageSet, frames, physics,hitBox);
 
-    hormiga.physics.vx = hormiga.physics.vLimit;
-    hormiga.physics.vy = hormiga.physics.vLimit;
+    for (let i = 0; i < attributes[0].length; i++) {
+        const { state, xPos, yPos } = attributes[0][i];
+        const hormiga = new Bombilla(SpriteID.HORMIGA, state, xPos, yPos, imageSet, frames, physics, hitBox);
+        globals.spritesHormigas.push(hormiga);
+    }
+    for (let i = 0; i < attributes[1].length; i++) {
+        const { state, xPos, yPos } = attributes[1][i];
+        const hormiga = new Bombilla(SpriteID.HORMIGA, state, xPos, yPos, imageSet, frames, physics, hitBox);
+        globals.spritesHormigaslvl2.push(hormiga);
+    }
 
-    //Añadimos el player al array de sprites
-    globals.spritesHormigas.push(hormiga);
 }
 
 function initBombilla()
@@ -453,21 +480,33 @@ function initBombilla()
     //Creamos los datos de la animacion. 8 frames / state
     const frames = new Frames(31, 4);
 
-    const hitBox = new HitBox(16,16,0,0)
+    const hitBox = new HitBox(14,14,1,1)
 
     //Creamos nuestro sprite
+    let attributes = [
+        [ // Nivel 0
+            { xPos: 144, yPos: 272 },
+            { xPos: 320, yPos: 272 },
 
-    const attributes = 
-    [
-        { xPos: 144, yPos: 272 },
-        { xPos: 320, yPos: 272 },
-
+        ],
+        [ // Nivel 1
+            { xPos: 112, yPos: 96},
+            { xPos: 112, yPos: 272},
+            { xPos: 352, yPos: 96},
+            { xPos: 352, yPos: 272}
+        ]
     ];
+    
 
-    for (let i = 0; i < attributes.length; i++) {
-        const { xPos, yPos } = attributes[i];
+    for (let i = 0; i < attributes[0].length; i++) {
+        const { xPos, yPos } = attributes[0][i];
         const bombilla = new Bombilla(SpriteID.BOMBILLA, State.ACTIVE, xPos, yPos, imageSet, frames, 0, hitBox, true);
         globals.spritesBombillas.push(bombilla);
+    }
+    for (let i = 0; i < attributes[1].length; i++) {
+        const { xPos, yPos } = attributes[1][i];
+        const bombilla = new Bombilla(SpriteID.BOMBILLA, State.ACTIVE, xPos, yPos, imageSet, frames, 0, hitBox, true);
+        globals.spritesBombillaslvl2.push(bombilla);
     }
 }
 
@@ -511,6 +550,87 @@ function initShot2()
     globals.sprites.push(shot);
 }
 
+function initShot3()
+{
+    let x = 0;
+    let y = 36;
+    let xOffset = 16*x + x;
+    let yOffset = 16*y + y - 2;
+    //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
+    const imageSet = new ImageSet(0, 0, 16, 16, 17, xOffset, yOffset);
+
+    //Creamos los datos de la animacion. 8 frames / state
+    const frames = new Frames(2, 4);
+
+    const physics = new Physics(20,0,0,0,0,0);
+
+    const hitBox = new HitBox(16,16,0,0)
+
+    const shot = new Sprite(SpriteID.SHOT, State.STILL, 112, 96, imageSet, frames, physics, hitBox);
+    globals.sprites.push(shot);
+}
+
+function initShot4()
+{
+    let x = 0;
+    let y = 36;
+    let xOffset = 16*x + x;
+    let yOffset = 16*y + y - 2;
+    //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
+    const imageSet = new ImageSet(0, 0, 16, 16, 17, xOffset, yOffset);
+
+    //Creamos los datos de la animacion. 8 frames / state
+    const frames = new Frames(2, 4);
+
+    const physics = new Physics(20,0,0,0,0,0);
+
+    const hitBox = new HitBox(16,16,0,0)
+
+    const shot = new Sprite(SpriteID.SHOT, State.STILL, 112, 272, imageSet, frames, physics, hitBox);
+    globals.sprites.push(shot);
+}
+
+
+function initShot5()
+{
+    let x = 0;
+    let y = 36;
+    let xOffset = 16*x + x;
+    let yOffset = 16*y + y - 2;
+    //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
+    const imageSet = new ImageSet(0, 0, 16, 16, 17, xOffset, yOffset);
+
+    //Creamos los datos de la animacion. 8 frames / state
+    const frames = new Frames(2, 4);
+
+    const physics = new Physics(20,0,0,0,0,0);
+
+    const hitBox = new HitBox(16,16,0,0)
+
+    const shot = new Sprite(SpriteID.SHOT, State.STILL, 352, 96, imageSet, frames, physics, hitBox);
+    globals.sprites.push(shot);
+}
+
+function initShot6()
+{
+    let x = 0;
+    let y = 36;
+    let xOffset = 16*x + x;
+    let yOffset = 16*y + y - 2;
+    //Creamos las propiedades de las imagenes: initFil, initCol, xSize, ySize, gridSize, xOffset, yOffset
+    const imageSet = new ImageSet(0, 0, 16, 16, 17, xOffset, yOffset);
+
+    //Creamos los datos de la animacion. 8 frames / state
+    const frames = new Frames(2, 4);
+
+    const physics = new Physics(20,0,0,0,0,0);
+
+    const hitBox = new HitBox(16,16,0,0)
+
+    const shot = new Sprite(SpriteID.SHOT, State.STILL, 352, 272, imageSet, frames, physics, hitBox);
+    globals.sprites.push(shot);
+}
+
 function initHeart()
 {
     let x = 0;
@@ -523,7 +643,7 @@ function initHeart()
     //Creamos los datos de la animacion. 8 frames / state
     const frames = new Frames(4);
     //Creamos nuestro sprite
-    const heart = new Sprite(SpriteID.HEART, State.STILL, 100, 70, imageSet, frames);
+    const heart = new Sprite(SpriteID.HEART, State.STILL, 352, 96, imageSet, frames);
 
     //Añadimos el player al array de sprites
     globals.spritesHUD.push(heart);
@@ -544,7 +664,7 @@ function initHealthPotion()
     const hitBox = new HitBox(6,4,6,5)
 
     //Creamos nuestro sprite
-    const healthPotion = new Sprite(SpriteID.HEALTHPOTION, State.STILL, 64, 112, imageSet, frames,0,hitBox);
+    const healthPotion = new Sprite(SpriteID.HEALTHPOTION, State.STILL, 352, 272, imageSet, frames,0,hitBox);
 
     //Añadimos el player al array de sprites
     globals.sprites.push(healthPotion);
@@ -732,4 +852,11 @@ export
     initParticles,
     initShot1,
     initShot2,
+    initShot3,
+    initShot4,
+    initShot5,
+    initShot6,
+    initGorrocoptero,
+    initHormiga,
+    initBombilla,
 }
