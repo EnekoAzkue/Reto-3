@@ -14,15 +14,11 @@ export default function render()
             break;
 
         case Game.LOADING_PLAYING:
-            console.log("hay que hacer cositas, como el spinner");
+            drawLoadingLvl();
             break;
 
         case Game.PLAYING:
             drawGame();
-            break;
-
-        case Game.OVER:
-            drawOver();
             break;
             
 
@@ -107,6 +103,71 @@ function drawOver()
     globals.ctx.fillText("OVER"     , 74, 125);
 
 }
+
+let loadingProgress = 0;
+let loadingComplete = false;
+
+function drawLoadingLvl() {
+    
+    // Borrar la pantalla
+    globals.ctx.clearRect(0, 0, globals.canvas.width, globals.canvas.height);
+    globals.ctxHUD.clearRect(0, 0, globals.canvasHUD.width, globals.canvasHUD.height);
+
+    renderOverScreen();
+
+    // Dibujar texto del mundo y nivel
+    globals.ctx.strokeStyle = 'black';
+    globals.ctx.font = '40px zwackery';
+    globals.ctx.fillStyle = 'white';
+    let levelText = `${globals.currentWorld + 1} - ${globals.currentLevel + 1}`;
+    let textWidth = globals.ctx.measureText(levelText).width;
+
+    globals.ctx.strokeText(levelText, (globals.canvas.width - textWidth) / 2, globals.canvas.height / 2);
+    globals.ctx.fillText(levelText, (globals.canvas.width - textWidth) / 2, globals.canvas.height / 2);
+
+    // Posición de la barra o mensaje "READY!"
+    let barWidth = 150;
+    let barHeight = 20;
+    let barX = (globals.canvas.width - barWidth) / 2;
+    let barY = (globals.canvas.height / 2) + 50;
+
+    if (!loadingComplete) {
+        // Dibujar la barra de carga
+        globals.ctx.strokeStyle = 'black';
+        globals.ctx.strokeRect(barX, barY, barWidth, barHeight);
+
+        globals.ctx.fillStyle = 'red';
+        globals.ctx.fillRect(barX, barY, (loadingProgress / 100) * barWidth, barHeight);
+
+        // Incrementar la carga con pausas
+        let increment = Math.random() * 10;
+        loadingProgress += increment;
+        if (loadingProgress >= 100) {
+            loadingProgress = 100;
+            loadingComplete = true;
+
+            // Borra solo la barra cuando se completa
+            setTimeout(() => {
+                globals.ctx.clearRect(barX - 5, barY - 5, barWidth + 10, barHeight + 10);
+            }, 200);
+        }
+
+        setTimeout(drawLoadingLvl, 200 + Math.random() * 200);
+    } else {
+        // Dibujar el mensaje "READY!" en lugar de la barra
+        globals.ctx.font = '30px zwackery';
+        globals.ctx.fillStyle = 'white';
+        globals.ctx.fillText("READY!", barX + 20, barY + 15);
+        globals.ctx.font = '15px zwackery';
+        globals.ctx.fillText("PRESS ENTER", barX + 30, barY + 30);
+
+
+    }
+}
+
+
+
+
 
 function drawOneLifeLess()
 {
@@ -270,11 +331,11 @@ globals.ctx.fillText(texto[7], 175, 120);
 }
 
 let texto = [
-    "After managing to escape from the claws,",
-    "claws of the throne, Joseph must,",
+    "After managing to escape from the",
+    "claws of the throne, Joseph must",
     "escape from the mansion's forest,",
-    "there he will encounter various,",
-    "enemies, with whom he can deal,",
+    "there he will encounter various",
+    "enemies, with whom he can deal",
     "with his weapons, but that will",
     "be the least of his problems",
     "since the throne follows him,",
@@ -515,59 +576,114 @@ function drawSprites()
 function drawGorrocopteros()
 {
 
-    for(let i = 0; i < globals.spritesGorrocopteros.length; i++)
-    {
-        const sprite = globals.spritesGorrocopteros[i];
-
-
-
-        //TEST: Dibuja un rectangulo alrededor del sprite(hitbox)
-        //drawSpriteRectangle(sprite);
-
-        renderSprite(sprite);
-
-        //TEST: Dibuja el hitBox
-        //drawHitBox(sprite);
-    }
+    if(globals.currentLevel === 0)
+        {
+            
+            for(let i = 0; i < globals.spritesGorrocopteros.length; i++)
+                {
+                    const sprite = globals.spritesGorrocopteros[i];
+            
+                    //TEST: Dibuja un rectangulo alrededor del sprite(hitbox)
+                    //drawSpriteRectangle(sprite);
+            
+                    renderSprite(sprite);
+            
+                    //TEST: Dibuja el hitBox
+                    //drawHitBox(sprite);
+                }
+        }
+        else
+        {
+            for(let i = 0; i < globals.spritesGorrocopteroslvl2.length; i++)
+                {
+                    const sprite = globals.spritesGorrocopteroslvl2[i];
+            
+            
+            
+                    //TEST: Dibuja un rectangulo alrededor del sprite(hitbox)
+                    //drawSpriteRectangle(sprite);
+            
+                    renderSprite(sprite);
+            
+                    //TEST: Dibuja el hitBox
+                    //drawHitBox(sprite);
+                }
+        }
 
 }
 
 function drawHormigas()
 {
 
-    for(let i = 0; i < globals.spritesHormigas.length; i++)
-    {
-        const sprite = globals.spritesHormigas[i];
 
-
-
-        //TEST: Dibuja un rectangulo alrededor del sprite(hitbox)
-        //drawSpriteRectangle(sprite);
-
-        renderSprite(sprite);
-
-        //TEST: Dibuja el hitBox
-        //drawHitBox(sprite);
-    }
+    if(globals.currentLevel === 0)
+        {
+            
+            for(let i = 0; i < globals.spritesHormigas.length; i++)
+                {
+                    const sprite = globals.spritesHormigas[i];
+            
+                    //TEST: Dibuja un rectangulo alrededor del sprite(hitbox)
+                    //drawSpriteRectangle(sprite);
+            
+                    renderSprite(sprite);
+            
+                    //TEST: Dibuja el hitBox
+                    //drawHitBox(sprite);
+                }
+        }
+        else
+        {
+            for(let i = 0; i < globals.spritesHormigaslvl2.length; i++)
+                {
+                    const sprite = globals.spritesHormigaslvl2[i];
+            
+            
+            
+                    //TEST: Dibuja un rectangulo alrededor del sprite(hitbox)
+                    //drawSpriteRectangle(sprite);
+            
+                    renderSprite(sprite);
+            
+                    //TEST: Dibuja el hitBox
+                    //drawHitBox(sprite);
+                }
+        }
 
 }
 
 function drawBombillas()
 {
-
-    for(let i = 0; i < globals.spritesBombillas.length; i++)
+    if(globals.currentLevel === 0)
     {
-        const sprite = globals.spritesBombillas[i];
+        
+        for(let i = 0; i < globals.spritesBombillas.length; i++)
+        {
+            const sprite = globals.spritesBombillas[i];
 
+            //TEST: Dibuja un rectangulo alrededor del sprite(hitbox)
+            //drawSpriteRectangle(sprite);
 
+            renderSprite(sprite);
 
-        //TEST: Dibuja un rectangulo alrededor del sprite(hitbox)
-        //drawSpriteRectangle(sprite);
-
-        renderSprite(sprite);
-
-        //TEST: Dibuja el hitBox
-        //drawHitBox(sprite);
+            //TEST: Dibuja el hitBox
+            //drawHitBox(sprite);
+        }
+    }
+    else
+    {
+        for(let i = 0; i < globals.spritesBombillaslvl2.length; i++)
+            {
+                const sprite = globals.spritesBombillaslvl2[i];
+    
+                //TEST: Dibuja un rectangulo alrededor del sprite(hitbox)
+                //drawSpriteRectangle(sprite);
+    
+                renderSprite(sprite);
+    
+                //TEST: Dibuja el hitBox
+                drawHitBox(sprite);
+            }
     }
 
 }
