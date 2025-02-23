@@ -1,8 +1,8 @@
 import globals from "./globals.js";
 import {Game, State, SpriteID, Collision, GRAVITY, ParticleState,ParticleID} from "./constants.js";
 import Timer from "./Timer.js";
-import {detectCollisionsPlayer, detectCollisionsExplosion,detectCollisionBetweenGorrocopteroAndMapObstacles, detectCollisionBetweenHormigaAndMapObstacles} from "./collisions.js";
-import { initShot1, initShot2 } from "./initialize.js";
+import {detectCollisionsPlayer, detectCollisionsExplosion,detectCollisionBetweenGorrocopteroAndMapObstacles, detectCollisionBetweenHormigaAndMapObstacles, detectCollisionBetweenHormigaAndMapObstacleslvl2, detectCollisionBetweenGorrocopteroAndMapObstacleslvl2} from "./collisions.js";
+import { initShot1, initShot2, initShot3, initShot4, initShot5, initShot6, initBombilla,initHormiga,initGorrocoptero } from "./initialize.js";
 let random = Math.floor((Math.random() * 7) + 1)
 //let random = 7;
 let playerXPos;
@@ -61,15 +61,19 @@ export default function update()
     }
 }
 
-function loadPlaying()
-{
+function loadPlaying() {
     setSprites();
     setGorrocopteroSprites();
     setHormigaSprites();
-    setPotionPosition(globals.sprites[2],random);
+    setBombillaSprites();
+    setPotionPosition(globals.sprites[2], random);
     setSpritesHUD();
 
-    globals.gameState = Game.PLAYING;
+
+    if (globals.action.enter && canChangeScreen) {
+        globals.gameState = Game.PLAYING;
+
+    }
 }
 
 function playGame()
@@ -83,7 +87,14 @@ function playGame()
     updateSpritesHUD();
 
     detectCollisionsPlayer();
-    detectCollisionBetweenGorrocopteroAndMapObstacles();
+    if(globals.currentLevel === 0)
+    {
+        detectCollisionBetweenGorrocopteroAndMapObstacles();
+    }
+    else 
+    {
+        detectCollisionBetweenGorrocopteroAndMapObstacleslvl2();
+    }
 
     updateCamera();
 
@@ -145,29 +156,63 @@ function updateSprites()
 
 function updateGorrocopteroSprites()
 {
-    for(let i = 0; i < globals.spritesGorrocopteros.length; i++)
-    {
-        const sprite = globals.spritesGorrocopteros[i];
-        updateGorrocopteroSprite(sprite);
-    }
+
+    if(globals.currentLevel === 0)
+        {
+            for(let i = 0; i < globals.spritesGorrocopteros.length; i++)
+                {
+                    const sprite = globals.spritesGorrocopteros[i];
+                    updateGorrocopteroSprite(sprite);
+                }
+        }
+        else
+        {
+            for(let i = 0; i < globals.spritesGorrocopteroslvl2.length; i++)
+                {
+                    const sprite = globals.spritesGorrocopteroslvl2[i];
+                    updateGorrocopteroSprite(sprite);
+                }
+        }
 }
 
 function updateHomrigaSprites()
 {
-    for(let i = 0; i < globals.spritesHormigas.length; i++)
+    if(globals.currentLevel === 0)
         {
-            const sprite = globals.spritesHormigas[i];
-            updateHormigaSprite(sprite);
+            for(let i = 0; i < globals.spritesHormigas.length; i++)
+                {
+                    const sprite = globals.spritesHormigas[i];
+                    updateHormigaSprite(sprite);
+                }
+        }
+        else
+        {
+            for(let i = 0; i < globals.spritesHormigaslvl2.length; i++)
+                {
+                    const sprite = globals.spritesHormigaslvl2[i];
+                    updateHormigaSprite(sprite);
+                }
         }
 }
 
 function updateBombillaSprites()
 {
-    for(let i = 0; i < globals.spritesBombillas.length; i++)
-        {
-            const sprite = globals.spritesBombillas[i];
-            updateBombillaSprite(sprite);
-        }
+    if(globals.currentLevel === 0)
+    {
+        for(let i = 0; i < globals.spritesBombillas.length; i++)
+            {
+                const sprite = globals.spritesBombillas[i];
+                updateBombillaSprite(sprite);
+            }
+    }
+    else
+    {
+        for(let i = 0; i < globals.spritesBombillaslvl2.length; i++)
+            {
+                const sprite = globals.spritesBombillaslvl2[i];
+                updateBombillaSprite(sprite);
+            }
+    }
 }
 
 function updateSpritesHUD()
@@ -190,19 +235,50 @@ function setSprites()
 
 function setGorrocopteroSprites()
 {
-    for(let i = 0; i < globals.spritesGorrocopteros.length; i++)
-    {
-        const sprite = globals.spritesGorrocopteros[i];
-        setGorrocopteroSprite(sprite);
-    }
+    if(globals.currentLevel === 0)
+        {
+            for(let i = 0; i < globals.spritesGorrocopteros.length; i++)
+                {
+                    const sprite = globals.spritesGorrocopteros[i];
+                    setGorrocopteroSprite(sprite);
+                }
+        }
+        else 
+        {
+            for(let i = 0; i < globals.spritesGorrocopteroslvl2.length; i++)
+                {
+                    const sprite = globals.spritesGorrocopteroslvl2[i];
+                    setGorrocopteroSprite(sprite);
+                }
+        }
 }
 
 function setHormigaSprites()
 {
-    for(let i = 0; i < globals.spritesHormigas.length; i++)
+    if(globals.currentLevel === 0)
     {
-        const sprite = globals.spritesHormigas[i];
-        setHormigaSprite(sprite);
+        for(let i = 0; i < globals.spritesHormigas.length; i++)
+        {
+            const sprite = globals.spritesHormigas[i];
+            setHormigaSprite(sprite);
+        }
+    }
+    else 
+    {
+        for(let i = 0; i < globals.spritesHormigaslvl2.length; i++)
+        {
+            const sprite = globals.spritesHormigaslvl2[i];
+            setHormigaSprite(sprite);
+        }
+    }
+}
+
+function setBombillaSprites()
+{
+    for(let i = 0; i < globals.spritesBombillas.length; i++)
+    {
+        const sprite = globals.spritesBombillas[i];
+        setBombillaSprite(sprite);
     }
 }
 
@@ -320,7 +396,7 @@ function setGorrocopteroSprite(sprite)
     {
 
         case SpriteID.GORROCOPTERO:
-            setGorrocoptero(sprite);
+            setGorrocoptero();
             break;
 
         default:
@@ -343,6 +419,11 @@ function setHormigaSprite(sprite)
 
             break;
     }
+}
+
+function setBombillaSprite(sprite)
+{
+
 }
 
 function updateMainSprite(sprite)
@@ -516,7 +597,6 @@ function setPlayer(sprite)
 //Funcion que actualiza el presonaje
 function updatePlayer(sprite)
 {
-    console.log(sprite.frames.frameChangeCounter);
     //Aqui actualizariamos el estado de las variables del player
     readKeyboardAndAssignState(sprite);
 
@@ -773,11 +853,51 @@ function updateBombControls(sprite) {
     sprite.yPos = 108;
 }
 
-function setGorrocoptero(sprite)
-{
-    // sprite.state = State.RIGHT_1;
-    // sprite.xPos   = 80;
-    // sprite.yPos   = 55;
+function setGorrocoptero() {
+    let posiciones = [];
+    if(globals.currentLevel === 0)
+    {    
+        posiciones = [
+        { state: State.RIGHT_1, xPos: 80, yPos: 55 },
+        { state: State.LEFT_1, xPos: 384, yPos: 55 },
+        { state: State.LEFT_1, xPos: 160, yPos: 216 },
+        { state: State.RIGHT_1, xPos: 304, yPos: 216 },
+        { state: State.RIGHT_1, xPos: 192, yPos: 136 },
+        { state: State.RIGHT_1, xPos: 272, yPos: 136 }
+        ];
+
+        for (let i = 0; i < posiciones.length; i++) {
+            if (globals.spritesGorrocopteros[i]) {
+                globals.spritesGorrocopteros[i].state = posiciones[i].state;
+                globals.spritesGorrocopteros[i].xPos = posiciones[i].xPos;
+                globals.spritesGorrocopteros[i].yPos = posiciones[i].yPos;
+            }
+        }
+    }
+    else
+    {
+
+        posiciones = 
+        [
+            { state: State.RIGHT_1, xPos: 192, yPos: 64 },
+            { state: State.LEFT_1, xPos: 192, yPos: 256 },
+            { state: State.LEFT_1, xPos: 80, yPos: 160 },
+            { state: State.RIGHT_1, xPos: 304, yPos: 160 },
+
+        ];
+
+        for (let i = 0; i < posiciones.length; i++) {
+            if (globals.spritesGorrocopteroslvl2[i]) {
+                globals.spritesGorrocopteroslvl2[i].state = posiciones[i].state;
+                globals.spritesGorrocopteroslvl2[i].xPos = posiciones[i].xPos;
+                globals.spritesGorrocopteroslvl2[i].yPos = posiciones[i].yPos;
+            }
+        }
+
+
+    }
+
+
 }
 
 function updateGorrocoptero(sprite) {
@@ -819,14 +939,62 @@ setInterval(() => {
         const verticalStates = [State.UP_1, State.DOWN_1];
         globals.spritesGorrocopteros[2].state = verticalStates[Math.floor(Math.random() * verticalStates.length)];
     }
+    if (globals.spritesGorrocopteroslvl2[2].state === State.UP_1 || globals.spritesGorrocopteroslvl2[2].state === State.DOWN_1) {
+        // Si está en UP o DOWN, cambiar a LEFT o RIGHT
+        const horizontalStates = [State.LEFT_1, State.RIGHT_1];
+        globals.spritesGorrocopteroslvl2[2].state = horizontalStates[Math.floor(Math.random() * horizontalStates.length)];
+    } else {
+        // Si está en LEFT o RIGHT, cambiar a UP o DOWN
+        const verticalStates = [State.UP_1, State.DOWN_1];
+        globals.spritesGorrocopteroslvl2[2].state = verticalStates[Math.floor(Math.random() * verticalStates.length)];
+    }
 }, 10000);
 
 function setHormiga(sprite)
 {
-    sprite.state = State.TL;
-    sprite.xPos        = 192;
-    sprite.yPos        = 104;
+    let posiciones = [];
+    if(globals.currentLevel === 0)
+    {    
+        posiciones = [
+            { state: State.TL, xPos: 192, yPos: 88 },
+            { state: State.DR, xPos: 280, yPos: 88 },
+        ];
+
+        for (let i = 0; i < posiciones.length; i++) {
+            if (globals.spritesHormigas[i]) {
+                globals.spritesHormigas[i].state = posiciones[i].state;
+                globals.spritesHormigas[i].xPos = posiciones[i].xPos;
+                globals.spritesHormigas[i].yPos = posiciones[i].yPos;
+            }
+        }
+    }
+    else
+    {
+        posiciones = 
+        [
+            { state: State.TL, xPos: 192, yPos: 176 },
+            { state: State.DR, xPos: 272, yPos: 176 },
+
+        ];
+
+        for (let i = 0; i < posiciones.length; i++) {
+            if (globals.spritesHormigaslvl2[i]) {
+                globals.spritesHormigaslvl2[i].state = posiciones[i].state;
+                globals.spritesHormigaslvl2[i].xPos = posiciones[i].xPos;
+                globals.spritesHormigaslvl2[i].yPos = posiciones[i].yPos;
+            }
+        }
+
+    }
+
 }
+
+
+function setBombilla(sprite)
+{
+
+}
+
 function updateHormiga(sprite) {
     // Máquina de estados
     switch (sprite.state) {
@@ -1019,7 +1187,6 @@ function updatePotionPosition(sprite) {
     sprite.xPos = randomPosition.xPos;
     sprite.yPos = randomPosition.yPos;
     
-    console.log("Posición seteada", randomPosition);
 }
 
 
@@ -1069,16 +1236,28 @@ function updateThroneMain(sprite)
 }
 
 function updateBombilla(sprite) {
-    let bombilla1 = null;
-    let bombilla2 = null;
-    let bombillaShot = false; // Inicializamos bombillaShot como false
 
+    let bombillaShot = false; // Inicializamos bombillaShot como false
+    let bombilla1;
+    let bombilla2;
+    let bombilla3;
+    let bombilla4;
     // Buscamos bombilla1 y bombilla2 en globals.sprites
-    bombilla1 = globals.spritesBombillas[0];
-    bombilla2 = globals.spritesBombillas[1];
+    if(globals.currentLevel === 0)
+    {
+        bombilla1 = globals.spritesBombillas[0];
+        bombilla2 = globals.spritesBombillas[1];
+    }
+    else
+    {
+        bombilla1 = globals.spritesBombillaslvl2[0];
+        bombilla2 = globals.spritesBombillaslvl2[1];
+        bombilla3 = globals.spritesBombillaslvl2[2];
+        bombilla4 = globals.spritesBombillaslvl2[3];
+    }
 
     // Si no encontramos la bombilla1 o bombilla2, devolvemos para evitar errores
-    if (!bombilla1 && !bombilla2) return;
+    if (!bombilla1 && !bombilla2 && bombilla3 && bombilla4) return;
 
     if (!sprite) return; // Evita errores si el sprite no existe
 
@@ -1105,7 +1284,7 @@ function updateBombilla(sprite) {
 
 
     // Generamos el número aleatorio solo si no están activos los disparos y bombillaShot es verdadero
-    if ((globals.shot1Active === false || globals.shot2Active === false) && bombillaShot) {
+    if ((globals.shot1Active === false || globals.shot2Active === false || globals.shot3Active === false || globals.shot4Active === false) && bombillaShot) {
         let randomNumber = Math.random();
 
         // Llamamos a la función de disparo si el número es menor a 0.1
@@ -1115,31 +1294,48 @@ function updateBombilla(sprite) {
             playerYPos = globals.sprites[0].yPos;
 
             // Solo se crea el disparo si no hay otro activo y si la bombilla no ha sido destruida
-            if (!globals.shot1Active && bombilla1.isActive === true) {
-                initShot1(bombilla1);
-                globals.shot1Active = true;
-            } 
-            if (!globals.shot2Active ) {
-                initShot2(bombilla2);
-                globals.shot2Active = true;
+            if(globals.currentLevel === 0)
+            {
+                if (!globals.shot1Active && bombilla1.isActive === true) {
+                    initShot1();
+                    globals.shot1Active = true;
+                } 
+                if (!globals.shot2Active ) {
+                    initShot2();
+                    globals.shot2Active = true;
+                }
+            }
+            else 
+            {
+                if (!globals.shot1Active && bombilla1.isActive === true) {
+                    initShot3();
+
+                    globals.shot1Active = true;
+                } 
+                if (!globals.shot2Active && bombilla2.isActive === true) {
+                    initShot4();
+
+                    globals.shot2Active = true;
+                }
+                if (!globals.shot3Active && bombilla3.isActive === true  ) {
+                    initShot5();
+
+                    globals.shot3Active = true;
+                } 
+                if (!globals.shot4Active ) {
+                    initShot6();
+
+                    globals.shot4Active = true;
+                }
             }
         }
     }
 }
 
 
-
 function updateShot(sprite) {
     updateAnimationFrame(sprite);
 
-    // Actualizamos la posición inicial de los disparos con la posición de las bombillas
-    if (sprite.id === 14) {  // Para el primer disparo
-        sprite.xPos = globals.spritesBombillas[0].xPos;
-        sprite.yPos = globals.spritesBombillas[0].yPos;
-    } else if (sprite.id === 15) {  // Para el segundo disparo
-        sprite.xPos = globals.spritesBombillas[1].xPos;
-        sprite.yPos = globals.spritesBombillas[1].yPos;
-    }
 
     // Usamos la última posición conocida del jugador como objetivo
     let targetX = playerXPos;
@@ -1176,6 +1372,8 @@ function updateShot(sprite) {
             // Restablecemos los indicadores de disparo una vez que el sprite ha sido eliminado
             globals.shot1Active = false;
             globals.shot2Active = false;
+            globals.shot3Active = false;
+            globals.shot4Active = false;
         }
     }, 5000); 
 }
@@ -1200,7 +1398,7 @@ function updateMainScreen(sprite) {
             activateScreenChangeDelay();
         } else if (globals.action.enter) {
             globals.gameState = Game.LOADING_PLAYING;
-
+            activateScreenChangeDelay();
         }
     }
 }
@@ -1275,7 +1473,6 @@ function updateOneLifeLessScreen(sprite) {
     sprite.state = State.STILL;
     if(globals.respawnTime.value <= 3)
         {
-            console.log("hola");
         }
     if(globals.respawnTime.value <= 0)
     {
@@ -1374,11 +1571,7 @@ function updateRespawnTime()
         globals.respawnTime.timeChangeCounter = 0;
     }
 
-    if(globals.respawnTime.value < 1)
-    {
-        globals.gameState = Game.LOADING_PLAYING;
-        globals.respawnTime.value = 5;
-    }
+
 }
 
 function updateStoryTime()
@@ -1575,33 +1768,7 @@ function updateLife() {
             else 
             {
                 if (!invulnerable && globals.life > 0) {
-                    // Reduce la vida si no está en invulnerabilidad
-                    globals.life--;
-
-                    globals.hitNum++;
-                    globals.spritesOneLifeLess[1].yPos = 140;
-
-                    //oneLifeLess();
-
-                    updateAngerBarFill(globals.spritesHUD[1], globals.hitNum)
-
-                    // Cambia al estado HIT_* correspondiente
-                    const hitState = getHitState(player.state);
-
-                    player.state = hitState;
-
-                    // Activa la invulnerabilidad
-                    invulnerable = true;
-
-                    // Configura un temporizador para restaurar el estado original y desactivar invulnerabilidad
-                    setTimeout(() => {
-                        const originalState = restoreOriginalState(hitState);
-                        player.state = originalState;
-                        invulnerable = false;
-                        player.xPos = 32;
-                        player.yPos = 16;
-                        globals.gameState = Game.LOADING_PLAYING;
-                    }, INVULNERABLE_TIME); // ← Asegúrate de que INVULNERABLE_TIME está definido
+                    gotHit(player,invulnerable);
                 }
             }
         }
@@ -1631,8 +1798,33 @@ function updateLife() {
             
         }
     }
+    for (let i = 0; i < globals.spritesHormigaslvl2.length; ++i) {
+        const sprite = globals.spritesHormigaslvl2[i];
+        if (sprite.isCollidingWithPlayer && !(sprite.id === 1 ||sprite.id === 2 || sprite.id === 3)) {
+
+
+            
+                if (!invulnerable && globals.life > 0) {
+                    // Reduce la vida si no está en invulnerabilidad
+                    gotHit(player,invulnerable);
+                }
+            
+        }
+    }
     for (let i = 0; i < globals.spritesBombillas.length; ++i) {
         const sprite = globals.spritesBombillas[i];
+        if (sprite.isCollidingWithPlayer && !(sprite.id === 1 ||sprite.id === 2 || sprite.id === 3)) {
+
+            
+                if (!invulnerable && globals.life > 0) {
+                    // Reduce la vida si no está en invulnerabilidad
+                    gotHit(player);   
+                }
+            
+        }
+    }
+    for (let i = 0; i < globals.spritesBombillaslvl2.length; ++i) {
+        const sprite = globals.spritesBombillaslvl2[i];
         if (sprite.isCollidingWithPlayer && !(sprite.id === 1 ||sprite.id === 2 || sprite.id === 3)) {
 
             
@@ -1671,7 +1863,10 @@ function gotHit(player,)
         invulnerable = false;
         player.xPos = 32;
         player.yPos = 16;
-        globals.gameState = Game.LOADING_PLAYING;
+        if(globals.gameState === Game.PLAYING)
+        {
+            globals.gameState = Game.LOADING_PLAYING;
+        }
     }, INVULNERABLE_TIME); // ← Asegúrate de que INVULNERABLE_TIME está definido
 
 }
@@ -1691,28 +1886,62 @@ function updateEnemyLife() {
         {
             if (sprite === globals.spritesGorrocopteros[0]) {
                 globals.spritesGorrocopteros.splice(0, 1);
-                globals.score += 1000;
+                globals.score += 1500;
                 globals.enemycount += 1;
+                globals.gorroCounter += 1;
             } else if (sprite === globals.spritesGorrocopteros[1]) {
                 globals.spritesGorrocopteros.splice(1, 1);
-                globals.score += 1000;
+                globals.score += 1500;
                 globals.enemycount += 1;
+                globals.gorroCounter += 1;
             } else if (sprite === globals.spritesGorrocopteros[2]) {
                 globals.spritesGorrocopteros.splice(2, 1);
-                globals.score += 1000;
+                globals.score += 1500;
                 globals.enemycount += 1;
+                globals.gorroCounter += 1;
             } else if (sprite === globals.spritesGorrocopteros[3]) {
                 globals.spritesGorrocopteros.splice(3, 1);
-                globals.score += 1000;
+                globals.score += 1500;
                 globals.enemycount += 1;
+                globals.gorroCounter += 1;
             } else if (sprite === globals.spritesGorrocopteros[4]) {
                 globals.spritesGorrocopteros.splice(4, 1);
-                globals.score += 1000;
+                globals.score += 1500;
                 globals.enemycount += 1;
+                globals.gorroCounter += 1;
             } else if (sprite === globals.spritesGorrocopteros[5]) {
                 globals.spritesGorrocopteros.splice(5, 1);
-                globals.score += 1000;
+                globals.score += 1500;
                 globals.enemycount += 1;
+                globals.gorroCounter += 1;
+            }
+        }
+    }
+    for (let i = 0; i < globals.spritesGorrocopteroslvl2.length; ++i) {
+        const sprite = globals.spritesGorrocopteroslvl2[i];
+
+        if (sprite.isCollidingWithExplosion) 
+        {
+            if (sprite === globals.spritesGorrocopteroslvl2[0]) {
+                globals.spritesGorrocopteroslvl2.splice(0, 1);
+                globals.score += 1500;
+                globals.enemycount += 1;
+                globals.gorroCounter += 1;
+            } else if (sprite === globals.spritesGorrocopteroslvl2[1]) {
+                globals.spritesGorrocopteroslvl2.splice(1, 1);
+                globals.score += 1500;
+                globals.enemycount += 1;
+                globals.gorroCounter += 1;
+            } else if (sprite === globals.spritesGorrocopteroslvl2[2]) {
+                globals.spritesGorrocopteroslvl2.splice(2, 1);
+                globals.score += 1500;
+                globals.enemycount += 1;
+                globals.gorroCounter += 1;
+            } else if (sprite === globals.spritesGorrocopteroslvl2[3]) {
+                globals.spritesGorrocopteroslvl2.splice(3, 1);
+                globals.score += 1500;
+                globals.enemycount += 1;
+                globals.gorroCounter += 1;
             }
         }
     }
@@ -1728,6 +1957,22 @@ function updateEnemyLife() {
                 globals.enemycount += 1;
             } else if (sprite === globals.spritesHormigas[1]) {
                 globals.spritesHormigas.splice(1, 1);
+                globals.score += 2000;
+                globals.enemycount += 1;
+            }
+        }
+    }
+    for (let i = 0; i < globals.spritesHormigaslvl2.length; ++i) {
+        const sprite = globals.spritesHormigaslvl2[i];
+
+        if (sprite.isCollidingWithExplosion) 
+        {
+            if (sprite === globals.spritesHormigaslvl2[0]) {
+                globals.spritesHormigaslvl2.splice(0, 1);
+                globals.score += 2000;
+                globals.enemycount += 1;
+            } else if (sprite === globals.spritesHormigaslvl2[1]) {
+                globals.spritesHormigaslvl2.splice(1, 1);
                 globals.score += 2000;
                 globals.enemycount += 1;
             }
@@ -1749,6 +1994,34 @@ function updateEnemyLife() {
                 globals.score += 1000;
                 globals.enemycount += 1;
                 globals.spritesBombillas[1].isActive = false;
+            }
+        }
+    }
+    for (let i = 0; i < globals.spritesBombillaslvl2.length; ++i) {
+        const sprite = globals.spritesBombillaslvl2[i];
+
+        if (sprite.isCollidingWithExplosion) 
+        {
+            if (sprite === globals.spritesBombillaslvl2[0]) {
+                globals.spritesBombillaslvl2.splice(0, 1);
+                globals.score += 1000;
+                globals.enemycount += 1;
+                globals.spritesBombillaslvl2[0].isActive = false;
+            } else if (sprite === globals.spritesBombillaslvl2[1]) {
+                globals.spritesBombillaslvl2.splice(1, 1);
+                globals.score += 1000;
+                globals.enemycount += 1;
+                globals.spritesBombillaslvl2[1].isActive = false;
+            } else if (sprite === globals.spritesBombillaslvl2[2]) {
+                globals.spritesBombillaslvl2.splice(2, 1);
+                globals.score += 1000;
+                globals.enemycount += 1;
+                globals.spritesBombillaslvl2[1].isActive = false;
+            } else if (sprite === globals.spritesBombillaslvl2[3]) {
+                globals.spritesBombillaslvl2.splice(3, 1);
+                globals.score += 1000;
+                globals.enemycount += 1;
+                globals.spritesBombillaslvl2[1].isActive = false;
             }
         }
     }
@@ -1806,7 +2079,15 @@ function restoreOriginalState(hitState) {
 
 function calculateCollisionWithFourBorders (sprite)
 {
-    let collision = detectCollisionBetweenHormigaAndMapObstacles();
+    let collision;
+    if(globals.currentLevel === 0)
+    {
+        collision = detectCollisionBetweenHormigaAndMapObstacles();
+    }
+    else
+    {
+        collision = detectCollisionBetweenHormigaAndMapObstacleslvl2();
+    }
 
 
     if (collision === 1)
@@ -1903,17 +2184,44 @@ function updateExplosionParticle(particle)
 
 function updateMap()
 {
-    if(globals.score >= 0)
+    if(globals.score >= 15000 && globals.score < 25000 )
     {
         globals.levels[globals.currentLevel].data[11][14] = 43
         globals.levels[globals.currentLevel].data[11][15] = 43
         globals.levels[globals.currentLevel].data[12][14] = 43
         globals.levels[globals.currentLevel].data[12][15] = 43
     }
-
-    if((globals.sprites[0].xPos >= 224 && globals.sprites[0].xPos <= 256) && (globals.sprites[0].yPos >= 176 && globals.sprites[0].yPos <= 208))
+    else if(globals.score >= 25000 && globals.score < 39000)
     {
-        globals.gameState = Game.OVER;
+        globals.levels[globals.currentLevel].data[11][14] = 57
+        globals.levels[globals.currentLevel].data[11][15] = 56
+        globals.levels[globals.currentLevel].data[12][14] = 55
+        globals.levels[globals.currentLevel].data[12][15] = 58
+    }
+    else if(globals.score >= 39000)
+    {
+        globals.levels[globals.currentLevel].data[11][14] = 4
+        globals.levels[globals.currentLevel].data[11][15] = 4
+        globals.levels[globals.currentLevel].data[12][14] = 4
+        globals.levels[globals.currentLevel].data[12][15] = 4
+    }
+
+    if((globals.sprites[0].xPos >= 216 && globals.sprites[0].xPos <= 248) && (globals.sprites[0].yPos >= 168 && globals.sprites[0].yPos <= 200))
+    {
+        globals.score += 10000
+        globals.currentLevel++;
+        globals.spritesGorrocopteros.splice(0,6)
+        globals.spritesBombillas.splice(0,2)
+        globals.spritesHormigas.splice(0,2)
+        let lastlvl = globals.currentLevel  - 1;
+        if(lastlvl === 0)
+        {
+        globals.gameState = Game.LOADING_PLAYING;
+        }
+        else
+        {
+            globals.gameState = Game.OVER
+        }
     }
 
 }
