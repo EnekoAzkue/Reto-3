@@ -1917,31 +1917,34 @@ function updateEnemyLife() {
             }
         }
     }
-    for (let i = 0; i < globals.spritesGorrocopteroslvl2.length; ++i) {
-        const sprite = globals.spritesGorrocopteroslvl2[i];
+    if(globals.currentLevel === 1)
+    {  
+        for (let i = 0; i < globals.spritesGorrocopteroslvl2.length; ++i) {
+            const sprite = globals.spritesGorrocopteroslvl2[i];
 
-        if (sprite.isCollidingWithExplosion) 
-        {
-            if (sprite === globals.spritesGorrocopteroslvl2[0]) {
-                globals.spritesGorrocopteroslvl2.splice(0, 1);
-                globals.score += 1500;
-                globals.enemycount += 1;
-                globals.gorroCounter += 1;
-            } else if (sprite === globals.spritesGorrocopteroslvl2[1]) {
-                globals.spritesGorrocopteroslvl2.splice(1, 1);
-                globals.score += 1500;
-                globals.enemycount += 1;
-                globals.gorroCounter += 1;
-            } else if (sprite === globals.spritesGorrocopteroslvl2[2]) {
-                globals.spritesGorrocopteroslvl2.splice(2, 1);
-                globals.score += 1500;
-                globals.enemycount += 1;
-                globals.gorroCounter += 1;
-            } else if (sprite === globals.spritesGorrocopteroslvl2[3]) {
-                globals.spritesGorrocopteroslvl2.splice(3, 1);
-                globals.score += 1500;
-                globals.enemycount += 1;
-                globals.gorroCounter += 1;
+            if (sprite.isCollidingWithExplosion) 
+            {
+                if (sprite === globals.spritesGorrocopteroslvl2[0]) {
+                    globals.spritesGorrocopteroslvl2.splice(0, 1);
+                    globals.score += 1500;
+                    globals.enemycount += 1;
+                    globals.gorroCounter += 1;
+                } else if (sprite === globals.spritesGorrocopteroslvl2[1]) {
+                    globals.spritesGorrocopteroslvl2.splice(1, 1);
+                    globals.score += 1500;
+                    globals.enemycount += 1;
+                    globals.gorroCounter += 1;
+                } else if (sprite === globals.spritesGorrocopteroslvl2[2]) {
+                    globals.spritesGorrocopteroslvl2.splice(2, 1);
+                    globals.score += 1500;
+                    globals.enemycount += 1;
+                    globals.gorroCounter += 1;
+                } else if (sprite === globals.spritesGorrocopteroslvl2[3]) {
+                    globals.spritesGorrocopteroslvl2.splice(3, 1);
+                    globals.score += 1500;
+                    globals.enemycount += 1;
+                    globals.gorroCounter += 1;
+                }
             }
         }
     }
@@ -1962,19 +1965,22 @@ function updateEnemyLife() {
             }
         }
     }
-    for (let i = 0; i < globals.spritesHormigaslvl2.length; ++i) {
-        const sprite = globals.spritesHormigaslvl2[i];
+    if(globals.currentLevel === 1)
+    {
+            for (let i = 0; i < globals.spritesHormigaslvl2.length; ++i) {
+            const sprite = globals.spritesHormigaslvl2[i];
 
-        if (sprite.isCollidingWithExplosion) 
-        {
-            if (sprite === globals.spritesHormigaslvl2[0]) {
-                globals.spritesHormigaslvl2.splice(0, 1);
-                globals.score += 2000;
-                globals.enemycount += 1;
-            } else if (sprite === globals.spritesHormigaslvl2[1]) {
-                globals.spritesHormigaslvl2.splice(1, 1);
-                globals.score += 2000;
-                globals.enemycount += 1;
+            if (sprite.isCollidingWithExplosion) 
+            {
+                if (sprite === globals.spritesHormigaslvl2[0]) {
+                    globals.spritesHormigaslvl2.splice(0, 1);
+                    globals.score += 2000;
+                    globals.enemycount += 1;
+                } else if (sprite === globals.spritesHormigaslvl2[1]) {
+                    globals.spritesHormigaslvl2.splice(1, 1);
+                    globals.score += 2000;
+                    globals.enemycount += 1;
+                }
             }
         }
     }
@@ -1997,35 +2003,37 @@ function updateEnemyLife() {
             }
         }
     }
-    for (let i = 0; i < globals.spritesBombillaslvl2.length; ++i) {
-        const sprite = globals.spritesBombillaslvl2[i];
-
-        if (sprite.isCollidingWithExplosion) 
+    if(globals.currentLevel === 1)
         {
-            if (sprite === globals.spritesBombillaslvl2[0]) {
-                globals.spritesBombillaslvl2.splice(0, 1);
-                globals.score += 1000;
-                globals.enemycount += 1;
-                globals.spritesBombillaslvl2[0].isActive = false;
-            } else if (sprite === globals.spritesBombillaslvl2[1]) {
-                globals.spritesBombillaslvl2.splice(1, 1);
-                globals.score += 1000;
-                globals.enemycount += 1;
-                globals.spritesBombillaslvl2[1].isActive = false;
-            } else if (sprite === globals.spritesBombillaslvl2[2]) {
-                globals.spritesBombillaslvl2.splice(2, 1);
-                globals.score += 1000;
-                globals.enemycount += 1;
-                globals.spritesBombillaslvl2[1].isActive = false;
-            } else if (sprite === globals.spritesBombillaslvl2[3]) {
-                globals.spritesBombillaslvl2.splice(3, 1);
-                globals.score += 1000;
-                globals.enemycount += 1;
-                globals.spritesBombillaslvl2[1].isActive = false;
+        for (let i = 0; i < globals.spritesBombillaslvl2.length; ++i) {
+            const sprite = globals.spritesBombillaslvl2[i];
+
+            if (sprite.isCollidingWithExplosion) 
+            {
+                if (sprite === globals.spritesBombillaslvl2[0]) {
+                    globals.spritesBombillaslvl2.splice(0, 1);
+                    globals.score += 1000;
+                    globals.enemycount += 1;
+                    globals.spritesBombillaslvl2[0].isActive = false;
+                } else if (sprite === globals.spritesBombillaslvl2[1]) {
+                    globals.spritesBombillaslvl2.splice(1, 1);
+                    globals.score += 1000;
+                    globals.enemycount += 1;
+                    globals.spritesBombillaslvl2[1].isActive = false;
+                } else if (sprite === globals.spritesBombillaslvl2[2]) {
+                    globals.spritesBombillaslvl2.splice(2, 1);
+                    globals.score += 1000;
+                    globals.enemycount += 1;
+                    globals.spritesBombillaslvl2[1].isActive = false;
+                } else if (sprite === globals.spritesBombillaslvl2[3]) {
+                    globals.spritesBombillaslvl2.splice(3, 1);
+                    globals.score += 1000;
+                    globals.enemycount += 1;
+                    globals.spritesBombillaslvl2[1].isActive = false;
+                }
             }
         }
-    }
-
+}
 }
 
 
